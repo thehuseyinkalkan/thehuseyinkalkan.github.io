@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bug Bounty & Research | HUSEYIN KALKAN</title>
+    <title>Bug Bounty & Research | Hüseyin Kalkan</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -46,6 +46,30 @@
         .red { background-color: #ff5f56; }
         .yellow { background-color: #ffbd2e; }
         .green { background-color: #27c93f; }
+
+        .lang-switcher {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-left: auto;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover { color: var(--accent-green); }
+        .lang-btn.active { color: var(--bg-color); background-color: var(--accent-green); }
 
         .profile-title { color: var(--accent-green); font-size: 1.8rem; font-weight: bold; }
         .subtitle { color: var(--accent-blue); font-size: 1rem; margin-top: 5px; }
@@ -140,9 +164,15 @@
             <span class="dot yellow"></span>
             <span class="dot green"></span>
             <span style="color: var(--text-dim); font-size: 0.8rem; margin-left: 10px;">vtshuseyin@security-lab:~/bug-bounty$</span>
+            
+            <div class="lang-switcher">
+                <button class="lang-btn active" onclick="setLanguage('tr')">TR</button>
+                <span style="color: var(--border-color);">|</span>
+                <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+            </div>
         </div>
-        <h1 class="profile-title">Bug Bounty & Zafiyet Araştırmaları</h1>
-        <p class="subtitle">YesWeHack Rapor Özeti, Web Zafiyetleri ve Etik Hacking Deneyimleri</p>
+        <h1 class="profile-title">Bug Bounty & Research</h1>
+        <p class="subtitle">YesWeHack Reports, Web Security & Research</p>
 
         <nav>
             <a href="index.html"><i class="fas fa-user"></i> Portfolyo</a>
@@ -155,23 +185,66 @@
         <section>
             <h2 class="section-title"><i class="fas fa-bug"></i> root@lab:~# cat accepted_reports.log</h2>
             <div class="grid">
-                <div class="card">
-                    <h3>[YesWeHack] Hardcoded Credentials Case Study</h3>
-                    <p>Web uygulamasında tespit edilen sabit kodlanmış hassas bilgiler (Hardcoded Credentials) üzerine zafiyet bildirimi, triage süreci ve çözümü.</p>
+                
+                <!-- TÜRKÇE BUG BOUNTY KARTI -->
+                <div class="card lang-item" data-lang="tr">
+                    <h3>[YesWeHack] Hardcoded Credentials Raporu (TR)</h3>
+                    <p>Web uygulamasında tespit edilen sabit kodlanmış hassas bilgiler üzerine zafiyet bildirimi, triage süreci ve çözümü.</p>
                     <div class="badge-container">
                         <span class="badge green">YesWeHack</span>
                         <span class="badge">Hardcoded Credentials</span>
-                        <span class="badge green">Accepted / Bounty Paid</span>
+                        <span class="badge green">Kabul Edildi</span>
                     </div>
                     <a href="#" class="btn-link">Rapor Özetini İncele &rarr;</a>
                 </div>
+
+                <!-- İNGİLİZCE BUG BOUNTY KARTI -->
+                <div class="card lang-item" data-lang="en">
+                    <h3>[YesWeHack] Hardcoded Credentials Report (EN)</h3>
+                    <p>Vulnerability submission, triage process, and remediation regarding hardcoded sensitive credentials in a web application.</p>
+                    <div class="badge-container">
+                        <span class="badge green">YesWeHack</span>
+                        <span class="badge">Hardcoded Credentials</span>
+                        <span class="badge green">Accepted</span>
+                    </div>
+                    <a href="#" class="btn-link">View Case Study &rarr;</a>
+                </div>
+
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 Hüseyin Kalkan.</p>
+        <p>&copy; 2026 Hüseyin Kalkan. Hosted on GitHub Pages.</p>
     </footer>
 
+    <script>
+        function setLanguage(lang) {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if (btn.innerText.toLowerCase() === lang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            const items = document.querySelectorAll('.lang-item');
+            items.forEach(item => {
+                const itemLang = item.getAttribute('data-lang');
+                if (itemLang === lang || itemLang === 'all') {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            localStorage.setItem('preferred_language', lang);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('preferred_language') || 'tr';
+            setLanguage(savedLang);
+        });
+    </script>
 </body>
 </html>
