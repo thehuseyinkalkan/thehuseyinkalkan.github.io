@@ -4,7 +4,7 @@
     <meta name="google-site-verification" content="Qa9pRx7_HHxHuLQC5GHpXIG2JbS8iohfp2VPuPH8ikg" />
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HUSEYIN KALKAN | Portfolio & Cybersecurity Hub</title>
+    <title>Hüseyin Kalkan | Portfolio & Cybersecurity Hub</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -47,6 +47,30 @@
         .red { background-color: #ff5f56; }
         .yellow { background-color: #ffbd2e; }
         .green { background-color: #27c93f; }
+
+        .lang-switcher {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            margin-left: auto;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            color: var(--text-dim);
+            cursor: pointer;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            padding: 2px 6px;
+            border-radius: 3px;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover { color: var(--accent-green); }
+        .lang-btn.active { color: var(--bg-color); background-color: var(--accent-green); }
 
         .profile-title { color: var(--accent-green); font-size: 1.8rem; font-weight: bold; }
         .subtitle { color: var(--accent-blue); font-size: 1rem; margin-top: 5px; }
@@ -134,10 +158,16 @@
             <span class="dot red"></span>
             <span class="dot yellow"></span>
             <span class="dot green"></span>
-            <span style="color: var(--text-dim); font-size: 0.8rem; margin-left: 10px;">thehuseyinkalkan@security-lab:~</span>
+            <span style="color: var(--text-dim); font-size: 0.8rem; margin-left: 10px;">vtshuseyin@security-lab:~</span>
+            
+            <div class="lang-switcher">
+                <button class="lang-btn active" onclick="setLanguage('tr')">TR</button>
+                <span style="color: var(--border-color);">|</span>
+                <button class="lang-btn" onclick="setLanguage('en')">EN</button>
+            </div>
         </div>
-        <h1 class="profile-title">HUSEYIN KALKAN</h1>
-        <p class="subtitle">Cyber Security Engineer & Cloud infrastructure Administrator</p>
+        <h1 class="profile-title">Hüseyin Kalkan</h1>
+        <p class="subtitle">IT Infrastructure & Cloud Engineer | Offensive Security Practitioner</p>
         
         <div class="social-links">
             <a href="https://github.com/thehuseyinkalkan" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
@@ -148,29 +178,38 @@
         </div>
 
         <nav>
-            <a href="index.html" class="active"><i class="fas fa-user"></i> Portfolio</a>
-            <a href="oscp.html"><i class="fas fa-terminal"></i> OSCP</a>
+            <a href="index.html" class="active"><i class="fas fa-user"></i> Portfolyo</a>
+            <a href="oscp.html"><i class="fas fa-terminal"></i> OSCP Hazırlık</a>
             <a href="bug-bounty.html"><i class="fas fa-bug"></i> Bug Bounty</a>
         </nav>
     </header>
 
     <main>
-        <!-- Hakkımda -->
-        <section id="about">
-            <h2 class="section-title"><i class="fas fa-terminal"></i> root@lab:~# cat about.txt</h2>
+        <!-- Hakkımda (TR) -->
+        <section id="about-tr" class="lang-item" data-lang="tr">
+            <h2 class="section-title"><i class="fas fa-terminal"></i> root@lab:~# cat about_tr.txt</h2>
             <div class="card">
                 <p>BT Altyapı ve Bulut Sistemleri Yönetimi alanında çalışan bir sistem ve güvenlik mühendisiyim. Sanallaştırma (Sangfor HCI, VMware ESXi), ağ güvenliği (FortiGate VDOMs, Mellanox SN2410) ve Linux/Windows sistem mimarisi konularında aktif deneyim sahibiyim.</p>
                 <p style="margin-top: 10px;">Siber güvenlik alanında sızma testleri, OSCP hazırlığı (TJNull listesi, Hack The Box, Proving Grounds Practice) ve YesWeHack üzerindeki Bug Bounty çalışmalarıyla teknik altyapımı sürekli geliştirmekteyim.</p>
             </div>
         </section>
 
-        <!-- Yetkinlikler -->
-        <section id="skills">
+        <!-- About Me (EN) -->
+        <section id="about-en" class="lang-item" data-lang="en">
+            <h2 class="section-title"><i class="fas fa-terminal"></i> root@lab:~# cat about_en.txt</h2>
+            <div class="card">
+                <p>I am an IT Infrastructure & Cloud Engineer specializing in virtualization (Sangfor HCI, VMware ESXi), network security (FortiGate VDOMs, Mellanox SN2410), and Linux/Windows administration.</p>
+                <p style="margin-top: 10px;">Concurrently, I actively develop my skills in offensive security through OSCP preparation (TJNull's list, Hack The Box, Proving Grounds Practice) and vulnerability research on YesWeHack bug bounty programs.</p>
+            </div>
+        </section>
+
+        <!-- Yetkinlikler (Her iki dilde ortak) -->
+        <section id="skills" class="lang-item" data-lang="all">
             <h2 class="section-title"><i class="fas fa-microchip"></i> root@lab:~# systemctl status skills</h2>
             <div class="grid">
                 <div class="card">
-                    <h3><i class="fas fa-server" style="color: var(--accent-blue);"></i> Altyapı & Bulut</h3>
-                    <p>Sözleşmeli ve kurumsal sanallaştırma, ağ ve sunucu yönetimi.</p>
+                    <h3><i class="fas fa-server" style="color: var(--accent-blue);"></i> Infrastructure & Cloud</h3>
+                    <p>Virtualization, networking, and server architecture management.</p>
                     <div class="badge-container">
                         <span class="badge">Sangfor HCI</span>
                         <span class="badge">VMware ESXi / vCenter</span>
@@ -180,8 +219,8 @@
                 </div>
 
                 <div class="card">
-                    <h3><i class="fas fa-shield-alt" style="color: var(--accent-green);"></i> Ağ & Siber Güvenlik</h3>
-                    <p>Güvenlik duvarı konfigürasyonu, VPN ve sızma testi yaklaşımı.</p>
+                    <h3><i class="fas fa-shield-alt" style="color: var(--accent-green);"></i> Security & Networking</h3>
+                    <p>Firewall configuration, VPNs, and penetration testing methodologies.</p>
                     <div class="badge-container">
                         <span class="badge green">FortiGate / VDOMs</span>
                         <span class="badge green">IPsec VPN</span>
@@ -191,8 +230,8 @@
                 </div>
 
                 <div class="card">
-                    <h3><i class="fas fa-terminal" style="color: #ffbd2e;"></i> İşletim Sistemleri & Araçlar</h3>
-                    <p>Sistem yönetimi ve geliştirme ortamı.</p>
+                    <h3><i class="fas fa-terminal" style="color: #ffbd2e;"></i> OS & Tools</h3>
+                    <p>Daily system management and terminal workflow tools.</p>
                     <div class="badge-container">
                         <span class="badge">Debian / antiX / Ubuntu</span>
                         <span class="badge">Active Directory & DNS</span>
@@ -204,26 +243,54 @@
         </section>
 
         <!-- Sertifikalar -->
-        <section id="certifications">
+        <section id="certifications" class="lang-item" data-lang="all">
             <h2 class="section-title"><i class="fas fa-award"></i> root@lab:~# cat certs.json</h2>
             <div class="grid">
                 <div class="card">
                     <h3>Sangfor HCI Associate</h3>
-                    <p>Sangfor Sanallaştırma Altyapısı Sertifikasyonu (Skor: 92/100)</p>
-                    <span class="badge green">Tamamlandı</span>
+                    <p>Sangfor Virtualization Infrastructure Certification (Score: 92/100)</p>
+                    <span class="badge green">Completed</span>
                 </div>
                 <div class="card">
                     <h3>Offensive Security Certified Professional (OSCP)</h3>
-                    <p>TJNull OSCP Hazırlık Listesi, HTB & Proving Grounds Laboratuvar Çalışmaları</p>
-                    <span class="badge">Süreçte</span>
+                    <p>TJNull OSCP Prep List, HTB & Proving Grounds Practice Labs</p>
+                    <span class="badge">In Progress</span>
                 </div>
             </div>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 Hüseyin Kalkan</p>
+        <p>&copy; 2026 Hüseyin Kalkan. Hosted on GitHub Pages.</p>
     </footer>
 
+    <script>
+        function setLanguage(lang) {
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                if (btn.innerText.toLowerCase() === lang) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            const items = document.querySelectorAll('.lang-item');
+            items.forEach(item => {
+                const itemLang = item.getAttribute('data-lang');
+                if (itemLang === lang || itemLang === 'all') {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
+            });
+
+            localStorage.setItem('preferred_language', lang);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedLang = localStorage.getItem('preferred_language') || 'tr';
+            setLanguage(savedLang);
+        });
+    </script>
 </body>
 </html>
