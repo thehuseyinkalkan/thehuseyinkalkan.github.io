@@ -3,26 +3,336 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Huseyin Kalkan - Cyber Security</title>
+    <title>Hüseyin Kalkan | Cybersecurity Portfolio & Writeups</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
-            background-color: #0d1117;
-            color: #00ff66;
-            font-family: 'Courier New', Courier, monospace;
-            padding: 40px;
-            line-height: 1.6;
+        :root {
+            --bg-color: #0b0e14;
+            --card-bg: #131722;
+            --accent-green: #00ff66;
+            --accent-blue: #00d2ff;
+            --text-color: #c9d1d9;
+            --text-dim: #8b949e;
+            --border-color: #21262d;
+            --font-mono: 'Fira Code', 'Courier New', Courier, monospace;
         }
-        h1 { border-bottom: 1px solid #00ff66; padding-bottom: 10px; }
-        a { color: #58a6ff; }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-mono);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        /* Header & Navigation */
+        header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .dot { height: 12px; width: 12px; border-radius: 50%; display: inline-block; }
+        .red { background-color: #ff5f56; }
+        .yellow { background-color: #ffbd2e; }
+        .green { background-color: #27c93f; }
+
+        .profile-title {
+            color: var(--accent-green);
+            font-size: 1.8rem;
+            font-weight: bold;
+        }
+
+        .subtitle {
+            color: var(--accent-blue);
+            font-size: 1rem;
+            margin-top: 5px;
+        }
+
+        nav {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 6px 14px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        nav a:hover, nav a.active {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            background-color: rgba(0, 255, 102, 0.05);
+        }
+
+        /* Sections */
+        section {
+            margin-bottom: 40px;
+        }
+
+        .section-title {
+            color: var(--accent-green);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        /* Grid Layouts */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-blue);
+        }
+
+        .card h3 {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+
+        .card p {
+            color: var(--text-dim);
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+        }
+
+        .badge-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .badge {
+            background: rgba(0, 210, 255, 0.1);
+            color: var(--accent-blue);
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            border: 1px solid rgba(0, 210, 255, 0.3);
+        }
+
+        .badge.green {
+            background: rgba(0, 255, 102, 0.1);
+            color: var(--accent-green);
+            border-color: rgba(0, 255, 102, 0.3);
+        }
+
+        /* Links & Buttons */
+        .btn-link {
+            display: inline-block;
+            color: var(--accent-green);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .btn-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Social Icons */
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            color: var(--text-dim);
+            font-size: 1.3rem;
+            transition: color 0.2s ease;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-green);
+        }
+
+        footer {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            color: var(--text-dim);
+            font-size: 0.8rem;
+        }
     </style>
 </head>
 <body>
-    <h1>root@security-blog:~# whoami</h1>
-    <p>Merhaba! Siber güvenlik, sızma testleri ve CTF çözümlerimi paylaştığım kişisel alanıma hoş geldiniz.</p>
-    <h2>[+] Yaklaşan İçerikler</h2>
-    <ul>
-        <li>OSCP / Proving Grounds Çözümleri</li>
-        <li>Bug Bounty Raporları & Araç İncelemeleri</li>
-    </ul>
+
+    <header>
+        <div class="terminal-header">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span style="color: var(--text-dim); font-size: 0.8rem; margin-left: 10px;">vtshuseyin@security-lab:~</span>
+        </div>
+        <h1 class="profile-title">Hüseyin Kalkan</h1>
+        <p class="subtitle">IT Infrastructure & Cloud Engineer | OffSec Enthusiast</p>
+        
+        <div class="social-links">
+            <a href="https://github.com/thehuseyinkalkan" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            <a href="#" target="_blank" title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="#" target="_blank" title="Hack The Box"><i class="fas fa-cube"></i></a>
+            <a href="#" target="_blank" title="YesWeHack"><i class="fas fa-bug"></i></a>
+            <a href="mailto:ornek@email.com" title="E-Posta"><i class="fas fa-envelope"></i></a>
+        </div>
+
+        <nav>
+            <a href="#about"><i class="fas fa-user"></i> Hakkımda</a>
+            <a href="#skills"><i class="fas fa-tools"></i> Yetkinlikler</a>
+            <a href="#writeups"><i class="fas fa-file-code"></i> Writeups & Laboratuvarlar</a>
+            <a href="#certifications"><i class="fas fa-certificate"></i> Sertifikalar</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hakkımda Section -->
+        <section id="about">
+            <h2 class="section-title"><i class="fas fa-terminal"></i> root@lab:~# cat about.txt</h2>
+            <div class="card">
+                <p>BT Altyapı ve Bulut Sistemleri Yönetimi alanında deneyimli bir sistem & güvenlik uzmanıyım. Sanallaştırma (Sangfor HCI, VMware ESXi), ağ güvenliği (FortiGate VDOMs, Mellanox) ve Linux/Windows sistem yönetimi konularında aktif rol alıyorum.</p>
+                <p style="margin-top: 10px;">Aynı zamanda Offensive Security (OSCP hazırlık), sızma testleri, Hack The Box / Proving Grounds laboratuvar çözümleri ve YesWeHack üzerindeki Bug Bounty programları ile siber güvenlik yetkinliklerimi sürekli geliştiriyorum.</p>
+            </div>
+        </section>
+
+        <!-- Yetkinlikler Section -->
+        <section id="skills">
+            <h2 class="section-title"><i class="fas fa-microchip"></i> root@lab:~# systemctl status skills</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3><i class="fas fa-server" style="color: var(--accent-blue);"></i> BT Altyapı & Bulut</h3>
+                    <p>Sistem mimarisi, sanallaştırma ve ağ bileşenleri yönetimi.</p>
+                    <div class="badge-container">
+                        <span class="badge">Sangfor HCI</span>
+                        <span class="badge">VMware ESXi / vCenter</span>
+                        <span class="badge">Lenovo ThinkSystem</span>
+                        <span class="badge">Mellanox Switches</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fas fa-shield-alt" style="color: var(--accent-green);"></i> Siber Güvenlik & Ağ</h3>
+                    <p>Sızma testi, güvenlik duvarı konfigürasyonu ve VPN/IPsec çözümleri.</p>
+                    <div class="badge-container">
+                        <span class="badge green">FortiGate Firewall / VDOMs</span>
+                        <span class="badge green">IPsec / VPN</span>
+                        <span class="badge green">Ethical Hacking</span>
+                        <span class="badge green">Bug Bounty (YesWeHack)</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3><i class="fas fa-terminal" style="color: #ffbd2e;"></i> İşletim Sistemleri & Araçlar</h3>
+                    <p>Günlük terminal akışı ve sistem yönetimi gereçleri.</p>
+                    <div class="badge-container">
+                        <span class="badge">Debian / antiX / Ubuntu</span>
+                        <span class="badge">Active Directory & DNS</span>
+                        <span class="badge">Bash / Zsh / Tmux</span>
+                        <span class="badge">Alacritty</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Writeups Section -->
+        <section id="writeups">
+            <h2 class="section-title"><i class="fas fa-book-open"></i> root@lab:~# ls -la ./writeups</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>[HTB] Lab Target Writeup #1</h3>
+                    <p>TJNull OSCP listesindeki Linux/Windows makinesinin zafiyet tespiti, sızma aşaması ve yetki yükseltme (Privilege Escalation) adımları.</p>
+                    <div class="badge-container" style="margin-bottom: 12px;">
+                        <span class="badge green">Hack The Box</span>
+                        <span class="badge">Linux</span>
+                        <span class="badge">Easy/Medium</span>
+                    </div>
+                    <a href="#" class="btn-link">Writeup'ı Oku &rarr;</a>
+                </div>
+
+                <div class="card">
+                    <h3>[Vulnerability Report] Hardcoded Credentials Case</h3>
+                    <p>YesWeHack platformunda tespit edilen ve kabul edilen sabit kodlanmış kimlik bilgisi (Hardcoded Credential) zafiyet incelemesi.</p>
+                    <div class="badge-container" style="margin-bottom: 12px;">
+                        <span class="badge green">YesWeHack</span>
+                        <span class="badge">Web Security</span>
+                        <span class="badge">Triage/Paid</span>
+                    </div>
+                    <a href="#" class="btn-link">Rapor Özetini Oku &rarr;</a>
+                </div>
+
+                <div class="card">
+                    <h3>[Infra Notes] ESXi 8.0 Clean Install & Disk Wipe</h3>
+                    <p>Bozuk disk bölümlerini antiX Linux Live USB ve sgdisk ile temizleyerek yapılan sıfır ESXi 8.0 kurulum adımları.</p>
+                    <div class="badge-container" style="margin-bottom: 12px;">
+                        <span class="badge">Sistem Yönetimi</span>
+                        <span class="badge">VMware</span>
+                        <span class="badge">Troubleshooting</span>
+                    </div>
+                    <a href="#" class="btn-link">Notları Göster &rarr;</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sertifikalar Section -->
+        <section id="certifications">
+            <h2 class="section-title"><i class="fas fa-award"></i> root@lab:~# cat certs.json</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Sangfor HCI Associate</h3>
+                    <p>Sangfor Sanallaştırma Altyapısı Uzmanlığı (Skor: 92/100)</p>
+                    <span class="badge green">Doğrulandı</span>
+                </div>
+                <div class="card">
+                    <h3>OSCP Preparation Journey</h3>
+                    <p>Offensive Security Certified Professional Sınav Hazırlığı (HTB & Proving Grounds)</p>
+                    <span class="badge">Devam Ediyor</span>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Hüseyin Kalkan. GitHub Pages üzerinde ücretsiz barındırılmaktadır.</p>
+    </footer>
+
 </body>
 </html>
