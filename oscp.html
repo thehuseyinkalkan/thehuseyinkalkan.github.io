@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSCP Prep & Lab Writeups | Hüseyin Kalkan</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0b0e14;
+            --card-bg: #131722;
+            --accent-green: #00ff66;
+            --accent-blue: #00d2ff;
+            --text-color: #c9d1d9;
+            --text-dim: #8b949e;
+            --border-color: #21262d;
+            --font-mono: 'Fira Code', 'Courier New', Courier, monospace;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-mono);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        header {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 20px;
+            margin-bottom: 30px;
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .dot { height: 12px; width: 12px; border-radius: 50%; display: inline-block; }
+        .red { background-color: #ff5f56; }
+        .yellow { background-color: #ffbd2e; }
+        .green { background-color: #27c93f; }
+
+        .profile-title { color: var(--accent-green); font-size: 1.8rem; font-weight: bold; }
+        .subtitle { color: var(--accent-blue); font-size: 1rem; margin-top: 5px; }
+
+        nav {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--text-color);
+            text-decoration: none;
+            padding: 8px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            transition: all 0.2s ease;
+            font-size: 0.9rem;
+        }
+
+        nav a:hover, nav a.active {
+            border-color: var(--accent-green);
+            color: var(--accent-green);
+            background-color: rgba(0, 255, 102, 0.05);
+        }
+
+        section { margin-bottom: 40px; }
+
+        .section-title {
+            color: var(--accent-green);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 8px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 20px;
+            transition: transform 0.2s ease, border-color 0.2s ease;
+        }
+
+        .card:hover { transform: translateY(-3px); border-color: var(--accent-blue); }
+        .card h3 { color: #fff; margin-bottom: 10px; font-size: 1.1rem; }
+        .card p { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 15px; }
+
+        .badge-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+        .badge {
+            background: rgba(0, 210, 255, 0.1);
+            color: var(--accent-blue);
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.75rem;
+            border: 1px solid rgba(0, 210, 255, 0.3);
+        }
+        .badge.green {
+            background: rgba(0, 255, 102, 0.1);
+            color: var(--accent-green);
+            border-color: rgba(0, 255, 102, 0.3);
+        }
+
+        .btn-link {
+            display: inline-block;
+            color: var(--accent-green);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        .btn-link:hover { text-decoration: underline; }
+
+        footer { text-align: center; padding-top: 20px; border-top: 1px solid var(--border-color); color: var(--text-dim); font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="terminal-header">
+            <span class="dot red"></span>
+            <span class="dot yellow"></span>
+            <span class="dot green"></span>
+            <span style="color: var(--text-dim); font-size: 0.8rem; margin-left: 10px;">vtshuseyin@security-lab:~/oscp-prep$</span>
+        </div>
+        <h1 class="profile-title">OSCP Preparation & Writeups</h1>
+        <p class="subtitle">TJNull Listesi, Hack The Box ve Proving Grounds Laboratuvar Çözümleri</p>
+
+        <nav>
+            <a href="index.html"><i class="fas fa-user"></i> Portfolyo</a>
+            <a href="oscp.html" class="active"><i class="fas fa-terminal"></i> OSCP Hazırlık</a>
+            <a href="bug-bounty.html"><i class="fas fa-bug"></i> Bug Bounty</a>
+        </nav>
+    </header>
+
+    <main>
+        <section>
+            <h2 class="section-title"><i class="fas fa-cube"></i> root@lab:~# ls -la ./htb-writeups</h2>
+            <div class="grid">
+                <div class="card">
+                    <h3>Hack The Box - Linux Target (TJNull List)</h3>
+                    <p>Servis tespiti, Nmap taraması, web zafiyeti üzerinden ilk erişim ve yetki yükseltme (Privilege Escalation) adımları.</p>
+                    <div class="badge-container">
+                        <span class="badge green">Hack The Box</span>
+                        <span class="badge">Linux</span>
+                        <span class="badge">Medium</span>
+                    </div>
+                    <a href="#" class="btn-link">Writeup İçeriği Yakında &rarr;</a>
+                </div>
+
+                <div class="card">
+                    <h3>Proving Grounds Practice - Windows Target</h3>
+                    <p>Active Directory ortamı, SMB keşfi ve Windows hizmetleri üzerinden yetki yükseltme senaryoları.</p>
+                    <div class="badge-container">
+                        <span class="badge green">Proving Grounds</span>
+                        <span class="badge">Windows / AD</span>
+                        <span class="badge">Hard</span>
+                    </div>
+                    <a href="#" class="btn-link">Writeup İçeriği Yakında &rarr;</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Hüseyin Kalkan. GitHub Pages üzerinde barındırılmaktadır.</p>
+    </footer>
+
+</body>
+</html>
