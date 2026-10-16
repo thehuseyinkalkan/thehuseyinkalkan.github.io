@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemapindex.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <!-- Ana Sayfa (Home) -->
+  <url>
+    <loc>https://huseyinkalkan.net/</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://huseyinkalkan.net/?lang=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://huseyinkalkan.net/?lang=en"/>
+  </url>
+
+  <!-- Freelance Pentest / Hizmetler Sayfası -->
+  <url>
+    <loc>https://huseyinkalkan.net/freelance.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://huseyinkalkan.net/freelance.html?lang=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://huseyinkalkan.net/freelance.html?lang=en"/>
+  </url>
+
+  <!-- Bug Bounty & Güvenlik Araştırmaları Sayfası -->
+  <url>
+    <loc>https://huseyinkalkan.net/bug-bounty.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://huseyinkalkan.net/bug-bounty.html?lang=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://huseyinkalkan.net/bug-bounty.html?lang=en"/>
+  </url>
+
+  <!-- OSCP & Lab Notları Sayfası -->
+  <url>
+    <loc>https://huseyinkalkan.net/oscp.html</loc>
+    <lastmod>2026-10-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="tr" href="https://huseyinkalkan.net/oscp.html?lang=tr"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://huseyinkalkan.net/oscp.html?lang=en"/>
+  </url>
+
+</urlset>
