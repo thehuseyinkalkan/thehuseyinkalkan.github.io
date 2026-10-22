@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog - Hüseyin Kalkan</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+
+  <header>
+    <div class="container">
+      <nav>
+        <a href="/" class="logo">huseyinkalkan.net</a>
+        <div class="nav-links">
+          <a href="/"><span lang="tr">Hakkımda</span><span lang="en">About</span></a>
+          <a href="/blog/" class="active"><span lang="tr">Blog</span><span lang="en">Blog</span></a>
+          <button id="lang-btn" class="lang-btn" onclick="toggleLanguage()">TR / EN</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1 lang="tr">Siber Güvenlik & Sistem Notları</h1>
+      <h1 lang="en">Cybersecurity & Infrastructure Notes</h1>
+      <p lang="tr">Sızma testleri, altyapı yönetimi ve kritik zafiyet incelemeleri.</p>
+      <p lang="en">Articles on pentesting, cloud infrastructure, and vulnerability research.</p>
+    </section>
+
+    <div class="post-card">
+      <div class="post-meta">
+        <time datetime="2026-10-22">22 Ekim 2026</time>
+        <span class="badge">CVE-2026-109618 / 19</span>
+      </div>
+      <h2 class="post-title">
+        <a href="/blog/php2shell-cve-2026-109618/">
+          <span lang="tr">PHP2Shell Kritik RCE Zafiyetleri (CVE-2026-109618 & CVE-2026-109619)</span>
+          <span lang="en">PHP2Shell Critical RCE Vulnerabilities (CVE-2026-109618 & CVE-2026-109619)</span>
+        </a>
+      </h2>
+      <p lang="tr">PHP çekirdeğindeki Use-After-Free zafiyetinin detayları, etkilenen sürümler ve çözüm adımları.</p>
+      <p lang="en">Technical breakdown, affected versions, and mitigation steps for the PHP core RCE flaw.</p>
+    </div>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Hüseyin Kalkan. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js"></script>
+</body>
+</html>
