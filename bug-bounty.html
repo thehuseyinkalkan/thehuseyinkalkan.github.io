@@ -1,251 +1,54 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bug Bounty & Research | Hüseyin Kalkan</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --bg-color: #0b0e14;
-            --card-bg: #131722;
-            --accent-green: #00ff66;
-            --accent-blue: #00d2ff;
-            --text-color: #c9d1d9;
-            --text-dim: #8b949e;
-            --border-color: #21262d;
-            --font-mono: 'Fira Code', 'Courier New', Courier, monospace;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: var(--font-mono);
-            line-height: 1.6;
-            padding: 20px;
-            max-width: 1100px;
-            margin: 0 auto;
-        }
-
-        header {
-            border-bottom: 1px solid var(--border-color);
-            padding-bottom: 20px;
-            margin-bottom: 30px;
-        }
-
-        .terminal-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .dot { height: 12px; width: 12px; border-radius: 50%; display: inline-block; }
-        .red { background-color: #ff5f56; }
-        .yellow { background-color: #ffbd2e; }
-        .green { background-color: #27c93f; }
-
-        .lang-switcher {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.85rem;
-            font-weight: bold;
-            margin-left: auto;
-        }
-
-        .lang-btn {
-            background: none;
-            border: none;
-            color: var(--text-dim);
-            cursor: pointer;
-            font-family: var(--font-mono);
-            font-size: 0.9rem;
-            padding: 2px 6px;
-            border-radius: 3px;
-            transition: all 0.2s ease;
-        }
-
-        .lang-btn:hover { color: var(--accent-green); }
-        .lang-btn.active { color: var(--bg-color); background-color: var(--accent-green); }
-
-        .profile-title { color: var(--accent-green); font-size: 1.8rem; font-weight: bold; }
-        .subtitle { color: var(--accent-blue); font-size: 1rem; margin-top: 5px; }
-
-        nav {
-            margin-top: 20px;
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-        }
-
-        nav a {
-            color: var(--text-color);
-            text-decoration: none;
-            padding: 8px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            transition: all 0.2s ease;
-            font-size: 0.9rem;
-        }
-
-        nav a:hover, nav a.active {
-            border-color: var(--accent-green);
-            color: var(--accent-green);
-            background-color: rgba(0, 255, 102, 0.05);
-        }
-
-        section { margin-bottom: 40px; }
-
-        .section-title {
-            color: var(--accent-green);
-            font-size: 1.3rem;
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border-bottom: 1px dashed var(--border-color);
-            padding-bottom: 8px;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            padding: 20px;
-            transition: transform 0.2s ease, border-color 0.2s ease;
-        }
-
-        .card:hover { transform: translateY(-3px); border-color: var(--accent-blue); }
-        .card h3 { color: #fff; margin-bottom: 10px; font-size: 1.1rem; }
-        .card p { color: var(--text-dim); font-size: 0.9rem; margin-bottom: 15px; }
-
-        .badge-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
-        .badge {
-            background: rgba(0, 210, 255, 0.1);
-            color: var(--accent-blue);
-            padding: 3px 8px;
-            border-radius: 3px;
-            font-size: 0.75rem;
-            border: 1px solid rgba(0, 210, 255, 0.3);
-        }
-        .badge.green {
-            background: rgba(0, 255, 102, 0.1);
-            color: var(--accent-green);
-            border-color: rgba(0, 255, 102, 0.3);
-        }
-
-        .btn-link {
-            display: inline-block;
-            color: var(--accent-green);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: bold;
-        }
-
-        .btn-link:hover { text-decoration: underline; }
-
-        footer { text-align: center; padding-top: 20px; border-top: 1px solid var(--border-color); color: var(--text-dim); font-size: 0.8rem; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bug Bounty - Hüseyin Kalkan</title>
+  <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
 
-    <header>
-        <div class="terminal-header">
-            <span class="dot red"></span>
-            <span class="dot yellow"></span>
-            <span class="dot green"></span>
-            <span style="color: var(--text-dim); font-size: 0.8rem; margin-left: 10px;">vtshuseyin@security-lab:~/bug-bounty$</span>
-            
-            <div class="lang-switcher">
-                <button class="lang-btn active" onclick="setLanguage('tr')">TR</button>
-                <span style="color: var(--border-color);">|</span>
-                <button class="lang-btn" onclick="setLanguage('en')">EN</button>
-            </div>
+  <header>
+    <div class="container">
+      <nav>
+        <a href="/" class="logo">huseyinkalkan.net</a>
+        <div class="nav-links">
+          <a href="/"><span lang="tr">Hakkımda</span><span lang="en">About</span></a>
+          <a href="/pentest.html"><span lang="tr">Pentest</span><span lang="en">Pentest</span></a>
+          <a href="/oscp.html"><span lang="tr">OSCP</span><span lang="en">OSCP</span></a>
+          <a href="/bug-bounty.html" class="active"><span lang="tr">Bug Bounty</span><span lang="en">Bug Bounty</span></a>
+          <a href="/blog/"><span lang="tr">Blog</span><span lang="en">Blog</span></a>
+          <button id="lang-btn" class="lang-btn" onclick="toggleLanguage()">TR / EN</button>
         </div>
-        <h1 class="profile-title">Bug Bounty & Research</h1>
-        <p class="subtitle">YesWeHack Reports, Web Security & Research</p>
+      </nav>
+    </div>
+  </header>
 
-        <nav>
-            <a href="index.html"><i class="fas fa-user"></i> Portfolyo</a>
-            <a href="oscp.html"><i class="fas fa-terminal"></i> OSCP Hazırlık</a>
-            <a href="bug-bounty.html" class="active"><i class="fas fa-bug"></i> Bug Bounty</a>
-            <a href="freelance-pentest.html"><i class="fas fa-shield-alt"></i> Freelance Pentest</a>
-        </nav>
-    </header>
+  <main class="container">
+    <section class="hero">
+      <h1 lang="tr">Bug Bounty & Zafiyet Raporları</h1>
+      <h1 lang="en">Bug Bounty & Responsible Disclosure</h1>
+      <p lang="tr">Ödül programlarında ve platformlarda (YesWeHack vb.) raporlanan ve doğrulanan güvenlik zafiyetleri.</p>
+      <p lang="en">Discovered and validated security vulnerabilities submitted across bug bounty platforms.</p>
+    </section>
 
-    <main>
-        <section>
-            <h2 class="section-title"><i class="fas fa-bug"></i> root@lab:~# cat accepted_reports.log</h2>
-            <div class="grid">
-                
-                <!-- TÜRKÇE BUG BOUNTY KARTI -->
-                <div class="card lang-item" data-lang="tr">
-                    <h3>[YesWeHack] Hardcoded Credentials Raporu (TR)</h3>
-                    <p>Web uygulamasında tespit edilen sabit kodlanmış hassas bilgiler üzerine zafiyet bildirimi, triage süreci ve çözümü.</p>
-                    <div class="badge-container">
-                        <span class="badge green">YesWeHack</span>
-                        <span class="badge">Hardcoded Credentials</span>
-                        <span class="badge green">Kabul Edildi</span>
-                    </div>
-                    <a href="#" class="btn-link">Rapor Özetini İncele &rarr;</a>
-                </div>
+    <div class="post-card">
+      <div class="post-meta">
+        <time>Temmuz 2026</time>
+        <span class="badge">Azure / API Key Exposure</span>
+      </div>
+      <h3>BrandBank - Azure Function Host Key Exposure</h3>
+      <p lang="tr">BrandBank hedefinde tespit edilen ve hassas API işlemlerine erişim imkanı veren açık Azure Function host key zafiyeti raporlandı, doğrulandı ve ödüllendirildi.</p>
+      <p lang="en">Reported an exposed Azure Function host key on BrandBank yielding access to sensitive cloud endpoints. Validated and rewarded on YesWeHack.</p>
+    </div>
+  </main>
 
-                <!-- İNGİLİZCE BUG BOUNTY KARTI -->
-                <div class="card lang-item" data-lang="en">
-                    <h3>[YesWeHack] Hardcoded Credentials Report (EN)</h3>
-                    <p>Vulnerability submission, triage process, and remediation regarding hardcoded sensitive credentials in a web application.</p>
-                    <div class="badge-container">
-                        <span class="badge green">YesWeHack</span>
-                        <span class="badge">Hardcoded Credentials</span>
-                        <span class="badge green">Accepted</span>
-                    </div>
-                    <a href="#" class="btn-link">View Case Study &rarr;</a>
-                </div>
+  <footer>
+    <div class="container">
+      <p>&copy; 2026 Hüseyin Kalkan. All rights reserved.</p>
+    </div>
+  </footer>
 
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2026 Hüseyin Kalkan. Hosted on GitHub Pages.</p>
-    </footer>
-
-    <script>
-        function setLanguage(lang) {
-            document.querySelectorAll('.lang-btn').forEach(btn => {
-                if (btn.innerText.toLowerCase() === lang) {
-                    btn.classList.add('active');
-                } else {
-                    btn.classList.remove('active');
-                }
-            });
-
-            const items = document.querySelectorAll('.lang-item');
-            items.forEach(item => {
-                const itemLang = item.getAttribute('data-lang');
-                if (itemLang === lang || itemLang === 'all') {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-
-            localStorage.setItem('preferred_language', lang);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const savedLang = localStorage.getItem('preferred_language') || 'tr';
-            setLanguage(savedLang);
-        });
-    </script>
+  <script src="/assets/js/main.js"></script>
 </body>
 </html>
