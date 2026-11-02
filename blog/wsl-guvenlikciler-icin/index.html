@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="tr" data-lang="tr" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    (function () {
+      var r = document.documentElement;
+      r.className = r.className.replace(/\bno-js\b/, '');
+      try {
+        var l = localStorage.getItem('site_lang');
+        if (l === 'en' || l === 'tr') { r.setAttribute('data-lang', l); r.setAttribute('lang', l); }
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Windows'un İçindeki Linux: Güvenlikçiler için WSL'e Sıcak Bir Giriş — Hüseyin Kalkan</title>
+  <meta name="description" content="WSL nedir, WSL 1 ile 2 arasındaki fark, Kali kurulumu, reverse shell'leri bozan ağ tuzağı ve günlük işleri kolaylaştıran küçük ayarlar.">
+  <meta name="author" content="Hüseyin Kalkan">
+  <meta name="theme-color" content="#080a0f">
+  <link rel="canonical" href="https://huseyinkalkan.net/blog/wsl-guvenlikciler-icin/">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="huseyinkalkan.net">
+  <meta property="og:title" content="Windows'un İçindeki Linux: Güvenlikçiler için WSL'e Sıcak Bir Giriş">
+  <meta property="og:description" content="WSL nedir, WSL 1 ile 2 arasındaki fark, Kali kurulumu, reverse shell'leri bozan ağ tuzağı ve günlük işleri kolaylaştıran küçük ayarlar.">
+  <meta property="og:url" content="https://huseyinkalkan.net/blog/wsl-guvenlikciler-icin/">
+  <meta property="og:locale" content="tr_TR">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="article:published_time" content="2026-11-02">
+  <meta property="og:image" content="https://huseyinkalkan.net/blog/wsl-guvenlikciler-icin/img/00-cover.png">
+  <meta property="og:image:width" content="2400">
+  <meta property="og:image:height" content="1260">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Windows'un İçindeki Linux: Güvenlikçiler için WSL'e Sıcak Bir Giriş",
+    "datePublished": "2026-11-02",
+    "dateModified": "2026-11-02",
+    "inLanguage": "tr",
+    "author": { "@type": "Person", "name": "Hüseyin Kalkan", "url": "https://huseyinkalkan.net/" },
+    "mainEntityOfPage": "https://huseyinkalkan.net/blog/wsl-guvenlikciler-icin/"
+  }
+  </script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main"><span class="t-tr">İçeriğe atla</span><span class="t-en" lang="en">Skip to content</span></a>
+
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Ana menü">
+        <a href="/" class="logo">
+          <svg class="logo-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span>huseyinkalkan.net</span><span class="caret" aria-hidden="true">_</span>
+        </a>
+
+        <button class="nav-toggle" type="button" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menü">
+          <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+
+        <div class="nav-links" id="nav-links">
+          <a href="/"><span class="t-tr">Hakkımda</span><span class="t-en" lang="en">About</span></a>
+          <a href="/pentest.html">Pentest</a>
+          <a href="/oscp-ultimate-guide/">OSCP Ultimate Guide</a>
+          <a href="/bug-bounty.html">Bug Bounty</a>
+          <a href="/blog/" aria-current="page">Blog</a>
+          <button id="lang-btn" class="lang-btn" type="button">TR</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="container">
+
+      <!-- ===================== Türkçe ===================== -->
+      <article class="article t-tr">
+        <a class="back-link" href="/blog/">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+          Tüm yazılar
+        </a>
+
+        <div class="post-meta">
+          <time datetime="2026-11-02">2 Kasım 2026</time>
+            <span class="badge">WSL / Linux</span>
+        </div>
+
+        <h1>Windows'un İçindeki Linux: Güvenlikçiler için WSL'e Sıcak Bir Giriş</h1>
+
+        <p>WSL nedir, WSL 1 ile 2 arasındaki fark, Kali kurulumu, reverse shell'leri bozan ağ tuzağı ve günlük işleri kolaylaştıran küçük ayarlar.</p>
+
+        <figure class="shot">
+          <img src="/blog/wsl-guvenlikciler-icin/img/00-cover.png" alt="WSL: Windows'un içindeki Linux — PowerShell'de Kali kurulumu ve WSL içinde çalışan bir terminal" width="1200" height="630">
+        </figure>
+
+        <p>Bir zamanlar Windows kullanan bir güvenlikçinin önünde iki seçenek vardı: ya bilgisayarı ikiye bölüp her seferinde yeniden başlatmak (dual boot), ya da birkaç GB RAM'i yiyip yavaş açılan bir sanal makineyle yaşamak. <strong>WSL</strong> (Windows Subsystem for Linux) üçüncü bir yol açtı: Linux'u Windows'un içinde, bir uygulama açar gibi çalıştırmak.</p>
+
+        <p>Bu yazıda WSL'in ne olduğunu, Kali'yi nasıl birkaç dakikada kurabileceğini ve en önemlisi, pentest yaparken insanı saatlerce uğraştıran <strong>ağ tuzağını</strong> anlatacağım. Görsellerdeki terminal çıktıları kendi makinemden.</p>
+
+        <h2>WSL tam olarak ne?</h2>
+        <p>Kısaca: Windows'ta, Linux programlarını <em>gerçekten</em> çalıştırmanın resmi yolu. İki sürümü var ve aralarındaki fark, neyin çalışıp neyin çalışmayacağını belirliyor:</p>
+
+        <figure class="shot">
+          <img src="/blog/wsl-guvenlikciler-icin/img/01-wsl1-vs-wsl2.png" alt="WSL 1 ve WSL 2 mimarisi: WSL 1 sistem çağrılarını çevirir, WSL 2 hafif bir sanal makinede gerçek Linux çekirdeği çalıştırır" width="1200" height="520" loading="lazy">
+          <figcaption>WSL 1 Linux çağrılarını Windows'a "tercüme eder"; WSL 2 ise hafif bir sanal makinede gerçek bir Linux çekirdeği çalıştırır.</figcaption>
+        </figure>
+
+        <ul>
+          <li><strong>WSL 1</strong>, Linux sistem çağrılarını Windows çekirdeğine çeviren bir katmandır. Gerçek bir Linux çekirdeği yoktur; bu yüzden ham soket (raw socket) gibi düşük seviyeli işler sınırlıdır.</li>
+          <li><strong>WSL 2</strong>, Hyper-V altyapısı üzerinde bir saniyede açılan hafif bir sanal makinede <strong>gerçek Linux çekirdeği</strong> çalıştırır. <code>sudo nmap -sS</code> ile SYN taraması, Docker, kernel modülü gerektiren araçlar burada çalışır.</li>
+        </ul>
+        <p>Güvenlik işleri için cevap net: <strong>WSL 2</strong>. Bugün <code>wsl --install</code> zaten varsayılan olarak onu kuruyor.</p>
+
+        <h2>5 dakikada kurulum</h2>
+        <p>Yönetici olarak açtığın bir PowerShell yeterli:</p>
+        <pre><code># WSL'i kur (ilk seferde yeniden başlatma isteyebilir)
+wsl --install
+
+# Kurulabilecek dağıtımları gör, Kali'yi ekle
+wsl --list --online
+wsl --install -d kali-linux</code></pre>
+
+        <figure class="shot">
+          <img src="/blog/wsl-guvenlikciler-icin/img/02-wsl-version.png" alt="PowerShell'de wsl --version ve wsl -l -v çıktısı: WSL 2.7.8, dağıtım WSL 2 sürümünde çalışıyor" width="900" height="370" loading="lazy">
+          <figcaption><code>wsl -l -v</code> çıktısındaki <strong>VERSION 2</strong>, dağıtımın gerçek çekirdekle çalıştığını gösterir.</figcaption>
+        </figure>
+
+        <p>Kali WSL'de neredeyse boş gelir; araçları sen seçersin. Klasik araç setini istiyorsan:</p>
+        <pre><code>sudo apt update &amp;&amp; sudo apt full-upgrade -y
+sudo apt install -y kali-linux-default     # nmap, burp, impacket, metasploit...
+# ya da daha hafifi:
+sudo apt install -y kali-linux-headless</code></pre>
+        <p>Grafik arayüzlü araçlar (Burp, Wireshark) için ekstra bir şey gerekmez: Windows 11'deki <strong>WSLg</strong> sayesinde Linux pencereleri Windows masaüstünde normal bir uygulama gibi açılır. Tam bir Kali masaüstü istersen <code>sudo apt install -y kali-win-kex</code> ve ardından <code>kex --win -s</code>.</p>
+
+        <h2>İçeride hayat nasıl?</h2>
+        <p>En tatlı kısmı şu: iki dünya birbirini görüyor.</p>
+
+        <figure class="shot">
+          <img src="/blog/wsl-guvenlikciler-icin/img/03-inside-wsl.png" alt="WSL içinde uname, /mnt altındaki Windows sürücüleri, NAT IP adresi ve bash'ten çalıştırılan powershell.exe" width="900" height="400" loading="lazy">
+          <figcaption>Çekirdek gerçek, Windows diskleri <code>/mnt</code> altında, Windows programları da bash'ten çağrılabiliyor.</figcaption>
+        </figure>
+
+        <ul>
+          <li><strong>Windows dosyaları Linux'ta:</strong> <code>C:\</code> sürücüsü <code>/mnt/c</code> altında.</li>
+          <li><strong>Linux dosyaları Windows'ta:</strong> Gezgin'in adres çubuğuna <code>\\wsl.localhost\kali-linux</code> yaz, ya da Linux'tayken <code>explorer.exe .</code> çalıştır.</li>
+          <li><strong>Programlar karşılıklı:</strong> bash'ten <code>powershell.exe</code>, <code>notepad.exe</code>; PowerShell'den <code>wsl nmap -sV 10.10.10.5</code>.</li>
+        </ul>
+
+        <h2>Güvenlikçinin asıl tuzağı: ağ</h2>
+        <p>Görseldeki <code>172.31.45.208</code> adresine dikkat. Varsayılan modda WSL 2, Windows'un arkasında kendi küçük <strong>NAT</strong> ağında yaşar. Dışarı bağlanmak sorun değil; ama <strong>içeri gelen bağlantılar</strong> (reverse shell!) WSL'e ulaşmaz.</p>
+
+        <figure class="shot">
+          <img src="/blog/wsl-guvenlikciler-icin/img/04-networking.png" alt="NAT modunda hedefin reverse shell'i Windows'a ulaşır ama WSL'e iletilmez; mirrored modda Windows ve WSL aynı arayüzleri paylaşır" width="1200" height="510" loading="lazy">
+          <figcaption>NAT modunda reverse shell Windows'ta kalır; mirrored modda ya da VPN'i WSL içinde çalıştırınca dinleyicine ulaşır.</figcaption>
+        </figure>
+
+        <p>Klasik senaryo: HTB/PG VPN'ini Windows'ta açarsın, Kali'de <code>nc -lvnp 443</code> dinlersin, hedefe <code>LHOST</code> olarak VPN IP'ni verirsin… ve hiçbir şey gelmez. Bağlantı Windows'a çarpar, kimse dinlemediği için düşer. İki temiz çözüm var:</p>
+
+        <h3>Çözüm 1: VPN'i WSL'in içinde çalıştır</h3>
+        <pre><code>sudo apt install -y openvpn
+sudo openvpn lab.ovpn          # tun0 artık Linux'ta
+ip -4 addr show tun0           # LHOST olarak bu IP'yi kullan</code></pre>
+        <p>Tünel, dinleyicinin olduğu yerde bittiği için NAT modunda bile çalışır. En az ayar isteyen yol bu.</p>
+
+        <h3>Çözüm 2: Mirrored ağ modu</h3>
+        <p>Windows 11'de WSL'e Windows'un ağ arayüzlerini <em>aynen</em> kullandırabilirsin. Kullanıcı klasöründe <code>%UserProfile%\.wslconfig</code> dosyasını oluştur:</p>
+        <pre><code>[wsl2]
+networkingMode=mirrored
+memory=6GB        # isteğe bağlı: WSL'in RAM üst sınırı
+processors=4      # isteğe bağlı</code></pre>
+        <p>Sonra <code>wsl --shutdown</code> ile WSL'i kapatıp yeniden aç. Artık Kali, Windows'un <code>tun0</code> adresini de görür. Gelen bağlantıları <strong>Hyper-V güvenlik duvarı</strong> engelleyebilir; her şeyi açmak yerine sadece dinleyici portuna izin ver (yönetici PowerShell):</p>
+        <pre><code>New-NetFirewallHyperVRule -Name WSL-443 -DisplayName "WSL reverse shell 443" `
+  -Direction Inbound -VMCreatorId '{40E0AC32-46A5-438A-A0B2-2B479E8F2E90}' `
+  -Protocol TCP -LocalPorts 443</code></pre>
+
+        <div class="callout callout-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <p><strong>Kısa yol:</strong> Lab'da en az sürprizi Çözüm 1 yaşatır. Mirrored mod ise Windows'taki araçlarla (ör. Burp'ün Windows sürümü) WSL'i aynı ağda buluşturmak istediğinde güzel.</p>
+        </div>
+
+        <h2>Küçük ama tatlı ayarlar</h2>
+        <ul>
+          <li><strong>Çalışma dosyalarını Linux tarafında tut</strong> (<code>~/</code>). <code>/mnt/c</code> üzerinden dosya işlemleri belirgin şekilde yavaştır; ayrıca exploit ve payload'larını Windows klasörlerinde tutmak, Defender'ın onları "bulup" silmesine davetiye çıkarır.</li>
+          <li><strong>Bir şeyler tuhaflaşınca:</strong> <code>wsl --shutdown</code>. Bilgisayarı yeniden başlatmanın WSL'deki karşılığı, iki saniye sürer.</li>
+          <li><strong>Windows Terminal</strong>'de Kali'yi varsayılan profil yap; sekmeler ve bölünmüş paneller tmux'a alışık olmayanlar için bile rahat.</li>
+          <li><strong>VS Code</strong>'u WSL eklentisiyle kullan: Kali'de bir klasördeyken <code>code .</code> yazınca editör Windows'ta açılır ama dosyalar ve terminal Linux'ta kalır.</li>
+          <li><strong>Yedek al:</strong> <code>wsl --export kali-linux kali-yedek.tar</code> ile tüm kurulumu tek dosyada saklayabilir, başka makinede <code>wsl --import</code> ile geri açabilirsin.</li>
+        </ul>
+
+        <h2>WSL'in yetmediği yerler</h2>
+        <ul>
+          <li><strong>Kablosuz testler:</strong> Wi-Fi adaptörünü monitor modda kullanmak için USB'yi WSL'e aktarmak (<code>usbipd-win</code>) ve uygun sürücüyü derlemek gerekiyor. Bu iş için ayrı bir Kali kurulumu ya da VM daha az uğraştırır.</li>
+          <li><strong>Sınav ortamı:</strong> OSCP gibi sınavlarda OffSec'in önerdiği ortam Kali sanal makinesi. WSL'i günlük işler ve lab için düşün; sınav günü sürpriz istemezsin.</li>
+          <li><strong>Kurumsal cihazlar:</strong> EDR ve şirket politikaları WSL'i kısıtlayabilir ya da izleyebilir. İş bilgisayarında kullanmadan önce kuralları kontrol et.</li>
+        </ul>
+
+        <h2>Özet kartı</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>İstediğin</th><th>Komut</th></tr></thead>
+            <tbody>
+              <tr><td>Kali kur</td><td><code>wsl --install -d kali-linux</code></td></tr>
+              <tr><td>Dağıtımları ve sürümleri gör</td><td><code>wsl -l -v</code></td></tr>
+              <tr><td>WSL'i yeniden başlat</td><td><code>wsl --shutdown</code></td></tr>
+              <tr><td>Linux dosyalarını Gezgin'de aç</td><td><code>explorer.exe .</code></td></tr>
+              <tr><td>Reverse shell sorunsuz gelsin</td><td>VPN'i WSL'de çalıştır ya da <code>networkingMode=mirrored</code></td></tr>
+              <tr><td>Kurulumu yedekle</td><td><code>wsl --export kali-linux kali.tar</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>WSL, "Linux mu Windows mu?" sorusunu "ikisi birden" diye cevaplıyor. Ağ tuzağını bir kez çözdükten sonra, günlük pentest notlarından lab makinelerine kadar çoğu işi tek bir bilgisayarda, yeniden başlatmadan yapabiliyorsun. OSCP'ye hazırlanıyorsan, buradaki komutların çoğunu <a href="/oscp-ultimate-guide/">OSCP Ultimate Guide</a>'da sınav akışı içinde bulabilirsin.</p>
+
+        <aside class="support-box" aria-label="Bu içerik işine yaradıysa">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.6 20.6 0 0 0 8 13.393a20.6 20.6 0 0 0 3.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.75.75 0 0 1-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5z"/></svg>
+          <div class="support-text">
+            <p class="support-title">Bu içerik işine yaradıysa</p>
+            <p>Yazılar ve OSCP rehberi ücretsiz. Yenilerini yazmama destek olmak istersen GitHub Sponsors üzerinden bir kahve ısmarlayabilirsin.</p>
+          </div>
+          <a class="btn btn-ghost" href="https://github.com/sponsors/thehuseyinkalkan" target="_blank" rel="noopener">Destek ol</a>
+        </aside>
+
+      </article>
+
+      <!-- ===================== English ===================== -->
+      <article class="article t-en" lang="en">
+        <a class="back-link" href="/blog/">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+          All posts
+        </a>
+
+        <div class="post-meta">
+          <time datetime="2026-11-02">November 2, 2026</time>
+            <span class="badge">WSL / Linux</span>
+        </div>
+
+        <h1>Linux Inside Windows: A Friendly WSL Guide for Security Folks</h1>
+
+        <p>What WSL is, WSL 1 vs 2, installing Kali, the networking trap that breaks reverse shells, and small tweaks that make daily work easier.</p>
+
+        <figure class="shot">
+          <img src="/blog/wsl-guvenlikciler-icin/img/00-cover.png" alt="WSL: Linux inside Windows — installing Kali from PowerShell and a terminal running inside WSL" width="1200" height="630">
+        </figure>
+
+        <p>Not long ago, a security person on Windows had two choices: split the laptop in two and reboot every time (dual boot), or live with a virtual machine that eats a few GB of RAM and takes ages to start. <strong>WSL</strong> (Windows Subsystem for Linux) opened a third way: run Linux inside Windows, as easily as opening an app.</p>
+
+        <p>In this post I cover what WSL is, how to get Kali running in a few minutes and, most importantly, the <strong>networking trap</strong> that costs people hours during pentests. The terminal output in the images comes from my own machine.</p>
+
+        <h2>So what exactly is WSL?</h2>
+        <p>In short: the official way to <em>really</em> run Linux programs on Windows. There are two versions, and the difference decides what will and will not work:</p>
+
+        <figure class="shot">
+          <img src="/blog/wsl-guvenlikciler-icin/img/01-wsl1-vs-wsl2.png" alt="WSL 1 vs WSL 2 architecture: WSL 1 translates system calls, WSL 2 runs a real Linux kernel in a lightweight VM" width="1200" height="520" loading="lazy">
+          <figcaption>WSL 1 "translates" Linux calls into Windows; WSL 2 runs a real Linux kernel inside a lightweight VM.</figcaption>
+        </figure>
+
+        <ul>
+          <li><strong>WSL 1</strong> is a layer that translates Linux system calls for the Windows kernel. There is no real Linux kernel, so low-level work such as raw sockets is limited.</li>
+          <li><strong>WSL 2</strong> runs a <strong>real Linux kernel</strong> in a lightweight VM on the Hyper-V platform that starts in about a second. SYN scans with <code>sudo nmap -sS</code>, Docker and tools that need kernel features work here.</li>
+        </ul>
+        <p>For security work the answer is clear: <strong>WSL 2</strong>. Today <code>wsl --install</code> installs it by default anyway.</p>
+
+        <h2>Installing it in 5 minutes</h2>
+        <p>An administrator PowerShell is all you need:</p>
+        <pre><code># Install WSL (the first run may ask for a reboot)
+wsl --install
+
+# See the available distributions, add Kali
+wsl --list --online
+wsl --install -d kali-linux</code></pre>
+
+        <figure class="shot">
+          <img src="/blog/wsl-guvenlikciler-icin/img/02-wsl-version.png" alt="wsl --version and wsl -l -v output in PowerShell: WSL 2.7.8, the distribution runs as version 2" width="900" height="370" loading="lazy">
+          <figcaption><strong>VERSION 2</strong> in the <code>wsl -l -v</code> output means the distribution runs on the real kernel.</figcaption>
+        </figure>
+
+        <p>Kali on WSL comes almost empty; you pick the tools. For the classic toolset:</p>
+        <pre><code>sudo apt update &amp;&amp; sudo apt full-upgrade -y
+sudo apt install -y kali-linux-default     # nmap, burp, impacket, metasploit...
+# or something lighter:
+sudo apt install -y kali-linux-headless</code></pre>
+        <p>GUI tools (Burp, Wireshark) need nothing extra: thanks to <strong>WSLg</strong> on Windows 11, Linux windows open on the Windows desktop like normal apps. If you want a full Kali desktop, run <code>sudo apt install -y kali-win-kex</code> and then <code>kex --win -s</code>.</p>
+
+        <h2>What life looks like inside</h2>
+        <p>The sweetest part: the two worlds can see each other.</p>
+
+        <figure class="shot">
+          <img src="/blog/wsl-guvenlikciler-icin/img/03-inside-wsl.png" alt="Inside WSL: uname, Windows drives under /mnt, the NAT IP address and powershell.exe run from bash" width="900" height="400" loading="lazy">
+          <figcaption>A real kernel, Windows drives under <code>/mnt</code>, and Windows programs callable from bash.</figcaption>
+        </figure>
+
+        <ul>
+          <li><strong>Windows files from Linux:</strong> the <code>C:\</code> drive lives under <code>/mnt/c</code>.</li>
+          <li><strong>Linux files from Windows:</strong> type <code>\\wsl.localhost\kali-linux</code> into the Explorer address bar, or run <code>explorer.exe .</code> from Linux.</li>
+          <li><strong>Programs both ways:</strong> <code>powershell.exe</code> or <code>notepad.exe</code> from bash; <code>wsl nmap -sV 10.10.10.5</code> from PowerShell.</li>
+        </ul>
+
+        <h2>The real trap for security folks: networking</h2>
+        <p>Look at the <code>172.31.45.208</code> address in the image. By default WSL 2 lives in its own small <strong>NAT</strong> network behind Windows. Connecting out is fine, but <strong>incoming connections</strong> (reverse shells!) do not reach WSL.</p>
+
+        <figure class="shot">
+          <img src="/blog/wsl-guvenlikciler-icin/img/04-networking.png" alt="In NAT mode the target's reverse shell reaches Windows but is not forwarded to WSL; in mirrored mode Windows and WSL share the same interfaces" width="1200" height="510" loading="lazy">
+          <figcaption>In NAT mode the reverse shell stops at Windows; in mirrored mode, or with the VPN running inside WSL, it reaches your listener.</figcaption>
+        </figure>
+
+        <p>The classic scenario: you start the HTB/PG VPN on Windows, listen with <code>nc -lvnp 443</code> in Kali, give the target your VPN IP as <code>LHOST</code>… and nothing arrives. The connection hits Windows, nobody listens there, and it is dropped. There are two clean fixes:</p>
+
+        <h3>Fix 1: run the VPN inside WSL</h3>
+        <pre><code>sudo apt install -y openvpn
+sudo openvpn lab.ovpn          # tun0 now lives in Linux
+ip -4 addr show tun0           # use this IP as LHOST</code></pre>
+        <p>The tunnel ends where your listener is, so this works even in NAT mode. It is the path with the least configuration.</p>
+
+        <h3>Fix 2: mirrored networking mode</h3>
+        <p>On Windows 11 you can let WSL use Windows' network interfaces <em>as they are</em>. Create <code>%UserProfile%\.wslconfig</code> in your user folder:</p>
+        <pre><code>[wsl2]
+networkingMode=mirrored
+memory=6GB        # optional: RAM cap for WSL
+processors=4      # optional</code></pre>
+        <p>Then stop WSL with <code>wsl --shutdown</code> and start it again. Kali now sees Windows' <code>tun0</code> address too. Incoming connections can be blocked by the <strong>Hyper-V firewall</strong>; instead of opening everything, allow only your listener port (administrator PowerShell):</p>
+        <pre><code>New-NetFirewallHyperVRule -Name WSL-443 -DisplayName "WSL reverse shell 443" `
+  -Direction Inbound -VMCreatorId '{40E0AC32-46A5-438A-A0B2-2B479E8F2E90}' `
+  -Protocol TCP -LocalPorts 443</code></pre>
+
+        <div class="callout callout-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <p><strong>Shortcut:</strong> in labs, Fix 1 gives the fewest surprises. Mirrored mode is nice when you want tools on Windows (for example the Windows build of Burp) and WSL on the same network.</p>
+        </div>
+
+        <h2>Small but sweet tweaks</h2>
+        <ul>
+          <li><strong>Keep your working files on the Linux side</strong> (<code>~/</code>). File operations through <code>/mnt/c</code> are noticeably slower, and keeping exploits and payloads in Windows folders invites Defender to "find" and delete them.</li>
+          <li><strong>When things get weird:</strong> <code>wsl --shutdown</code>. It is WSL's version of rebooting the computer, and it takes two seconds.</li>
+          <li><strong>Make Kali the default profile in Windows Terminal</strong>; tabs and split panes are comfortable even if you are not used to tmux.</li>
+          <li><strong>Use VS Code with the WSL extension:</strong> type <code>code .</code> in a Kali folder and the editor opens on Windows while files and the terminal stay in Linux.</li>
+          <li><strong>Back it up:</strong> <code>wsl --export kali-linux kali-backup.tar</code> stores the whole install in one file, and <code>wsl --import</code> restores it on another machine.</li>
+        </ul>
+
+        <h2>Where WSL is not enough</h2>
+        <ul>
+          <li><strong>Wireless testing:</strong> using a Wi-Fi adapter in monitor mode means passing USB into WSL (<code>usbipd-win</code>) and building the right driver. A separate Kali install or VM is less hassle for this.</li>
+          <li><strong>Exam environment:</strong> for exams like the OSCP, the environment OffSec recommends is a Kali virtual machine. Think of WSL for daily work and labs; you do not want surprises on exam day.</li>
+          <li><strong>Corporate devices:</strong> EDR and company policy may restrict or monitor WSL. Check the rules before using it on a work laptop.</li>
+        </ul>
+
+        <h2>Cheat card</h2>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>You want to</th><th>Command</th></tr></thead>
+            <tbody>
+              <tr><td>Install Kali</td><td><code>wsl --install -d kali-linux</code></td></tr>
+              <tr><td>List distributions and versions</td><td><code>wsl -l -v</code></td></tr>
+              <tr><td>Restart WSL</td><td><code>wsl --shutdown</code></td></tr>
+              <tr><td>Open Linux files in Explorer</td><td><code>explorer.exe .</code></td></tr>
+              <tr><td>Get reverse shells to arrive</td><td>VPN inside WSL, or <code>networkingMode=mirrored</code></td></tr>
+              <tr><td>Back up the install</td><td><code>wsl --export kali-linux kali.tar</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>WSL answers "Linux or Windows?" with "both". Once you have solved the networking trap, most of the work, from daily pentest notes to lab machines, happens on one computer without rebooting. If you are preparing for the OSCP, you will find most of these commands in the exam workflow of the <a href="/oscp-ultimate-guide/">OSCP Ultimate Guide</a>.</p>
+
+        <aside class="support-box" aria-label="Found this useful?">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.6 20.6 0 0 0 8 13.393a20.6 20.6 0 0 0 3.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.75.75 0 0 1-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5z"/></svg>
+          <div class="support-text">
+            <p class="support-title">Found this useful?</p>
+            <p>The posts and the OSCP guide are free. If you would like to support new ones, you can buy me a coffee through GitHub Sponsors.</p>
+          </div>
+          <a class="btn btn-ghost" href="https://github.com/sponsors/thehuseyinkalkan" target="_blank" rel="noopener">Sponsor</a>
+        </aside>
+
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-meta">
+        <p>&copy; 2026 Hüseyin Kalkan. <span class="t-tr">Tüm hakları saklıdır.</span><span class="t-en" lang="en">All rights reserved.</span></p>
+        <p class="contact-line">
+          <a href="mailto:info@huseyinkalkan.net">info@huseyinkalkan.net</a>
+          <span aria-hidden="true">·</span>
+          <a href="tel:+905365071963">+90 536 507 19 63</a>
+        </p>
+      </div>
+      <div class="social">
+        <a href="https://www.linkedin.com/in/huseyinkalkann/" rel="me noopener" target="_blank" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+        </a>
+        <a href="https://github.com/thehuseyinkalkan" rel="me noopener" target="_blank" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.3-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.3-.52-1.47.11-3.07 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.6.23 2.77.12 3.06.74.82 1.18 1.85 1.18 3.11 0 4.43-2.69 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+        </a>
+        <a href="mailto:info@huseyinkalkan.net" aria-label="E-posta: info@huseyinkalkan.net">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+        </a>
+        <a href="tel:+905365071963" aria-label="Telefon: +90 536 507 19 63">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.22 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js" defer></script>
+  <!-- Cloudflare Web Analytics (cerezsiz) -->
+  <script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "1f2740f3b3f248f0ba07407bda304372"}'></script>
+</body>
+</html>
