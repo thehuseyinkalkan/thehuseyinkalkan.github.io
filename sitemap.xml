@@ -25,6 +25,14 @@
     <priority>0.8</priority>
   </url>
 
+  <!-- OSCP Ultimate Guide (etkilesimli rehber) -->
+  <url>
+    <loc>https://huseyinkalkan.net/oscp-ultimate-guide/</loc>
+    <lastmod>2026-11-02</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
   <!-- Bug Bounty -->
   <url>
     <loc>https://huseyinkalkan.net/bug-bounty.html</loc>
