@@ -982,10 +982,7 @@ td code {
   font-weight: 800;
   letter-spacing: -.05em;
   line-height: 1;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--accent);
 }
 
 .notfound h1 {
