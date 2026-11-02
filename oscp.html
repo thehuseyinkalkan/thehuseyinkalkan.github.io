@@ -1,58 +1,173 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" data-lang="tr" class="no-js">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OSCP Prep - Hüseyin Kalkan</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    (function () {
+      var r = document.documentElement;
+      r.className = r.className.replace(/\bno-js\b/, '');
+      try {
+        var l = localStorage.getItem('site_lang');
+        if (l === 'en' || l === 'tr') { r.setAttribute('data-lang', l); r.setAttribute('lang', l); }
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>OSCP Hazırlık &amp; Laboratuvar Notları — Hüseyin Kalkan</title>
+  <meta name="description" content="OSCP sınavı hazırlık süreci: Hack The Box ve Proving Grounds makinelerinde keşif, yetki yükseltme ve Active Directory metodolojisi notları.">
+  <meta name="author" content="Hüseyin Kalkan">
+  <meta name="theme-color" content="#080a0f">
+  <link rel="canonical" href="https://huseyinkalkan.net/oscp.html">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="huseyinkalkan.net">
+  <meta property="og:title" content="OSCP Hazırlık &amp; Laboratuvar Notları — Hüseyin Kalkan">
+  <meta property="og:description" content="Hack The Box ve Proving Grounds makinelerinden keşif ve yetki yükseltme notları.">
+  <meta property="og:url" content="https://huseyinkalkan.net/oscp.html">
+  <meta property="og:locale" content="tr_TR">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap">
   <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
 
-  <header>
+  <a class="skip-link" href="#main"><span class="t-tr">İçeriğe atla</span><span class="t-en" lang="en">Skip to content</span></a>
+
+  <header class="site-header">
     <div class="container">
-      <nav>
-        <a href="/" class="logo">huseyinkalkan.net</a>
-        <div class="nav-links">
-          <a href="/"><span lang="tr">Hakkımda</span><span lang="en">About</span></a>
-          <a href="/pentest.html"><span lang="tr">Pentest</span><span lang="en">Pentest</span></a>
-          <a href="/oscp.html" class="active"><span lang="tr">OSCP</span><span lang="en">OSCP</span></a>
-          <a href="/bug-bounty.html"><span lang="tr">Bug Bounty</span><span lang="en">Bug Bounty</span></a>
-          <a href="/blog/"><span lang="tr">Blog</span><span lang="en">Blog</span></a>
-          <button id="lang-btn" class="lang-btn" onclick="toggleLanguage()">TR / EN</button>
+      <nav class="nav" aria-label="Ana menü">
+        <a href="/" class="logo">
+          <svg class="logo-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span>huseyinkalkan.net</span><span class="caret" aria-hidden="true">_</span>
+        </a>
+
+        <button class="nav-toggle" type="button" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menü">
+          <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+
+        <div class="nav-links" id="nav-links">
+          <a href="/"><span class="t-tr">Hakkımda</span><span class="t-en" lang="en">About</span></a>
+          <a href="/pentest.html">Pentest</a>
+          <a href="/oscp.html" aria-current="page">OSCP</a>
+          <a href="/bug-bounty.html">Bug Bounty</a>
+          <a href="/blog/">Blog</a>
+          <button id="lang-btn" class="lang-btn" type="button">TR</button>
         </div>
       </nav>
     </div>
   </header>
 
-  <main class="container">
-    <section class="hero">
-      <h1 lang="tr">OSCP Hazırlık & Laboratuvar Notları</h1>
-      <h1 lang="en">OSCP Preparation & Lab Journey</h1>
-      <p lang="tr">Offensive Security Certified Professional (OSCP) sınavı için Hack The Box ve Proving Grounds makinelerinden elde ettiğim deneyimler.</p>
-      <p lang="en">Hand-on experiences, enumeration techniques, and privilege escalation pathways practiced on HTB and Proving Grounds targets.</p>
-    </section>
+  <main id="main">
+    <div class="container">
 
-    <div class="grid">
-      <div class="card">
-        <h3><span lang="tr">Keşif & Bilgi Toplama</span><span lang="en">Enumeration & Recon</span></h3>
-        <p lang="tr">Nmap, Gobuster, Feroxbuster ve BloodHound ile sistem ve Active Directory keşif süreçleri.</p>
-        <p lang="en">System and Active Directory enumeration workflows using Nmap, Gobuster, Feroxbuster, and BloodHound.</p>
-      </div>
+      <section class="hero">
+        <p class="eyebrow"><span class="dot" aria-hidden="true"></span>OSCP PREP</p>
 
-      <div class="card">
-        <h3><span lang="tr">Yetki Yükseltme (PrivEsc)</span><span lang="en">Privilege Escalation</span></h3>
-        <p lang="tr">Linux (SUID, Sudo, Capabilities, Cron) ve Windows (Token Impersonation, Unquoted Service Paths, Active Directory) yetki yükseltme yöntemleri.</p>
-        <p lang="en">Linux and Windows privilege escalation vectors, service misconfigurations, and Kerberoasting techniques.</p>
-      </div>
+        <h1 class="t-tr">OSCP Hazırlık &amp; Laboratuvar Notları</h1>
+        <h1 class="t-en" lang="en">OSCP Preparation &amp; Lab Journey</h1>
+
+        <p class="lead t-tr">
+          Offensive Security Certified Professional sınavına hazırlık sürecinde
+          <strong>Hack The Box</strong> ve <strong>Proving Grounds</strong> makinelerinden
+          edindiğim deneyimler ve metodoloji notları.
+        </p>
+        <p class="lead t-en" lang="en">
+          Hands-on experience, enumeration techniques and privilege escalation pathways
+          practiced on <strong>Hack The Box</strong> and <strong>Proving Grounds</strong> targets.
+        </p>
+
+        <ul class="tag-row" aria-label="Araçlar">
+          <li class="tag">Nmap</li>
+          <li class="tag">Feroxbuster</li>
+          <li class="tag">BloodHound</li>
+          <li class="tag">Impacket</li>
+          <li class="tag">Burp Suite</li>
+        </ul>
+      </section>
+
+      <section class="section" aria-labelledby="topics">
+        <h2 class="section-title" id="topics">
+          <span class="idx">01</span>
+          <span class="t-tr">Çalışma Başlıkları</span><span class="t-en" lang="en">Focus Areas</span>
+        </h2>
+
+        <div class="grid">
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+            </div>
+            <h3><span class="t-tr">Keşif &amp; Bilgi Toplama</span><span class="t-en" lang="en">Enumeration &amp; Recon</span></h3>
+            <p class="t-tr">Nmap, Gobuster, Feroxbuster ve BloodHound ile sistem ve Active Directory keşif süreçleri.</p>
+            <p class="t-en" lang="en">System and Active Directory enumeration workflows using Nmap, Gobuster, Feroxbuster, and BloodHound.</p>
+          </article>
+
+          <article class="card">
+            <div class="card-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+            </div>
+            <h3><span class="t-tr">Yetki Yükseltme</span><span class="t-en" lang="en">Privilege Escalation</span></h3>
+            <p class="t-tr">Linux (SUID, sudo, capabilities, cron) ve Windows (token impersonation, unquoted service path, Active Directory) yetki yükseltme yöntemleri.</p>
+            <p class="t-en" lang="en">Linux and Windows privilege escalation vectors, service misconfigurations, and Kerberoasting techniques.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" aria-labelledby="checklist">
+        <h2 class="section-title" id="checklist">
+          <span class="idx">02</span>
+          <span class="t-tr">Metodoloji Kontrol Listesi</span><span class="t-en" lang="en">Methodology Checklist</span>
+        </h2>
+
+        <div class="grid">
+          <article class="card">
+            <h3><span class="t-tr">Linux Hedefler</span><span class="t-en" lang="en">Linux Targets</span></h3>
+            <ul class="check-list">
+              <li class="t-tr"><strong>SUID / SGID</strong> ikili dosyalarının taranması</li>
+              <li class="t-en" lang="en">Scanning <strong>SUID / SGID</strong> binaries</li>
+              <li class="t-tr"><strong>sudo -l</strong> çıktısı ve GTFOBins eşleştirmesi</li>
+              <li class="t-en" lang="en"><strong>sudo -l</strong> output and GTFOBins mapping</li>
+              <li class="t-tr">Cron görevleri, yazılabilir dosya yolları ve capabilities</li>
+              <li class="t-en" lang="en">Cron jobs, writable paths and capabilities</li>
+            </ul>
+          </article>
+
+          <article class="card">
+            <h3><span class="t-tr">Windows / AD Hedefler</span><span class="t-en" lang="en">Windows / AD Targets</span></h3>
+            <ul class="check-list">
+              <li class="t-tr">Servis yapılandırma hataları ve <strong>unquoted service path</strong></li>
+              <li class="t-en" lang="en">Service misconfigurations and <strong>unquoted service paths</strong></li>
+              <li class="t-tr"><strong>Kerberoasting</strong> ve AS-REP roasting denemeleri</li>
+              <li class="t-en" lang="en"><strong>Kerberoasting</strong> and AS-REP roasting</li>
+              <li class="t-tr">BloodHound ile saldırı yolu çıkarımı</li>
+              <li class="t-en" lang="en">Attack path analysis with BloodHound</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
     </div>
   </main>
 
-  <footer>
-    <div class="container">
-      <p>&copy; 2026 Hüseyin Kalkan. All rights reserved.</p>
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; 2026 Hüseyin Kalkan. <span class="t-tr">Tüm hakları saklıdır.</span><span class="t-en" lang="en">All rights reserved.</span></p>
+      <div class="social">
+        <a href="https://github.com/thehuseyinkalkan" rel="me noopener" target="_blank" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.3-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.3-.52-1.47.11-3.07 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.6.23 2.77.12 3.06.74.82 1.18 1.85 1.18 3.11 0 4.43-2.69 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+        </a>
+      </div>
     </div>
   </footer>
 
-  <script src="/assets/js/main.js"></script>
+  <script src="/assets/js/main.js" defer></script>
 </body>
 </html>
