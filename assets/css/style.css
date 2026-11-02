@@ -255,6 +255,51 @@ html[data-lang="en"] .t-tr {
   .lang-opt { padding: 5px 9px; }
 }
 
+a.lang-opt {
+  display: inline-block;
+  text-decoration: none;
+}
+
+/* "Bu sayfa diger dilde de var" bandi (main.js ekler, yonlendirme yapmaz) */
+.lang-hint {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding: 9px 44px 9px 16px;
+  position: relative;
+  background: var(--bg-soft);
+  border-bottom: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: .875rem;
+}
+
+.lang-hint a {
+  color: var(--text);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.lang-hint-close {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 0;
+  color: var(--text-muted);
+  font-size: 1.25rem;
+  line-height: 1;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.lang-hint-close:hover {
+  color: var(--text);
+}
+
 .lang-opt:hover {
   color: var(--text);
 }

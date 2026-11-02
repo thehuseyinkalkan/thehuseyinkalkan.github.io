@@ -94,6 +94,9 @@ $template = @'
 
   <title>__TITLE_TR__ — Hüseyin Kalkan</title>
   <meta name="description" content="__SUMMARY_TR__">
+  <meta name="i18n:title:en" content="__TITLE_EN__ — Hüseyin Kalkan">
+  <meta name="i18n:description:en" content="__SUMMARY_EN__">
+  <meta name="i18n:og-title:en" content="__TITLE_EN__">
   <meta name="author" content="Hüseyin Kalkan">
   <meta name="theme-color" content="#080a0f">
   <link rel="canonical" href="https://huseyinkalkan.net/blog/__SLUG__/">
