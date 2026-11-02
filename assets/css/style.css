@@ -359,9 +359,6 @@ html[data-lang="en"] .t-tr {
   width: clamp(140px, 19vw, 200px);
   aspect-ratio: 1;
   border-radius: 50%;
-  padding: 3px;
-  background: linear-gradient(135deg, var(--accent), var(--accent-2));
-  box-shadow: 0 18px 48px -18px rgba(91, 157, 255, .75);
 }
 
 .hero-photo img {
@@ -371,7 +368,6 @@ html[data-lang="en"] .t-tr {
   border-radius: 50%;
   object-fit: cover;
   object-position: 50% 40%;
-  border: 3px solid var(--bg);
   background: var(--card);
 }
 
