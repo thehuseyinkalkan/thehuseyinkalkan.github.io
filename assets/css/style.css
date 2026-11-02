@@ -517,6 +517,50 @@ html[data-lang="en"] .t-tr {
   transform: translateX(4px);
 }
 
+/* One cikan rehber karti */
+.feature {
+  position: relative;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(91, 157, 255, .12), rgba(34, 211, 238, .06)),
+    var(--card);
+  border: 1px solid rgba(91, 157, 255, .35);
+  border-radius: var(--radius);
+  padding: clamp(24px, 4vw, 36px);
+  box-shadow: var(--shadow);
+}
+
+.feature h3 {
+  font-size: clamp(1.15rem, 2.6vw, 1.5rem);
+  font-weight: 750;
+  letter-spacing: -.02em;
+  margin-bottom: 10px;
+}
+
+.feature > p {
+  color: var(--text-muted);
+  max-width: 62ch;
+  margin-bottom: 18px;
+}
+
+.feature-points {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.feature-points li {
+  font-family: var(--font-mono);
+  font-size: .76rem;
+  color: var(--accent-soft);
+  background: rgba(91, 157, 255, .1);
+  border: 1px solid rgba(91, 157, 255, .25);
+  border-radius: 999px;
+  padding: 5px 12px;
+}
+
 /* Madde listesi (uzmanlik detaylari) */
 .check-list {
   list-style: none;
@@ -852,6 +896,27 @@ td code {
   gap: 16px;
   align-items: center;
   justify-content: space-between;
+}
+
+.footer-meta p {
+  margin: 0;
+}
+
+.contact-line {
+  margin-top: 6px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: .82rem;
+}
+
+.contact-line a {
+  color: var(--text-muted);
+}
+
+.contact-line a:hover {
+  color: var(--accent);
 }
 
 .social {

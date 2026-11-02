@@ -1,0 +1,6 @@
+Bu dosya GitHub Pages'in Jekyll islemesini tamamen devre disi birakir.
+Site saf HTML/CSS/JS; Jekyll'e ihtiyaci yok.
+
+KALDIRMAYIN: oscp-ultimate-guide icindeki SSTI bolumu {{7*7}} gibi Liquid
+sozdizimiyle cakisan yukler iceriyor. Jekyll acikken bunlar ya derlemeyi
+bozar ya da sessizce silinir.

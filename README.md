@@ -12,7 +12,10 @@ oscp.html                  OSCP hazırlık notları
 bug-bounty.html            Doğrulanan zafiyet raporları
 blog/index.html            Blog listesi
 blog/<slug>/index.html     Blog yazısı
+oscp-ultimate-guide/       Etkileşimli OSCP+ sınav rehberi (kendi stili, bağımsız)
+tools/new-post.ps1         Yeni blog yazısı oluşturma betiği
 404.html                   Özel hata sayfası
+.nojekyll                  GitHub Pages Jekyll işlemesini kapatır (silmeyin)
 robots.txt, sitemap.xml    Arama motoru dosyaları
 CNAME                      Özel alan adı (huseyinkalkan.net)
 assets/css/style.css       Tüm stiller
@@ -44,9 +47,43 @@ uygular; böylece içerik yanlış dilde yanıp sönmez.
 
 ## Yeni blog yazısı ekleme
 
-1. `blog/<slug>/index.html` oluşturun (mevcut bir yazıyı kopyalayarak başlayın).
-2. `blog/index.html` içine yeni bir `<article class="post-card">` bloğu ekleyin.
-3. `sitemap.xml` dosyasına yeni `<url>` girdisi ekleyin.
+Tek komut — üç dosyayı da kendisi hallediyor:
+
+```powershell
+.\tools\new-post.ps1 -Slug "nginx-alias-traversal" `
+  -TitleTr "Nginx alias yanlış yapılandırması" `
+  -TitleEn "Nginx alias misconfiguration" `
+  -SummaryTr "Alias direktifindeki eksik eğik çizgi neden path traversal'a yol açıyor." `
+  -SummaryEn "Why a missing trailing slash in the alias directive enables path traversal." `
+  -Badge "Nginx / Path Traversal"
+```
+
+Bu komut:
+1. `blog/<slug>/index.html` dosyasını iki dilli şablondan oluşturur,
+2. `blog/index.html` listesinin **en üstüne** yazı kartını ekler,
+3. `sitemap.xml` dosyasına yeni `<url>` girdisini ekler.
+
+Sonra oluşan dosyadaki `ICERIK BURAYA` / `CONTENT HERE` bölümlerini doldurun ve:
+
+```powershell
+git add -A; git commit -m "Yeni yazı: ..."; git push
+```
+
+Oluştur + yayınla tek adımda isterseniz komuta `-Push` ekleyin.
+
+Şablonda hazır bloklar var (uyarı kutusu, kod bloğu, tablo) — dosyadaki
+HTML yorumunun içinden kopyalayın.
+
+> `tools/new-post.ps1` **BOM'lu UTF-8** olarak kaydedilmiştir. Bu şart:
+> Windows PowerShell 5.1, BOM'suz UTF-8 betikleri ANSI sanar ve içindeki
+> Türkçe karakterler bozuk çıkar (`Kasım` → `KasÄ±m`).
+
+## Jekyll kapalı
+
+Kökteki `.nojekyll` dosyası GitHub Pages'in Jekyll işlemesini devre dışı bırakır.
+**Silmeyin:** `oscp-ultimate-guide` içindeki SSTI bölümü `{{7*7}}` gibi Liquid
+söz dizimiyle çakışan yükler içerir; Jekyll açıkken bunlar ya derlemeyi bozar
+ya da sessizce silinir.
 
 ## Yerelde çalıştırma
 
