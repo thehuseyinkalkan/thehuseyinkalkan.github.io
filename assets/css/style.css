@@ -794,6 +794,46 @@ html[data-lang="en"] .t-tr {
   white-space: nowrap;
 }
 
+/* Destek kutusu (GitHub Sponsors) — yazi ve rehber sonunda */
+.support-box {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 20px;
+  margin: 48px 0 8px;
+  padding: 20px 22px;
+  border: 1px solid rgba(219, 97, 162, .3);
+  border-radius: var(--radius);
+  background: linear-gradient(135deg, rgba(219, 97, 162, .08), rgba(91, 157, 255, .05)), var(--card);
+}
+
+.support-box > svg {
+  width: 26px;
+  height: 26px;
+  flex: 0 0 auto;
+  color: #db61a2;
+}
+
+.support-box .support-text {
+  flex: 1 1 260px;
+}
+
+.support-box .support-text p {
+  margin: 0;
+  font-size: .93rem;
+  color: var(--text-muted);
+}
+
+.support-box .support-text .support-title {
+  color: var(--text);
+  font-weight: 650;
+  margin-bottom: 2px;
+}
+
+.support-box .btn {
+  margin: 0;
+}
+
 /* Geri baglantisi */
 .back-link {
   display: inline-flex;

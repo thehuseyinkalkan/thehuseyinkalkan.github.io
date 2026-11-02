@@ -198,6 +198,16 @@ $template = @'
           </table>
         </div>
         -->
+
+        <aside class="support-box" aria-label="Bu içerik işine yaradıysa">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.6 20.6 0 0 0 8 13.393a20.6 20.6 0 0 0 3.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.75.75 0 0 1-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5z"/></svg>
+          <div class="support-text">
+            <p class="support-title">Bu içerik işine yaradıysa</p>
+            <p>Yazılar ve OSCP rehberi ücretsiz. Yenilerini yazmama destek olmak istersen GitHub Sponsors üzerinden bir kahve ısmarlayabilirsin.</p>
+          </div>
+          <a class="btn btn-ghost" href="https://github.com/sponsors/thehuseyinkalkan" target="_blank" rel="noopener">Destek ol</a>
+        </aside>
+
       </article>
 
       <!-- ===================== English ===================== -->
@@ -217,6 +227,16 @@ $template = @'
 
         <h2>CONTENT HERE — first section heading</h2>
         <p>Write the text here.</p>
+
+        <aside class="support-box" aria-label="Found this useful?">
+          <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4.25 2.5c-1.336 0-2.75 1.164-2.75 3 0 2.15 1.58 4.144 3.365 5.682A20.6 20.6 0 0 0 8 13.393a20.6 20.6 0 0 0 3.135-2.211C12.92 9.644 14.5 7.65 14.5 5.5c0-1.836-1.414-3-2.75-3-1.373 0-2.609.986-3.029 2.456a.75.75 0 0 1-1.442 0C6.859 3.486 5.623 2.5 4.25 2.5z"/></svg>
+          <div class="support-text">
+            <p class="support-title">Found this useful?</p>
+            <p>The posts and the OSCP guide are free. If you would like to support new ones, you can buy me a coffee through GitHub Sponsors.</p>
+          </div>
+          <a class="btn btn-ghost" href="https://github.com/sponsors/thehuseyinkalkan" target="_blank" rel="noopener">Sponsor</a>
+        </aside>
+
       </article>
 
     </div>
