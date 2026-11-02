@@ -320,10 +320,7 @@ html[data-lang="en"] .t-tr {
   letter-spacing: -.035em;
   font-weight: 800;
   margin-bottom: 20px;
-  background: linear-gradient(135deg, #ffffff 25%, #9bc2ff 75%, var(--accent-2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--text);
 }
 
 .hero .lead {
