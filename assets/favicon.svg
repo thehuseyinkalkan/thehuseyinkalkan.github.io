@@ -4,11 +4,15 @@
       <stop offset="0" stop-color="#5b9dff"/>
       <stop offset="1" stop-color="#22d3ee"/>
     </linearGradient>
+    <linearGradient id="s" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fff" stop-opacity=".22"/>
+      <stop offset=".5" stop-color="#fff" stop-opacity="0"/>
+    </linearGradient>
   </defs>
   <rect width="64" height="64" rx="14" fill="#080a0f"/>
-  <path d="M32 9 15 15.2v13.4C15 41.3 23.1 49.9 32 54c8.9-4.1 17-12.7 17-25.4V15.2L32 9z"
-        fill="none" stroke="url(#g)" stroke-width="3.5" stroke-linejoin="round"/>
-  <path d="M25 27.5l5 5-5 5" fill="none" stroke="url(#g)" stroke-width="3.5"
+  <path d="M32 6 52 12.5V29c0 14-9 23.5-20 29C21 52.5 12 43 12 29V12.5z" fill="url(#g)"/>
+  <path d="M32 6 52 12.5V29c0 14-9 23.5-20 29C21 52.5 12 43 12 29V12.5z" fill="url(#s)"/>
+  <path d="M22.5 24.5 30 31.5 22.5 38.5" fill="none" stroke="#080a0f" stroke-width="5"
         stroke-linecap="round" stroke-linejoin="round"/>
-  <path d="M33.5 38h7" fill="none" stroke="url(#g)" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M34 40.5h8.5" fill="none" stroke="#080a0f" stroke-width="5" stroke-linecap="round"/>
 </svg>

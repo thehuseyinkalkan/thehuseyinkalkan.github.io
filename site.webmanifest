@@ -1,0 +1,12 @@
+{
+  "name": "Hüseyin Kalkan",
+  "short_name": "H. Kalkan",
+  "icons": [
+    { "src": "/assets/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
+    { "src": "/assets/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+  ],
+  "theme_color": "#080a0f",
+  "background_color": "#080a0f",
+  "display": "browser",
+  "start_url": "/"
+}
