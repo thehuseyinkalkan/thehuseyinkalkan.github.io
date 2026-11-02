@@ -8,11 +8,11 @@ GitHub Pages üzerinde, derleme adımı olmadan (saf HTML/CSS/JS) yayınlanır.
 ```
 index.html                 Ana sayfa
 pentest.html               Sızma testi metodolojisi
-oscp.html                  OSCP hazırlık notları
 bug-bounty.html            Doğrulanan zafiyet raporları
 blog/index.html            Blog listesi
-blog/<slug>/index.html     Blog yazısı
-oscp-ultimate-guide/       Etkileşimli OSCP+ sınav rehberi (kendi stili, bağımsız)
+blog/<slug>/index.html     Blog yazısı (görseller blog/<slug>/img/ altında)
+oscp-ultimate-guide/       OSCP Ultimate Guide — menüdeki OSCP sekmesi; TR + EN tek sayfada
+oscp.html                  Eski adres; /oscp-ultimate-guide/ adresine yönlendirir
 tools/new-post.ps1         Yeni blog yazısı oluşturma betiği
 404.html                   Özel hata sayfası
 .nojekyll                  GitHub Pages Jekyll işlemesini kapatır (silmeyin)
@@ -44,6 +44,15 @@ uygular; böylece içerik yanlış dilde yanıp sönmez.
 > **Dikkat:** Görünürlük için asla `[lang="tr"]` / `[lang="en"]` seçicisi kullanmayın.
 > Bu seçici `<html lang="tr">` etiketini de yakalar ve köke `display:none` vererek
 > tüm sayfayı görünmez bırakır.
+
+## OSCP Ultimate Guide'ı düzenleme
+
+`oscp-ultimate-guide/index.html` iki dili tek dosyada tutar: Türkçe içerik
+`<div class="guide-body t-tr" id="guide-tr">`, İngilizce içerik
+`<div class="guide-body t-en" lang="en" id="guide-en">` içindedir; sol menüdeki
+içindekiler de iki ayrı `.toc` bloğudur. Bir bölümü değiştirirken **iki dili de**
+güncelleyin. İngilizce başlık kimlikleri `en-` önekiyle başlar (ör. `#en-sudo`),
+Türkçe kimliklerle çakışmaz.
 
 ## Yeni blog yazısı ekleme
 

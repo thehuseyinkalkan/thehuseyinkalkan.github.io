@@ -1,231 +1,24 @@
 <!DOCTYPE html>
-<html lang="tr" data-lang="tr" class="no-js">
+<html lang="tr">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script>
-    (function () {
-      var r = document.documentElement;
-      r.className = r.className.replace(/\bno-js\b/, '');
-      try {
-        var l = localStorage.getItem('site_lang');
-        if (l === 'en' || l === 'tr') { r.setAttribute('data-lang', l); r.setAttribute('lang', l); }
-      } catch (e) {}
-    })();
-  </script>
-
-  <title>OSCP Ultimate Guide — Sınav Rehberi &amp; Laboratuvar Notları | Hüseyin Kalkan</title>
-  <meta name="description" content="OSCP Ultimate Guide: OSCP+ sınavı için kapsamlı ve etkileşimli Türkçe rehber, keşif ve yetki yükseltme metodolojisi, Hack The Box ve Proving Grounds laboratuvar notları.">
-  <meta name="author" content="Hüseyin Kalkan">
-  <meta name="theme-color" content="#080a0f">
-  <link rel="canonical" href="https://huseyinkalkan.net/oscp.html">
-
-  <meta property="og:type" content="website">
-  <meta property="og:site_name" content="huseyinkalkan.net">
-  <meta property="og:title" content="OSCP Ultimate Guide — Sınav Rehberi &amp; Laboratuvar Notları">
-  <meta property="og:description" content="OSCP+ sınavı için kapsamlı ve etkileşimli Türkçe rehber, metodoloji ve laboratuvar notları.">
-  <meta property="og:url" content="https://huseyinkalkan.net/oscp.html">
-  <meta property="og:locale" content="tr_TR">
-  <meta property="og:locale:alternate" content="en_US">
-  <meta name="twitter:card" content="summary">
-
+  <!-- Eski OSCP sayfasi: rehber artik /oscp-ultimate-guide/ adresinde.
+       GitHub Pages sunucu tarafli yonlendirme desteklemedigi icin meta refresh + canonical. -->
+  <title>OSCP Ultimate Guide — Hüseyin Kalkan</title>
+  <meta name="robots" content="noindex, follow">
+  <link rel="canonical" href="https://huseyinkalkan.net/oscp-ultimate-guide/">
+  <meta http-equiv="refresh" content="0; url=/oscp-ultimate-guide/">
   <link rel="icon" href="/assets/favicon.svg" type="image/svg+xml">
-<link rel="icon" href="/favicon.ico" sizes="48x48">
-<link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap">
-  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <script>location.replace('/oscp-ultimate-guide/' + location.hash);</script>
+  <style>
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #080a0f; color: #94a3b8;
+      font: 16px/1.6 Inter, -apple-system, 'Segoe UI', Roboto, sans-serif; padding: 0 16px; text-align: center; }
+    a { color: #5b9dff; }
+  </style>
 </head>
 <body>
-
-  <a class="skip-link" href="#main"><span class="t-tr">İçeriğe atla</span><span class="t-en" lang="en">Skip to content</span></a>
-
-  <header class="site-header">
-    <div class="container">
-      <nav class="nav" aria-label="Ana menü">
-        <a href="/" class="logo">
-          <svg class="logo-mark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">
-            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
-          <span>huseyinkalkan.net</span><span class="caret" aria-hidden="true">_</span>
-        </a>
-
-        <button class="nav-toggle" type="button" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Menü">
-          <svg class="icon-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
-          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
-        </button>
-
-        <div class="nav-links" id="nav-links">
-          <a href="/"><span class="t-tr">Hakkımda</span><span class="t-en" lang="en">About</span></a>
-          <a href="/pentest.html">Pentest</a>
-          <a href="/oscp.html" aria-current="page">OSCP Ultimate Guide</a>
-          <a href="/bug-bounty.html">Bug Bounty</a>
-          <a href="/blog/">Blog</a>
-          <button id="lang-btn" class="lang-btn" type="button">TR</button>
-        </div>
-      </nav>
-    </div>
-  </header>
-
-  <main id="main">
-    <div class="container">
-
-      <section class="hero">
-        <p class="eyebrow"><span class="dot" aria-hidden="true"></span>OSCP PREP</p>
-
-        <h1 class="t-tr">OSCP Ultimate Guide</h1>
-        <h1 class="t-en" lang="en">OSCP Ultimate Guide</h1>
-
-        <p class="lead t-tr">
-          Offensive Security Certified Professional sınavına hazırlık sürecinde
-          <strong>Hack The Box</strong> ve <strong>Proving Grounds</strong> makinelerinden
-          edindiğim deneyimler ve metodoloji notları.
-        </p>
-        <p class="lead t-en" lang="en">
-          Hands-on experience, enumeration techniques and privilege escalation pathways
-          practiced on <strong>Hack The Box</strong> and <strong>Proving Grounds</strong> targets.
-        </p>
-
-        <ul class="tag-row" aria-label="Araçlar">
-          <li class="tag">Nmap</li>
-          <li class="tag">Feroxbuster</li>
-          <li class="tag">BloodHound</li>
-          <li class="tag">Impacket</li>
-          <li class="tag">Burp Suite</li>
-        </ul>
-      </section>
-
-      <section class="section" aria-labelledby="guide">
-        <h2 class="section-title" id="guide">
-          <span class="idx">01</span>
-          <span class="t-tr">Etkileşimli Rehber</span><span class="t-en" lang="en">Interactive Guide</span>
-        </h2>
-
-        <div class="feature">
-          <h3><span class="t-tr">OSCP+ Sınav Rehberi</span><span class="t-en" lang="en">OSCP+ Exam Guide</span></h3>
-
-          <p class="t-tr">
-            Sınav kuralları ve puanlamadan zaman yönetimine, keşiften Active Directory'ye
-            kadar tüm metodolojiyi kapsayan, tek sayfalık etkileşimli rehber.
-            Komutları doğrudan kopyalayabilir, <strong>LHOST</strong> değerini bir kez girip
-            tüm komutlarda otomatik yerine koydurabilirsin.
-          </p>
-          <p class="t-en" lang="en">
-            A single-page interactive guide covering the full methodology — exam rules and
-            scoring, time management, enumeration, web, Active Directory and privilege
-            escalation. Copy commands directly, and set <strong>LHOST</strong> once to have it
-            substituted throughout. <em>Written in Turkish.</em>
-          </p>
-
-          <ul class="feature-points">
-            <li>97+ <span class="t-tr">bölüm</span><span class="t-en" lang="en">sections</span></li>
-            <li><span class="t-tr">Canlı LHOST değişimi</span><span class="t-en" lang="en">Live LHOST substitution</span></li>
-            <li><span class="t-tr">Kopyalanabilir komutlar</span><span class="t-en" lang="en">Copy-ready commands</span></li>
-            <li><span class="t-tr">Bölüm arama</span><span class="t-en" lang="en">Section search</span></li>
-            <li><span class="t-tr">Yazdır / PDF</span><span class="t-en" lang="en">Print / PDF</span></li>
-          </ul>
-
-          <div class="actions">
-            <a class="btn btn-primary" href="/oscp-ultimate-guide/">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5V6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v13.5"/><path d="M8 8h8M8 12h8M8 16h5"/></svg>
-              <span class="t-tr">Rehberi aç</span><span class="t-en" lang="en">Open the guide</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      <section class="section" aria-labelledby="topics">
-        <h2 class="section-title" id="topics">
-          <span class="idx">02</span>
-          <span class="t-tr">Çalışma Başlıkları</span><span class="t-en" lang="en">Focus Areas</span>
-        </h2>
-
-        <div class="grid">
-          <article class="card">
-            <div class="card-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
-            </div>
-            <h3><span class="t-tr">Keşif &amp; Bilgi Toplama</span><span class="t-en" lang="en">Enumeration &amp; Recon</span></h3>
-            <p class="t-tr">Nmap, Gobuster, Feroxbuster ve BloodHound ile sistem ve Active Directory keşif süreçleri.</p>
-            <p class="t-en" lang="en">System and Active Directory enumeration workflows using Nmap, Gobuster, Feroxbuster, and BloodHound.</p>
-          </article>
-
-          <article class="card">
-            <div class="card-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
-            </div>
-            <h3><span class="t-tr">Yetki Yükseltme</span><span class="t-en" lang="en">Privilege Escalation</span></h3>
-            <p class="t-tr">Linux (SUID, sudo, capabilities, cron) ve Windows (token impersonation, unquoted service path, Active Directory) yetki yükseltme yöntemleri.</p>
-            <p class="t-en" lang="en">Linux and Windows privilege escalation vectors, service misconfigurations, and Kerberoasting techniques.</p>
-          </article>
-        </div>
-      </section>
-
-      <section class="section" aria-labelledby="checklist">
-        <h2 class="section-title" id="checklist">
-          <span class="idx">03</span>
-          <span class="t-tr">Metodoloji Kontrol Listesi</span><span class="t-en" lang="en">Methodology Checklist</span>
-        </h2>
-
-        <div class="grid">
-          <article class="card">
-            <h3><span class="t-tr">Linux Hedefler</span><span class="t-en" lang="en">Linux Targets</span></h3>
-            <ul class="check-list">
-              <li class="t-tr"><strong>SUID / SGID</strong> ikili dosyalarının taranması</li>
-              <li class="t-en" lang="en">Scanning <strong>SUID / SGID</strong> binaries</li>
-              <li class="t-tr"><strong>sudo -l</strong> çıktısı ve GTFOBins eşleştirmesi</li>
-              <li class="t-en" lang="en"><strong>sudo -l</strong> output and GTFOBins mapping</li>
-              <li class="t-tr">Cron görevleri, yazılabilir dosya yolları ve capabilities</li>
-              <li class="t-en" lang="en">Cron jobs, writable paths and capabilities</li>
-            </ul>
-          </article>
-
-          <article class="card">
-            <h3><span class="t-tr">Windows / AD Hedefler</span><span class="t-en" lang="en">Windows / AD Targets</span></h3>
-            <ul class="check-list">
-              <li class="t-tr">Servis yapılandırma hataları ve <strong>unquoted service path</strong></li>
-              <li class="t-en" lang="en">Service misconfigurations and <strong>unquoted service paths</strong></li>
-              <li class="t-tr"><strong>Kerberoasting</strong> ve AS-REP roasting denemeleri</li>
-              <li class="t-en" lang="en"><strong>Kerberoasting</strong> and AS-REP roasting</li>
-              <li class="t-tr">BloodHound ile saldırı yolu çıkarımı</li>
-              <li class="t-en" lang="en">Attack path analysis with BloodHound</li>
-            </ul>
-          </article>
-        </div>
-      </section>
-
-    </div>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container footer-inner">
-      <div class="footer-meta">
-        <p>&copy; 2026 Hüseyin Kalkan. <span class="t-tr">Tüm hakları saklıdır.</span><span class="t-en" lang="en">All rights reserved.</span></p>
-        <p class="contact-line">
-          <a href="mailto:info@huseyinkalkan.net">info@huseyinkalkan.net</a>
-          <span aria-hidden="true">·</span>
-          <a href="tel:+905365071963">+90 536 507 19 63</a>
-        </p>
-      </div>
-      <div class="social">
-        <a href="https://www.linkedin.com/in/huseyinkalkann/" rel="me noopener" target="_blank" aria-label="LinkedIn">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M20.45 20.45h-3.56v-5.57c0-1.33-.03-3.04-1.85-3.04-1.86 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13zM7.12 20.45H3.55V9h3.57v11.45zM22.22 0H1.77C.79 0 0 .77 0 1.72v20.56C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.72V1.72C24 .77 23.2 0 22.22 0z"/></svg>
-        </a>
-        <a href="https://github.com/thehuseyinkalkan" rel="me noopener" target="_blank" aria-label="GitHub">
-          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5A11.5 11.5 0 0 0 .5 12a11.5 11.5 0 0 0 7.86 10.92c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.34-1.29-1.7-1.29-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.2 1.77 1.2 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.56-.3-5.25-1.28-5.25-5.7 0-1.26.45-2.29 1.19-3.1-.12-.3-.52-1.47.11-3.07 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.8 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.6.23 2.77.12 3.06.74.82 1.18 1.85 1.18 3.11 0 4.43-2.69 5.4-5.26 5.69.41.36.78 1.06.78 2.14v3.17c0 .31.2.67.8.56A11.5 11.5 0 0 0 23.5 12 11.5 11.5 0 0 0 12 .5z"/></svg>
-        </a>
-        <a href="mailto:info@huseyinkalkan.net" aria-label="E-posta: info@huseyinkalkan.net">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>
-        </a>
-        <a href="tel:+905365071963" aria-label="Telefon: +90 536 507 19 63">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.12 4.22 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        </a>
-      </div>
-    </div>
-  </footer>
-
-  <script src="/assets/js/main.js" defer></script>
+  <p>OSCP Ultimate Guide taşındı / has moved: <a href="/oscp-ultimate-guide/">huseyinkalkan.net/oscp-ultimate-guide/</a></p>
 </body>
 </html>

@@ -753,6 +753,47 @@ html[data-lang="en"] .t-tr {
   font-size: .93rem;
 }
 
+/* Bilgi kutusu (mavi) */
+.callout-info {
+  background: rgba(91, 157, 255, .07);
+  border-color: rgba(91, 157, 255, .25);
+  border-left-color: var(--accent);
+}
+
+.callout-info svg {
+  color: var(--accent);
+}
+
+/* Ekran goruntusu */
+.shot {
+  margin: 20px 0 26px;
+}
+
+.shot img {
+  display: block;
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--code-bg);
+}
+
+.shot figcaption {
+  margin-top: 8px;
+  font-size: .84rem;
+  color: var(--text-dim);
+}
+
+/* Yazi icindeki tablolarda uzun aciklamalar satir kirsin */
+.article td {
+  white-space: normal;
+}
+
+.article td:first-child {
+  white-space: nowrap;
+}
+
 /* Geri baglantisi */
 .back-link {
   display: inline-flex;
@@ -788,6 +829,7 @@ pre {
 
 pre code {
   background: none;
+  border: 0;
   padding: 0;
   font-size: inherit;
 }
