@@ -339,7 +339,7 @@ html[data-lang="en"] .t-tr {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: clamp(24px, 5vw, 56px);
+  gap: clamp(20px, 2.5vw, 32px);
 }
 
 .hero-head-text {
@@ -353,7 +353,7 @@ html[data-lang="en"] .t-tr {
 .hero-photo {
   flex: 0 0 auto;
   display: block;
-  width: clamp(140px, 19vw, 200px);
+  width: clamp(120px, 14vw, 160px);
   aspect-ratio: 1;
   border-radius: 50%;
 }
