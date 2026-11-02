@@ -195,6 +195,7 @@ html[data-lang="en"] .t-tr {
 
 .nav-links a {
   position: relative;
+  white-space: nowrap;
   color: var(--text-muted);
   font-size: .925rem;
   font-weight: 500;
@@ -223,25 +224,53 @@ html[data-lang="en"] .t-tr {
   background: linear-gradient(90deg, var(--accent), var(--accent-2));
 }
 
-.lang-btn {
+/* Dil secici: iki secenek yan yana, secili olan dolu */
+.lang-switch {
   margin-left: 8px;
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
   background: var(--card);
   border: 1px solid var(--border);
-  color: var(--text-muted);
-  padding: 6px 12px;
   border-radius: 999px;
-  cursor: pointer;
-  font-family: var(--font-mono);
-  font-size: .78rem;
-  font-weight: 600;
-  letter-spacing: .04em;
-  transition: border-color .18s ease, color .18s ease, background-color .18s ease;
 }
 
-.lang-btn:hover {
-  border-color: var(--accent);
+.lang-opt {
+  background: transparent;
+  border: 0;
+  color: var(--text-muted);
+  padding: 5px 12px;
+  border-radius: 999px;
+  cursor: pointer;
+  font: inherit;
+  font-size: .82rem;
+  font-weight: 500;
+  line-height: 1.2;
+  transition: color .18s ease, background-color .18s ease;
+}
+
+/* 901-1000px arasi: menu + dil secici tek satira sigsin */
+@media (min-width: 901px) and (max-width: 1000px) {
+  .nav-links a { padding: 8px 8px; font-size: .875rem; }
+  .lang-opt { padding: 5px 9px; }
+}
+
+.lang-opt:hover {
   color: var(--text);
-  background: var(--card-hover);
+}
+
+.lang-opt:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* Secili dil: JS gelmeden once de dogru gorunsun diye data-lang'a bagli */
+:root[data-lang="en"] .lang-opt[data-set-lang="en"],
+:root:not([data-lang="en"]) .lang-opt[data-set-lang="tr"] {
+  background: var(--text);
+  color: var(--bg);
+  font-weight: 600;
+  cursor: default;
 }
 
 /* Mobil menu dugmesi — genis ekranda gizli */
@@ -1073,7 +1102,8 @@ td code {
    Duyarli davranis
    -------------------------------------------------------------------------- */
 
-@media (max-width: 760px) {
+/* Menu 900px altinda acilir panele doner (dil secici + 5 link daha dar ekrana sigmiyor) */
+@media (max-width: 900px) {
   .nav-toggle {
     display: inline-flex;
     order: 3;
@@ -1108,11 +1138,13 @@ td code {
     display: none;
   }
 
-  .lang-btn {
+  .lang-switch {
     margin: 10px 0 0;
     align-self: flex-start;
   }
+}
 
+@media (max-width: 760px) {
   .container {
     padding: 0 18px;
   }
@@ -1128,7 +1160,7 @@ html.no-js .nav-toggle {
   display: none;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 900px) {
   html.no-js .nav-links {
     position: static;
     display: flex;

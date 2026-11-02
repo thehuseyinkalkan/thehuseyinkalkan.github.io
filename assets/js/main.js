@@ -43,21 +43,19 @@
     root.setAttribute('data-lang', lang);
     root.setAttribute('lang', lang); /* ekran okuyucular dogru dili okusun */
 
-    var btn = document.getElementById('lang-btn');
-    if (btn) {
-      btn.textContent = lang === 'en' ? 'EN' : 'TR';
-      btn.setAttribute('aria-label', lang === 'en'
-        ? 'Switch language to Turkish'
-        : 'Dili Ingilizceye cevir');
-      btn.setAttribute('title', lang === 'en' ? 'Switch to Turkish' : 'Switch to English');
+    var opts = document.querySelectorAll('.lang-opt');
+    for (var i = 0; i < opts.length; i++) {
+      opts[i].setAttribute('aria-pressed',
+        opts[i].getAttribute('data-set-lang') === lang ? 'true' : 'false');
     }
 
     document.dispatchEvent(new CustomEvent('langchange', { detail: { lang: lang } }));
   }
 
-  function toggleLang() {
-    var current = root.getAttribute('data-lang') === 'en' ? 'en' : 'tr';
-    var next = current === 'tr' ? 'en' : 'tr';
+  function setLang(next) {
+    if (!isSupported(next) || next === root.getAttribute('data-lang')) {
+      return;
+    }
     writeLang(next);
     applyLang(next);
   }
@@ -67,9 +65,11 @@
        Burada yalnizca dugme metnini ve olay dinleyicisini bagliyoruz. */
     applyLang(readLang() || root.getAttribute('data-lang') || 'tr');
 
-    var btn = document.getElementById('lang-btn');
-    if (btn) {
-      btn.addEventListener('click', toggleLang);
+    var opts = document.querySelectorAll('.lang-opt');
+    for (var i = 0; i < opts.length; i++) {
+      opts[i].addEventListener('click', function () {
+        setLang(this.getAttribute('data-set-lang'));
+      });
     }
   }
 
@@ -104,7 +104,7 @@
     });
 
     /* Masaustu genisligine gecince acik panel kalmasin */
-    var wide = window.matchMedia('(min-width: 761px)');
+    var wide = window.matchMedia('(min-width: 901px)');
     var onChange = function (event) {
       if (event.matches) {
         setOpen(false);
